@@ -1,0 +1,222 @@
+﻿<Application x:Class="PixaiBot.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModel="clr-namespace:PixaiBot.UI.ViewModel"
+             xmlns:view="clr-namespace:PixaiBot.UI.View"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             >
+
+    <!--#region DataTemplates -->
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:MainWindowViewModel}">
+            <view:MainWindowView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:DashboardControlViewModel}">
+            <view:DashboardControlView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:SettingsControlViewModel}">
+            <view:SettingsControlView/>
+        </DataTemplate>
+        <!--#endregion-->
+
+        <!--#region Colors -->
+
+        <SolidColorBrush x:Key="LightPurpleColor" Color="#af9bff"/>
+        <SolidColorBrush x:Key="DarkPurpleColor" Color="#6c5ce7"/>
+        <SolidColorBrush x:Key="BlackColor" Color="#083353" />
+        <SolidColorBrush x:Key="GreyColor" Color="#B7B7B7" />
+        <SolidColorBrush x:Key="White" Color="#ffffff" />
+        <SolidColorBrush x:Key="DarkGreen" Color="#00b894" />
+        <SolidColorBrush x:Key="Orange" Color="#e17055" />
+        <SolidColorBrush x:Key="Magenta" Color="#e84393" />
+        <SolidColorBrush x:Key="Mint" Color="#00cec9" />
+
+        <!--#endregion-->
+
+        <!--#region Control Styles -->
+
+
+        <Style x:Key="MenuButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#a4b0be" />
+            <Setter Property="Margin" Value="0 0 0 5" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Height" Value="45" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Tag" Value="#a4b0be" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
+                                BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#ffffff" />
+                    <Setter Property="Foreground" Value="#ffffff" />
+                    <Setter Property="Tag" Value="#ffffff" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
+                                        BorderBrush="#a29bfe">
+                                    <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <Style x:Key="SidePanelButtonIcon" TargetType="fa:ImageAwesome">
+            <Setter Property="Width" Value="23" />
+            <Setter Property="Height" Value="23" />
+            <Setter Property="Margin" Value="35 0 20 0" />
+            <Setter Property="Foreground"
+                    Value="{Binding Path=Tag,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+        </Style>
+        <Style x:Key="SidePanelButton" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground"
+                    Value="{Binding Path=Foreground,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+        </Style>
+        <Style x:Key="TitleText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource BlackColor}" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style x:Key="SecondaryText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource GreyColor}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0 5 0 5" />
+        </Style>
+
+
+        <Style x:Key="ButtonWithHighLight" TargetType="Button">
+            <Setter Property="Background" Value="#F5F7F9" />
+            <Setter Property="Foreground" Value="#363636" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="20" Padding="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#c9c9c9" />
+                    <Setter Property="Foreground" Value="#161616" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <Style x:Key="PurpleButton" TargetType="Button" BasedOn="{StaticResource ButtonWithHighLight}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush>
+                        <GradientStop Color="#a29bfe"/>
+                        <GradientStop Color="#8964ff"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#6c5ce7" />
+                    <Setter Property="Foreground" Value="#ffffff" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <Style x:Key="FormCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource LightPurpleColor}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="4,0,0,0" />
+            <Setter Property="Margin" Value="0,0,4,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border CornerRadius="4 4 4 4 " x:Name="Border" BorderBrush="{StaticResource LightPurpleColor}" BorderThickness="2" Background="Transparent" Width="20" Height="20">
+                                <Viewbox>
+                                    <Canvas Width="20" Height="20">
+                                        <Rectangle x:Name="BackgroundRectangle" Width="20" Height="20" Fill="{Binding Path=Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        <Path x:Name="CheckMark" Stroke="#ffffff" StrokeThickness="2" Data="M5,10 L9,14 L16,7" Visibility="Collapsed"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Border>
+                            <ContentPresenter Grid.Column="1" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="BackgroundRectangle" Property="Fill" Value="{StaticResource LightPurpleColor}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BackgroundRectangle" Property="Fill" Value="{StaticResource GreyColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="FormTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#F5F7F9" />
+            <Setter Property="Foreground" Value="#767676" />
+            <Setter Property="BorderBrush" Value="#B7B7B7" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="10 10" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0 10" />
+        </Style>
+
+        <Style x:Key="FormPasswordBox" TargetType="PasswordBox">
+            <Setter Property="Background" Value="#F5F7F9" />
+            <Setter Property="Foreground" Value="#767676" />
+            <Setter Property="BorderBrush" Value="#B7B7B7" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="10 10" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0 10" />
+        </Style>
+
+
+
+        <!--#endregion-->
+        <Style x:Key="BaldPurpleText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource LightPurpleColor}" />
+            <Setter Property="FontSize" Value="23" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+
+
+
+    </Application.Resources>
+</Application>
