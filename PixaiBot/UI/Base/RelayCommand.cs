@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace PixaiBot.UI.Base
 {
-    internal class RelayCommand : ICommand
+    public class RelayCommand : ICommand
     {
         private readonly Func<object, bool> _canExecute;
 

@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PixaiBot.UI.View"
+        xmlns:helper="clr-namespace:PixaiBot.UI.Helpers"
         mc:Ignorable="d" Background="Transparent" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterOwner"
-        Title="AddAccountWindowView" Height="200" Width="500">
+        Title="AddAccountWindowView" Height="200" Width="500" helper:WindowHelper.EnableClosing="True" > 
     <Border CornerRadius="10" Background="White" MouseDown="Border_OnMouseDown" BorderThickness="2" BorderBrush="{StaticResource White}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -44,8 +45,8 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Style="{StaticResource PurpleButton}" Background="#d63031" Content="Cancel" VerticalAlignment="Center" Width="100"  Margin="0 0 5 5" />
-                <Button Grid.Row="0" Style="{StaticResource PurpleButton}" Content="Add" Margin="0 0 0 0" Width="100" VerticalAlignment="Center" />
+                <Button Grid.Row="0" Style="{StaticResource PurpleButton}" Command="{Binding AddAccountCommand}" Content="Add" Margin="0 0 0 0" Width="100" VerticalAlignment="Center" />
+                <Button Grid.Row="1" Style="{StaticResource PurpleButton}" Command="{Binding CloseWindowCommand}" Background="#d63031" Content="Cancel" VerticalAlignment="Center" Width="100"  Margin="0 0 5 5" />
             </Grid>
         </Grid>
     </Border>

@@ -16,9 +16,11 @@ namespace PixaiBot.UI.ViewModel
         public ICommand ShowAddAccountWindowCommand { get;  }
                     
         
-        public SettingsControlViewModel(IDialogService dialogService)
+        public SettingsControlViewModel(IDialogService dialogService,IAccountsManager accountsManager,IDataValidator dataValidator)
         {
             _dialogService = dialogService;
+            _accountsManager = accountsManager;
+            _dataValidator = dataValidator;
             ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
 
 
@@ -27,10 +29,14 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly IDialogService _dialogService;
 
+        private readonly IAccountsManager _accountsManager;
+
+        private readonly IDataValidator _dataValidator;
+
 
         private void ShowAddAccountWindow()
         {
-            _dialogService.ShowDialog(new AddAccountWindowView(), true);
+            _dialogService.ShowDialog(new AddAccountWindowView(_accountsManager,_dataValidator), true);
         }
 
     }

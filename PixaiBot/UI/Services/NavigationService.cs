@@ -8,7 +8,7 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.Services
 {
-    internal class NavigationService : BaseViewModel, INavigationService
+    public class NavigationService : BaseViewModel, INavigationService
 
     {
         private readonly Func<Type, BaseViewModel> _viewModelFactory;

@@ -11,19 +11,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.ViewModel;
 
 namespace PixaiBot.UI.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy AddAccountWindowView.xaml
-    /// </summary>
+    
     public partial class AddAccountWindowView : Window
     {
-        public AddAccountWindowView()
+        public AddAccountWindowView(IAccountsManager accountsManager,IDataValidator dataValidator)
         {
             InitializeComponent();
-            this.DataContext = new AddAccountWindowViewModel();
+            this.DataContext = new AddAccountWindowViewModel(accountsManager,dataValidator);
         }
 
         private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using PixaiBot.Bussines_Logic;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Services;
@@ -25,6 +26,8 @@ namespace PixaiBot
             services.AddSingleton<SettingsControlViewModel>();
             services.AddSingleton<INavigationService,NavigationService>();
             services.AddSingleton<IDialogService,DialogService>();
+            services.AddSingleton<IAccountsManager, AccountsManager>();
+            services.AddSingleton<IDataValidator, DataValidator>();
             services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
                 viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
 
@@ -33,7 +36,6 @@ namespace PixaiBot
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
- 
             var mainWindow = _serviceProvider.GetRequiredService<MainWindowView>();
             mainWindow.Show();
 

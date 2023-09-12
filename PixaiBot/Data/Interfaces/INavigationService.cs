@@ -7,10 +7,10 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.Data.Interfaces
 {
-    internal interface INavigationService
+    public interface INavigationService
     {
-        internal BaseViewModel CurrentView { get; }
+        public BaseViewModel CurrentView { get; }
 
-        internal void NavigateTo<T>() where T : BaseViewModel;
+        public void NavigateTo<T>() where T : BaseViewModel;
     }
 }

@@ -10,7 +10,7 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel
 {
-    internal class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
         public ICommand NavigateToDashboardCommand { get; }
         

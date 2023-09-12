@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace PixaiBot.Data.Models
 {
-    internal class UserAccount
+    public class UserAccount
     {
-       public string? Email { get; set; }
+        public string? Email { get; set; }
 
-       public string? Password { get; set; }
+        public string? Password { get; set; }
     }
 }

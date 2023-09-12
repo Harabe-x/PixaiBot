@@ -10,7 +10,7 @@ namespace PixaiBot.UI.Services
 {
     internal class DialogService : IDialogService
     {
-        public void ShowDialog<TDialog>(TDialog dialogWindow, bool isModal) where TDialog : Window, new()
+        public void ShowDialog<TDialog>(TDialog dialogWindow, bool isModal) where TDialog : Window
         {
             if (isModal)
             {
