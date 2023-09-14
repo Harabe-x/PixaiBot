@@ -16,25 +16,31 @@ namespace PixaiBot.Bussines_Logic
     {
         private ChromeDriver _driver;
 
+        private const string _mainPageUrl = "https://www.pixai.art";
+
         public bool CheckAccountLogin(UserAccount userAccount)
         {
             _driver = new ChromeDriver();
 
-            var account = new UserAccount()
+            LoginModule.Login(_driver, userAccount);
+
+
+            if (_driver.Url == _mainPageUrl )
             {
-                Email = "xgra577@gmail.com",
-                Password = "Lenny231"
-            };
+                _driver.Close();
+                return true;
+            }
 
-            LoginModule.Login(_driver,account);
-
-            return false;
-
+            _driver.Close();
+            return false; 
         }
 
-        public void CheckAllAccountsLogin(IList<UserAccount> userAccountsList)
+        public void CheckAllAccountsLogin(IList<UserAccount> accountsList)
         {
-            throw new NotImplementedException();
+            foreach (var account in accountsList)
+            {
+                CheckAccountLogin(account);
+            }
         }
     }
 }
