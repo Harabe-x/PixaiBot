@@ -28,6 +28,7 @@ namespace PixaiBot
             services.AddSingleton<IDialogService,DialogService>();
             services.AddSingleton<IAccountsManager, AccountsManager>();
             services.AddSingleton<IDataValidator, DataValidator>();
+            services.AddSingleton<IConfigManager, ConfigManager>();
             services.AddSingleton<IAccountLoginChecker, AccountLoginChecker>();
             services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
                 viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));

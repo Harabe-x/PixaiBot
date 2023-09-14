@@ -38,6 +38,46 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly IAccountLoginChecker _accountLoginChecker;
 
+
+        private bool _shouldStartWithSystem;
+
+        public bool ShouldStartWithSystem
+        {
+            get => _shouldStartWithSystem;
+            set
+            {
+                _shouldStartWithSystem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _enableToastNotifications;
+
+        public bool EnableToastNotifications
+        {
+            get => _enableToastNotifications;
+            set
+            {
+                _enableToastNotifications = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _autoClaimCredits;
+
+        public bool AutoClaimCredits
+        {
+            get => _autoClaimCredits;
+            set
+            {
+                _autoClaimCredits = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+
         private void ShowAddAccountWindow()
         {
             _dialogService.ShowDialog(new AddAccountWindowView(_accountsManager,_dataValidator), true);

@@ -19,9 +19,12 @@ namespace PixaiBot.Bussines_Logic
 
         private readonly JsonReader _jsonReader;
 
+        private readonly JsonWriter _jsonWriter;
+
         public AccountsManager()
         {
             _jsonReader = new JsonReader();
+            _jsonWriter = new JsonWriter();
             UpdateAccountManagerProperties();
         }
 
@@ -31,13 +34,13 @@ namespace PixaiBot.Bussines_Logic
             {
                 var accountsList = new List<UserAccount>();
                 accountsList.Add(account);
-                _jsonReader.WriteAccountList(accountsList, AccountsFilePath);
+                _jsonWriter.WriteJson(accountsList, AccountsFilePath);
                 return;
             }
 
             var accountList = _jsonReader.ReadAccountFile(AccountsFilePath);
             accountList.Add(account);
-            _jsonReader.WriteAccountList(accountList, AccountsFilePath);
+            _jsonWriter.WriteJson(accountList, AccountsFilePath);
 
             UpdateAccountManagerProperties();
         }
@@ -50,7 +53,7 @@ namespace PixaiBot.Bussines_Logic
             }
 
             accountList.Remove(userAccount);
-            _jsonReader.WriteAccountList(accountList, AccountsFilePath);
+            _jsonWriter.WriteJson(accountList, AccountsFilePath);
           
             UpdateAccountManagerProperties();
         }
