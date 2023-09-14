@@ -25,7 +25,7 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2"  >
                 <TextBlock  Style="{StaticResource BaldPurpleText}" Text="Click Button Below To Start The Process"  HorizontalAlignment="Center" FontSize="18" />
                 <TextBlock Style="{StaticResource SecondaryText}" Text="You will need access to the internet ! " HorizontalAlignment="Center" />
-                <Button Style="{StaticResource PurpleButton}" Width="200" Margin="0 30 0 0" Content="Claim Credits"/>
+                <Button Command="{Binding testCommand}" Style="{StaticResource PurpleButton}" Width="200" Margin="0 30 0 0" Content="Claim Credits"/>
                 <TextBlock Style="{StaticResource SecondaryText}"  Text="You already claimed all credits today" FontSize="12" FontWeight="Light" HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>

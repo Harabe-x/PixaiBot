@@ -16,5 +16,7 @@ namespace PixaiBot.Data.Interfaces
         public void RemoveAccount(IList<UserAccount> accountList, UserAccount account);
 
         public IEnumerable<UserAccount> GetAllAccounts();
+
+        public void AddManyAccounts();
     }
 }

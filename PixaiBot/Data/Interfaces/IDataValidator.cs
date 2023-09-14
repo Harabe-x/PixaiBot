@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PixaiBot.Data.Interfaces
 {
-    public interface IDataValidator
+    public interface IDataValidator 
     {
         public bool ValidateEmail(string email);
 

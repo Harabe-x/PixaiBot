@@ -79,9 +79,6 @@ namespace PixaiBot.UI.ViewModel
                 return;
             }
 
-            MessageBox.Show("Invailid Data","EERRRRRRRROORRRRRRR",MessageBoxButton.OK,MessageBoxImage.Error);
-            
-           
         }
 
 

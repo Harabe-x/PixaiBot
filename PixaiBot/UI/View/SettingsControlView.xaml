@@ -21,8 +21,6 @@
             <TextBlock FontWeight="Regular" Style="{StaticResource SecondaryText}" HorizontalAlignment="Center" Text="Here you can add accounts and configure bot" VerticalAlignment="Center" />
         </StackPanel>
 
-
-
         <Grid Grid.Row="1" Margin="0 -5 0 0">
             <StackPanel HorizontalAlignment="Center">
                 <Border Width="300" Height="250" BorderThickness="1" BorderBrush="{StaticResource DarkPurpleColor}" >
@@ -30,11 +28,8 @@
                         <TextBlock Text="Accounts Settings:" Style="{StaticResource BaldPurpleText}"   Margin="20" />
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
                             <Button Content="Add Account" FontSize="14"  Width="130" Height="40" Style="{StaticResource PurpleButton}"   Margin="20 40 0 0 " Command="{Binding ShowAddAccountWindowCommand}"/>
-                            <Button Width="130" Height="40" FontSize="12" Content="Add Account List"  Style="{StaticResource PurpleButton}"   Margin="20 20 0 0 "/>
+                            <Button Width="130" Height="40" FontSize="12" Content="Add Account List"  Style="{StaticResource PurpleButton}"   Margin="20 20 0 0" Command="{Binding AddManyAccountsCommand}"/>
                             <Button Width="130" Content="Validate Accounts" FontSize="14" Height="40" Style="{StaticResource PurpleButton}"  Margin="20 20 0 0 "/>
-
-
-
                         </StackPanel>
                     </Grid>
                 </Border>

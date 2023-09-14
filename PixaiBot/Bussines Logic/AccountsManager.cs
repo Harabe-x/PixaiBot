@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Win32;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 
@@ -61,9 +62,55 @@ namespace PixaiBot.Bussines_Logic
                 : new List<UserAccount>();
         }
 
+        public void AddManyAccounts()
+        {
+            var dialog = new OpenFileDialog()
+            {
+                Title = "Select File:",
+                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            };
+            
+            var result = dialog.ShowDialog();
+
+            if (result == false)
+            {
+                return;
+            }
+
+            var importedUserAccounts = GetUserAccountsFromTxt(dialog.FileName);
+
+            foreach (var account in importedUserAccounts)
+            {
+                AddAccount(account);
+            }
+
+        }
+
         private void UpdateAccountManagerProperties()
         {
             AccountsCount = GetAllAccounts().Count();
+        }
+
+        private IEnumerable<UserAccount> GetUserAccountsFromTxt(string filePath)
+        {
+            var accountsList = File.ReadAllLines(filePath);
+            var accounts = new List<UserAccount>();
+
+            foreach (var account in accountsList)
+            {
+                var splittedLogin = account.Split(":");
+
+                var userAccount = new UserAccount()
+                {
+                    Email = splittedLogin[0],
+                    Password = splittedLogin[1]
+                };
+
+                accounts.Add(userAccount);
+            }
+
+            return accounts;
         }
     }
 }

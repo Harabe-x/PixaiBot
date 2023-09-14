@@ -13,18 +13,21 @@ namespace PixaiBot.UI.ViewModel
     internal class SettingsControlViewModel : BaseViewModel
     {
        
-        public ICommand ShowAddAccountWindowCommand { get;  }
-                    
-        
-        public SettingsControlViewModel(IDialogService dialogService,IAccountsManager accountsManager,IDataValidator dataValidator)
+        public ICommand ShowAddAccountWindowCommand { get; }
+
+        public ICommand AddManyAccountsCommand { get; }
+
+        public ICommand CheckAllAccountsLoginCommand { get; }
+
+        public SettingsControlViewModel(IDialogService dialogService,IAccountsManager accountsManager,IDataValidator dataValidator,IAccountLoginChecker accountLoginChecker)
         {
             _dialogService = dialogService;
             _accountsManager = accountsManager;
             _dataValidator = dataValidator;
+            _accountLoginChecker = accountLoginChecker;
             ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
-
-
-
+            AddManyAccountsCommand = new RelayCommand((obj) => AddManyAccounts());
+            CheckAllAccountsLoginCommand = new RelayCommand((obj) => AddManyAccounts());
         }
 
         private readonly IDialogService _dialogService;
@@ -33,11 +36,22 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly IDataValidator _dataValidator;
 
+        private readonly IAccountLoginChecker _accountLoginChecker;
 
         private void ShowAddAccountWindow()
         {
             _dialogService.ShowDialog(new AddAccountWindowView(_accountsManager,_dataValidator), true);
         }
 
+        private void AddManyAccounts()
+        {
+            _accountsManager.AddManyAccounts();
+        }
+
+        private void CheckAllAccountsLogin()
+        {
+            var accounts = _accountsManager.GetAllAccounts().ToList();
+            _accountLoginChecker.CheckAllAccountsLogin(accounts);
+        }
     }
 }

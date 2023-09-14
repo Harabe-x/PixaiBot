@@ -13,3 +13,4 @@ namespace PixaiBot.Data.Models
         public string? Password { get; set; }
     }
 }
+ 

@@ -38,8 +38,7 @@ namespace PixaiBot.UI.ViewModel
             }
         }
 
-       
-
+        
         private void NavigateToDashboard()
         {
             Navigation.NavigateTo<DashboardControlViewModel>();
