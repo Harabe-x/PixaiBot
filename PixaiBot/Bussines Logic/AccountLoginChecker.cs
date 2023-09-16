@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.PerformanceData;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,9 +15,11 @@ namespace PixaiBot.Bussines_Logic
 {
     internal class AccountLoginChecker : LoginModule , IAccountLoginChecker
     {
-        private ChromeDriver _driver;
+        private ChromeDriver? _driver;
 
-        private const string _mainPageUrl = "https://www.pixai.art";
+        private const string _mainPageUrl = "https://pixai.art/";
+
+        private const string _accountsFileName = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
 
         public bool CheckAccountLogin(UserAccount userAccount)
         {
@@ -24,23 +27,27 @@ namespace PixaiBot.Bussines_Logic
 
             LoginModule.Login(_driver, userAccount);
 
+            Thread.Sleep(1000);
 
             if (_driver.Url == _mainPageUrl )
             {
                 _driver.Close();
+                _driver.Dispose();
                 return true;
             }
 
             _driver.Close();
+            _driver.Dispose();
             return false; 
         }
-
-        public void CheckAllAccountsLogin(IList<UserAccount> accountsList)
+        public int CheckAllAccountsLogin(IList<UserAccount> accountsList)
         {
-            foreach (var account in accountsList)
-            {
-                CheckAccountLogin(account);
-            }
+            var validAccounts = accountsList.Where(CheckAccountLogin).ToList();
+
+            JsonWriter.WriteJson(validAccounts, _accountsFileName);
+
+            return validAccounts.Count;
         }
+        
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using PixaiBot.Data.Interfaces;
+using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.View;
 
@@ -19,15 +20,18 @@ namespace PixaiBot.UI.ViewModel
 
         public ICommand CheckAllAccountsLoginCommand { get; }
 
-        public SettingsControlViewModel(IDialogService dialogService,IAccountsManager accountsManager,IDataValidator dataValidator,IAccountLoginChecker accountLoginChecker)
+        public SettingsControlViewModel(IDialogService dialogService,IAccountsManager 
+            accountsManager,IDataValidator dataValidator,IAccountLoginChecker
+            accountLoginChecker,IAccountsStatisticsManager accountsStatisticsManager)
         {
+            _accountsStatisticsManager = accountsStatisticsManager;
             _dialogService = dialogService;
             _accountsManager = accountsManager;
             _dataValidator = dataValidator;
             _accountLoginChecker = accountLoginChecker;
             ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
             AddManyAccountsCommand = new RelayCommand((obj) => AddManyAccounts());
-            CheckAllAccountsLoginCommand = new RelayCommand((obj) => AddManyAccounts());
+            CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLogin());
         }
 
         private readonly IDialogService _dialogService;
@@ -37,6 +41,8 @@ namespace PixaiBot.UI.ViewModel
         private readonly IDataValidator _dataValidator;
 
         private readonly IAccountLoginChecker _accountLoginChecker;
+
+        private readonly IAccountsStatisticsManager _accountsStatisticsManager;
 
 
         private bool _shouldStartWithSystem;
@@ -91,7 +97,16 @@ namespace PixaiBot.UI.ViewModel
         private void CheckAllAccountsLogin()
         {
             var accounts = _accountsManager.GetAllAccounts().ToList();
-            _accountLoginChecker.CheckAllAccountsLogin(accounts);
+
+            var totalAccountsCount = accounts.Count;
+            
+            var validAccountsCount =  _accountLoginChecker.CheckAllAccountsLogin(accounts);
+
+            _accountsStatisticsManager.IncrementAccountsNumber(-totalAccountsCount);
+
+            _accountsStatisticsManager.IncrementAccountsNumber(validAccountsCount);
+
+
         }
     }
 }

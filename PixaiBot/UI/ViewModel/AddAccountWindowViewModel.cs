@@ -67,17 +67,14 @@ namespace PixaiBot.UI.ViewModel
 
         private void AddAccount()
         {
-            if (_dataValidator.ValidateEmail(Email) && _dataValidator.ValidatePassword(Password))
+            if (!_dataValidator.ValidateEmail(Email) || !_dataValidator.ValidatePassword(Password)) return;
+            var userAccount = new UserAccount
             {
-                var userAccount = new UserAccount
-                {
-                    Email = this.Email,
-                    Password = this.Password
-                };
-                _accountsManger.AddAccount(userAccount);
-               
-                return;
-            }
+                Email = this.Email,
+                Password = this.Password
+            };
+            _accountsManger.AddAccount(userAccount);
+            CloseWindow();
 
         }
 

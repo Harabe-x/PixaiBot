@@ -37,9 +37,9 @@
                   <Grid>
                       <TextBlock Text="Accounts Info :" Foreground="{StaticResource LightPurpleColor}" FontSize="23" FontWeight="SemiBold" Margin="20" />
                       <StackPanel VerticalAlignment="Center">
-                          <TextBlock Foreground="{StaticResource DarkGreen}" Text="Accounts Count : 231" Margin="20 10 20 10" FontSize="15" FontWeight="Thin"/>
-                            <TextBlock Foreground="{StaticResource Magenta}" Text="Accounts With Claimed Credits : 132" Margin="20 10 20 10" FontSize="15" FontWeight="Thin" />
-                          <TextBlock Foreground="{StaticResource Mint}" Text="Accounts With Unclaimed credits: 132" Margin="20 10 20 10" FontSize="15" FontWeight="Thin" />
+                            <TextBlock Foreground="{StaticResource DarkGreen}" Text="{Binding AccountCount}" Margin="20 10 20 10" FontSize="15" FontWeight="Thin"/>
+                            <TextBlock Foreground="{StaticResource Magenta}" Text="{Binding AccountWithClaimedCredits}" Margin="20 10 20 10" FontSize="15" FontWeight="Thin" />
+                            <TextBlock Foreground="{StaticResource Mint}" Text="{Binding AccountWithUnclaimedCredits }" Margin="20 10 20 10" FontSize="15" FontWeight="Thin" />
                       </StackPanel>
                     </Grid>
                 </Border>

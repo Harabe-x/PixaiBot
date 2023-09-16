@@ -34,8 +34,8 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBox Grid.Row="0" Style="{StaticResource FormTextBox}" BorderBrush="{StaticResource LightPurpleColor}" HorizontalAlignment="Stretch"  Margin="5 0 5 0"/>
-                        <PasswordBox Grid.Row="1" BorderBrush="{StaticResource LightPurpleColor}" HorizontalAlignment="Stretch" Style="{StaticResource FormPasswordBox}"  Margin="5 0 5 0 "/>
+                        <TextBox Grid.Row="0" Text="{Binding Email}" Style="{StaticResource FormTextBox}" BorderBrush="{StaticResource LightPurpleColor}" HorizontalAlignment="Stretch"  Margin="5 0 5 0"/>
+                        <TextBox Grid.Row="1" Text="{Binding Password}" BorderBrush="{StaticResource LightPurpleColor}" HorizontalAlignment="Stretch" Style="{StaticResource FormTextBox}"  Margin="5 0 5 0 "/>
                     </Grid>
                 </Border>
             </Grid>

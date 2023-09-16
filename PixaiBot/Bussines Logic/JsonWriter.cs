@@ -11,7 +11,7 @@ namespace PixaiBot.Bussines_Logic
     internal class JsonWriter
     {
 
-        public void WriteJson<T>(T obj, string filePath)
+        public static void WriteJson<T>(T obj, string filePath)
         {
             var serializedJson = JsonSerializer.Serialize(obj);
             File.WriteAllText(filePath,serializedJson);

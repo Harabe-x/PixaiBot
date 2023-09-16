@@ -29,7 +29,7 @@
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
                             <Button Content="Add Account" FontSize="14"  Width="130" Height="40" Style="{StaticResource PurpleButton}"   Margin="20 40 0 0 " Command="{Binding ShowAddAccountWindowCommand}"/>
                             <Button Width="130" Height="40" FontSize="12" Content="Add Account List"  Style="{StaticResource PurpleButton}"   Margin="20 20 0 0" Command="{Binding AddManyAccountsCommand}"/>
-                            <Button Width="130" Content="Validate Accounts" FontSize="14" Height="40" Style="{StaticResource PurpleButton}"  Margin="20 20 0 0 "/>
+                            <Button Width="130" Content="Validate Accounts" FontSize="14" Height="40" Style="{StaticResource PurpleButton}"  Margin="20 20 0 0 " Command="{Binding CheckAllAccountsLoginCommand}"/>
                         </StackPanel>
                     </Grid>
                 </Border>

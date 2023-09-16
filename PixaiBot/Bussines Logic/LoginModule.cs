@@ -41,7 +41,6 @@ namespace PixaiBot.Bussines_Logic
             textInputs.ElementAt(1).Click();
             textInputs.ElementAt(1).SendKeys(userAccount.Password);
             
-
             buttons = driver.FindElements(By.TagName("button"));
 
             buttons.FirstOrDefault(x => x.Text == "Login")?.Click();

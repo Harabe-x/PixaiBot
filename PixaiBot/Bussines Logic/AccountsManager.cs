@@ -13,19 +13,19 @@ namespace PixaiBot.Bussines_Logic
 {
     public class AccountsManager : IAccountsManager
     {
-        public int AccountsCount { get; private set; }
+        public int AccountsCount => UpdateAccountManagerProperties();
 
-        public const string AccountsFilePath = "accounts.json";
+        public const string AccountsFilePath = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
 
         private readonly JsonReader _jsonReader;
 
-        private readonly JsonWriter _jsonWriter;
+        private readonly IAccountsStatisticsManager _accountsStatisticsManager;
 
-        public AccountsManager()
+        public AccountsManager(IAccountsStatisticsManager accountsStatisticsManager)
         {
+            _accountsStatisticsManager = accountsStatisticsManager;
             _jsonReader = new JsonReader();
-            _jsonWriter = new JsonWriter();
-            UpdateAccountManagerProperties();
+             
         }
 
         public void AddAccount(UserAccount account)
@@ -34,14 +34,17 @@ namespace PixaiBot.Bussines_Logic
             {
                 var accountsList = new List<UserAccount>();
                 accountsList.Add(account);
-                _jsonWriter.WriteJson(accountsList, AccountsFilePath);
+                JsonWriter.WriteJson(accountsList, AccountsFilePath);
+                _accountsStatisticsManager.IncrementAccountsNumber(1);
+                UpdateAccountManagerProperties();
+
                 return;
             }
 
             var accountList = _jsonReader.ReadAccountFile(AccountsFilePath);
             accountList.Add(account);
-            _jsonWriter.WriteJson(accountList, AccountsFilePath);
-
+            JsonWriter.WriteJson(accountList, AccountsFilePath);
+            _accountsStatisticsManager.IncrementAccountsNumber(1);
             UpdateAccountManagerProperties();
         }
 
@@ -53,8 +56,9 @@ namespace PixaiBot.Bussines_Logic
             }
 
             accountList.Remove(userAccount);
-            _jsonWriter.WriteJson(accountList, AccountsFilePath);
-          
+            JsonWriter.WriteJson(accountList, AccountsFilePath);
+            _accountsStatisticsManager.IncrementAccountsNumber(-1);
+
             UpdateAccountManagerProperties();
         }
 
@@ -87,12 +91,11 @@ namespace PixaiBot.Bussines_Logic
             {
                 AddAccount(account);
             }
-
         }
 
-        private void UpdateAccountManagerProperties()
+        private int UpdateAccountManagerProperties()
         {
-            AccountsCount = GetAllAccounts().Count();
+            return GetAllAccounts().Count(); 
         }
 
         private IEnumerable<UserAccount> GetUserAccountsFromTxt(string filePath)
@@ -103,6 +106,11 @@ namespace PixaiBot.Bussines_Logic
             foreach (var account in accountsList)
             {
                 var splittedLogin = account.Split(":");
+
+                if (splittedLogin.Length != 2)
+                {
+                    continue;
+                }
 
                 var userAccount = new UserAccount()
                 {

@@ -25,5 +25,13 @@ namespace PixaiBot.Bussines_Logic
 
             return userConfig; 
         }
+
+        public AccountsStatistics ReadStatisticsFile(string filePath)
+        {
+            var jsonString = File.ReadAllText(filePath);
+            var statistics = JsonSerializer.Deserialize<AccountsStatistics>(jsonString);
+            return statistics;
+        }
+
     }
 }

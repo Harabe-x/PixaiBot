@@ -11,16 +11,14 @@ namespace PixaiBot.Bussines_Logic
     internal class ConfigManager : IConfigManager
     {
 
-        public const string ConfigFilePath = "config.json";
+        public const string ConfigFilePath = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\config.json";
 
         private readonly JsonReader _jsonReader;
 
-        private readonly JsonWriter _jsonWriter;
 
         public ConfigManager()
         {
             _jsonReader = new JsonReader();
-            _jsonWriter = new JsonWriter();
         }
          
         public UserConfig GetConfig()
@@ -30,7 +28,7 @@ namespace PixaiBot.Bussines_Logic
 
         public void SaveConfig(UserConfig config)
         {
-            _jsonWriter.WriteJson(config, ConfigFilePath);
+            JsonWriter.WriteJson(config, ConfigFilePath);
         }
     }
 }

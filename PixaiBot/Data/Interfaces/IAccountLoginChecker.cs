@@ -11,7 +11,7 @@ namespace PixaiBot.Data.Interfaces
     {
         bool CheckAccountLogin(UserAccount userAccount);
 
-        void CheckAllAccountsLogin(IList<UserAccount> accountsList);
+        int CheckAllAccountsLogin(IList<UserAccount> accountsList);
 
     }
 }
