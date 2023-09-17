@@ -17,7 +17,8 @@ namespace PixaiBot.UI.ViewModel
     {
         public ICommand ClaimCreditsCommand { get; }
 
-        public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager, IAccountsStatisticsManager accountsStatisticsManager)
+        public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
+            IAccountsStatisticsManager accountsStatisticsManager, ILogger logger)
         {
             _accountsStatisticsManager = accountsStatisticsManager;
             _creditClaimer = creditClaimer;

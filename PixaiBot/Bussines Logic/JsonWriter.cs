@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace PixaiBot.Bussines_Logic
 {
-    internal class JsonWriter
+    public class JsonWriter
     {
 
         public static void WriteJson<T>(T obj, string filePath)

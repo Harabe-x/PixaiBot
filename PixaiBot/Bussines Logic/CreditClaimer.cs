@@ -24,6 +24,13 @@ namespace PixaiBot.Bussines_Logic
 
         private const string LoginUrl = "https://pixai.art/login/";
 
+        private readonly ILogger _logger;
+
+        public CreditClaimer(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public void ClaimCredits(UserAccount account)
         {
             _driver = new ChromeDriver();
@@ -32,21 +39,27 @@ namespace PixaiBot.Bussines_Logic
 
             if (_driver.Url == LoginUrl)
             {
+                _logger.Log("Login failed");
                 _driver.Quit();
                 return;
             }
+
+            _logger.Log("Logged in successfully");
 
             if (!GoToProfile())
             {
                 _driver.Quit();
                 return;
             }
-
+            _logger.Log("Navigated to profile page");
             if (!ClaimCreditsOnAccount())
             {
                 _driver.Quit();
                 return;
             }
+            _driver.Quit();
+            
+            _logger.Log($"Claiming credits completed successfully for {account.Email}");
 
         }
 

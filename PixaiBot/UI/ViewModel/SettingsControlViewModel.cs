@@ -22,8 +22,9 @@ namespace PixaiBot.UI.ViewModel
 
         public SettingsControlViewModel(IDialogService dialogService,IAccountsManager 
             accountsManager,IDataValidator dataValidator,IAccountLoginChecker
-            accountLoginChecker,IAccountsStatisticsManager accountsStatisticsManager)
+            accountLoginChecker,IAccountsStatisticsManager accountsStatisticsManager,IConfigManager configManager)
         {
+            _configManager = configManager;
             _accountsStatisticsManager = accountsStatisticsManager;
             _dialogService = dialogService;
             _accountsManager = accountsManager;
@@ -32,6 +33,7 @@ namespace PixaiBot.UI.ViewModel
             ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
             AddManyAccountsCommand = new RelayCommand((obj) => AddManyAccounts());
             CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLogin());
+            InitializeUserConfig();
         }
 
         private readonly IDialogService _dialogService;
@@ -44,6 +46,9 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly IAccountsStatisticsManager _accountsStatisticsManager;
 
+        private readonly IConfigManager _configManager;
+
+        private UserConfig _userConfig;
 
         private bool _shouldStartWithSystem;
 
@@ -52,8 +57,11 @@ namespace PixaiBot.UI.ViewModel
             get => _shouldStartWithSystem;
             set
             {
+                _userConfig.StartWithSystem = value;
                 _shouldStartWithSystem = value;
                 OnPropertyChanged();
+                SaveUserConfig();
+
             }
         }
 
@@ -64,8 +72,11 @@ namespace PixaiBot.UI.ViewModel
             get => _enableToastNotifications;
             set
             {
+                _userConfig.ToastNotifications = value;
                 _enableToastNotifications = value;
                 OnPropertyChanged();
+                SaveUserConfig();
+
             }
         }
 
@@ -76,8 +87,11 @@ namespace PixaiBot.UI.ViewModel
             get => _autoClaimCredits;
             set
             {
+                _userConfig.CreditsAutoClaim = value;
                 _autoClaimCredits = value;
                 OnPropertyChanged();
+                SaveUserConfig();
+
             }
         }
 
@@ -105,8 +119,20 @@ namespace PixaiBot.UI.ViewModel
             _accountsStatisticsManager.ResetNumberOfAccounts();
 
             _accountsStatisticsManager.IncrementAccountsNumber(validAccountsCount);
-
-
         }
+
+        private void InitializeUserConfig()
+        {
+           _userConfig = _configManager.GetConfig();
+           ShouldStartWithSystem = _userConfig.StartWithSystem;
+           EnableToastNotifications = _userConfig.ToastNotifications; 
+           AutoClaimCredits = _userConfig.CreditsAutoClaim;
+        }
+
+        public void SaveUserConfig()
+        {
+            _configManager.SaveConfig(_userConfig);
+        }
+
     }
 }
