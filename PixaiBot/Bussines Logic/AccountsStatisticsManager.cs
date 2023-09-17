@@ -62,5 +62,10 @@ namespace PixaiBot.Bussines_Logic
         {
             JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
         }
+
+        public void ResetNumberOfAccounts()
+        {
+            _accountsStatistics.AccountsCount = 0;
+        }
     }
 }

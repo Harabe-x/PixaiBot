@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Accessibility;
 using PixaiBot.Bussines_Logic;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
@@ -14,31 +15,29 @@ namespace PixaiBot.UI.ViewModel
 {
     internal class DashboardControlViewModel : BaseViewModel
     {
-        public ICommand testCommand { get;  }
+        public ICommand ClaimCreditsCommand { get; }
 
-        public DashboardControlViewModel(IAccountLoginChecker accountLoginChecker,IAccountsStatisticsManager accountsStatisticsManager)
+        public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager, IAccountsStatisticsManager accountsStatisticsManager)
         {
             _accountsStatisticsManager = accountsStatisticsManager;
-            _accountLoginChecker = accountLoginChecker;
-            testCommand = new RelayCommand((obj) => test());
+            _creditClaimer = creditClaimer;
+            _accountsManager = accountsManager;
+            ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(30);
-            _timer.Tick += UpdateStaistics;
-            _timer.Start();
-            UpdateStaistics(null,null);
-           
-
+            StartStatisticsRefreshing();
         }
 
-        private readonly IAccountLoginChecker _accountLoginChecker;
+        private readonly IAccountsManager _accountsManager;
+
+        private readonly ICreditClaimer _creditClaimer;
 
         private readonly IAccountsStatisticsManager _accountsStatisticsManager;
 
-        private DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer;
 
-        private string _accountCount;
+        private string? _accountCount;
 
-        public string AccountCount
+        public string? AccountCount
         {
             get => _accountCount;
             set
@@ -47,9 +46,9 @@ namespace PixaiBot.UI.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _accountWithClaimedCredits;
+        private string? _accountWithClaimedCredits;
 
-        public string AccountWithClaimedCredits
+        public string? AccountWithClaimedCredits
         {
             get => _accountWithClaimedCredits;
             set
@@ -58,9 +57,9 @@ namespace PixaiBot.UI.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _accountWithUnclaimedCredits;
+        private string? _accountWithUnclaimedCredits;
 
-        public string AccountWithUnclaimedCredits
+        public string? AccountWithUnclaimedCredits
         {
             get => _accountWithUnclaimedCredits;
             set
@@ -70,13 +69,27 @@ namespace PixaiBot.UI.ViewModel
             }
         }
 
-
-        private void test()
+        private void StartStatisticsRefreshing()
         {
-          
+            _timer.Interval = TimeSpan.FromSeconds(5);
+            _timer.Tick += UpdateStatistics;
+            _timer.Start();
+            UpdateStatistics(null, null);
+
         }
 
-        private void UpdateStaistics(object? sender, EventArgs e)
+        private void ClaimCredits()
+        {
+            var accounts = _accountsManager.GetAllAccounts();
+
+            foreach (var account in accounts)  
+            {
+                _creditClaimer.ClaimCredits(account);
+            }
+
+        }
+
+        private void UpdateStatistics(object? sender, EventArgs? e)
         {
             _accountsStatisticsManager.RefreshStatistics();
             AccountCount = _accountsStatisticsManager.AccountsNumber.ToString();

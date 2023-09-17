@@ -102,7 +102,7 @@ namespace PixaiBot.UI.ViewModel
             
             var validAccountsCount =  _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
-            _accountsStatisticsManager.IncrementAccountsNumber(-totalAccountsCount);
+            _accountsStatisticsManager.ResetNumberOfAccounts();
 
             _accountsStatisticsManager.IncrementAccountsNumber(validAccountsCount);
 

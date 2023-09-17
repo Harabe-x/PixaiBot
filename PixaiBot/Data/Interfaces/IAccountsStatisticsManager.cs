@@ -24,5 +24,7 @@ namespace PixaiBot.Data.Interfaces
 
         public void WriteStatisticsToFile();
 
+        public void ResetNumberOfAccounts();
+
     }
 }
