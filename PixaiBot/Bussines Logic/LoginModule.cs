@@ -12,23 +12,20 @@ namespace PixaiBot.Bussines_Logic
 {
     public abstract class LoginModule
     {
+        private const string LoginUrl = "https://pixai.art/login";
 
-        private const int _waitTime = 200;
-
-        private const string _loginUrl = "https://pixai.art/login";
+        private const int StartWaitTime = 1000;
 
         protected static void Login(ChromeDriver driver,UserAccount userAccount)
         {
 
-            driver.Navigate().GoToUrl(_loginUrl);
-
-            Thread.Sleep(_waitTime);
+            driver.Navigate().GoToUrl(LoginUrl);
+            
+            Thread.Sleep(StartWaitTime);
 
             IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName("button"));
 
             buttons.FirstOrDefault(x => x.Text == "Log in with email")?.Click();
-
-            Thread.Sleep(_waitTime);
 
             IReadOnlyCollection<IWebElement> textInputs = driver.FindElements(By.TagName("input"));
 

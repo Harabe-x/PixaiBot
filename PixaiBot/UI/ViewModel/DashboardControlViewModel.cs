@@ -18,11 +18,14 @@ namespace PixaiBot.UI.ViewModel
         public ICommand ClaimCreditsCommand { get; }
 
         public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
-            IAccountsStatisticsManager accountsStatisticsManager, ILogger logger)
+            IAccountsStatisticsManager accountsStatisticsManager, ILogger logger,IConfigManager configManager, IToastNotificationSender toastNotificationSender)
         {
+            _configManager = configManager;
+            _logger = logger;
             _accountsStatisticsManager = accountsStatisticsManager;
             _creditClaimer = creditClaimer;
             _accountsManager = accountsManager;
+            _toastNotificationSender = toastNotificationSender;
             ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
             _timer = new DispatcherTimer();
             StartStatisticsRefreshing();
@@ -34,9 +37,17 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly IAccountsStatisticsManager _accountsStatisticsManager;
 
+        private readonly IConfigManager _configManager;
+
+        private readonly ILogger _logger;
+
+        private readonly IToastNotificationSender _toastNotificationSender;
+
         private readonly DispatcherTimer _timer;
 
         private string? _accountCount;
+
+        private  UserConfig _userConfig;
 
         public string? AccountCount
         {
@@ -85,7 +96,14 @@ namespace PixaiBot.UI.ViewModel
 
             foreach (var account in accounts)  
             {
-                _creditClaimer.ClaimCredits(account);
+                if (_userConfig.ToastNotifications)
+                {
+                  _creditClaimer.ClaimCredits(account,_toastNotificationSender);
+                }
+                else
+                {
+                    { _creditClaimer.ClaimCredits(account); }
+                }
             }
 
         }
@@ -96,6 +114,7 @@ namespace PixaiBot.UI.ViewModel
             AccountCount = _accountsStatisticsManager.AccountsNumber.ToString();
             AccountWithClaimedCredits = _accountsStatisticsManager.AccountsWithClaimedCredits.ToString();
             AccountWithUnclaimedCredits = _accountsStatisticsManager.AccountsWithUnclaimedCredits.ToString();
+            _userConfig = _configManager.GetConfig();
         }
 
 

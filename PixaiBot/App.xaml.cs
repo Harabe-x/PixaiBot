@@ -33,6 +33,7 @@ namespace PixaiBot
             services.AddSingleton<IAccountsStatisticsManager, AccountsStatisticsManager>();
             services.AddSingleton<ICreditClaimer, CreditClaimer>();
             services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();
             services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
                 viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
 

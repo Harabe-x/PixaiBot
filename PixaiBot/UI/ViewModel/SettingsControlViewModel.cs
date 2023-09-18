@@ -96,8 +96,6 @@ namespace PixaiBot.UI.ViewModel
         }
 
 
-
-
         private void ShowAddAccountWindow()
         {
             _dialogService.ShowDialog(new AddAccountWindowView(_accountsManager,_dataValidator), true);
@@ -133,6 +131,5 @@ namespace PixaiBot.UI.ViewModel
         {
             _configManager.SaveConfig(_userConfig);
         }
-
     }
 }

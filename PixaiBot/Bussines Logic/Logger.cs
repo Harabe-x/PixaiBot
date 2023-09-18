@@ -27,7 +27,7 @@ namespace PixaiBot.Bussines_Logic
 
         public void Log(string message)
         {
-            File.AppendAllText(LogFilePath, $"[{DateTime.Now}] {message}");
+            File.AppendAllText(LogFilePath, $"[{DateTime.Now}] {message}\n");
         }
     }
 }
