@@ -48,7 +48,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                BorderBrush="Transparent">
+                        BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
@@ -57,13 +57,26 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="#ffffff" />
+                    <Setter Property="Tag" Value="#ffffff" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
+                                BorderBrush="#a29bfe">
+                                    <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Foreground" Value="#ffffff" />
                     <Setter Property="Tag" Value="#ffffff" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                        BorderBrush="#a29bfe">
+                                BorderBrush="#a29bfe">
                                     <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
@@ -72,7 +85,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
 
         <Style x:Key="SidePanelButtonIcon" TargetType="fa:ImageAwesome">
             <Setter Property="Width" Value="23" />

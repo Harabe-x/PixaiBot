@@ -31,5 +31,19 @@ namespace PixaiBot.UI.View
                 this.DragMove(); 
             }
         }
+        private void ResetButtonsColors()
+        {
+         
+        }
+
+        private void DashboardBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+          
+        }
+
+        private void SettingsBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+          
+        }
     }
 }

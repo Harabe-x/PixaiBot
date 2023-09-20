@@ -8,7 +8,7 @@ using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.Bussines_Logic
 {
-    internal class ToastNotificationSender : IToastNotificationSender
+    public class ToastNotificationSender : IToastNotificationSender
     {
 
         private readonly NotificationManager _notification;
@@ -17,11 +17,10 @@ namespace PixaiBot.Bussines_Logic
         {
             _notification = new NotificationManager();
         }
-        
+
         public void SendNotification(string title,string message,NotificationType notificationType)
         {
-          _notification.Show( title,message,notificationType);
-
+            _notification.Show( title,message,notificationType);
         }
     }
 }

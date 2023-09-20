@@ -10,6 +10,6 @@ namespace PixaiBot.Data.Interfaces
 {
     internal interface ICreditClaimer
     {
-        public void ClaimCredits(UserAccount account, IToastNotificationSender notificationSender = null);
+        public void ClaimCredits(UserAccount account,IToastNotificationSender toastNotificationSender = null);
     }
 }

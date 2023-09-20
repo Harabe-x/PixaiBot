@@ -24,14 +24,14 @@
               
                 <StackPanel>
                     <Image Source="../../Resources/images/PixaiLogo.png" Height="250"/>
-                    <Button Command="{Binding NavigateToDashboardCommand}" Style="{StaticResource MenuButton}">
+                    <Button  Name="DashboardBtn" Command="{Binding NavigateToDashboardCommand}" Click="DashboardBtn_OnClick" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Home" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="SettingsButton" Text="Dashnoard"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
+                    <Button Name="SettingsBtn" Click="SettingsBtn_OnClick" Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Cog" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="Settings" Text="Settings"

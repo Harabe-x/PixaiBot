@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Accessibility;
+using Notification.Wpf;
 using PixaiBot.Bussines_Logic;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
@@ -17,6 +18,9 @@ namespace PixaiBot.UI.ViewModel
     {
         public ICommand ClaimCreditsCommand { get; }
 
+
+        public ICommand TestCommand { get; }
+
         public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
             IAccountsStatisticsManager accountsStatisticsManager, ILogger logger,IConfigManager configManager, IToastNotificationSender toastNotificationSender)
         {
@@ -27,6 +31,7 @@ namespace PixaiBot.UI.ViewModel
             _accountsManager = accountsManager;
             _toastNotificationSender = toastNotificationSender;
             ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
+            TestCommand = new RelayCommand((obj) => TestMethod());
             _timer = new DispatcherTimer();
             StartStatisticsRefreshing();
         }
@@ -91,21 +96,33 @@ namespace PixaiBot.UI.ViewModel
         }
 
         private void ClaimCredits()
-        {
-            var accounts = _accountsManager.GetAllAccounts();
+        { 
+            var task = new Task(ClaimCreditsInNewThread);
+            task.Start();
 
-            foreach (var account in accounts)  
+        }
+
+        private void ClaimCreditsInNewThread()
+        {
+            var accounts = _accountsManager.GetAllAccounts().ToList();
+
+            foreach (var account in accounts)
             {
                 if (_userConfig.ToastNotifications)
                 {
-                  _creditClaimer.ClaimCredits(account,_toastNotificationSender);
+                    _creditClaimer.ClaimCredits(account,_toastNotificationSender);
                 }
                 else
                 {
-                    { _creditClaimer.ClaimCredits(account); }
+                    _creditClaimer.ClaimCredits(account);
                 }
             }
+        }
+ 
 
+        private void TestMethod()
+        {
+           
         }
 
         private void UpdateStatistics(object? sender, EventArgs? e)

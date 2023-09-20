@@ -13,7 +13,5 @@ namespace PixaiBot.Data.Models
         public int AccountWithClaimedCredits { get; set; }
 
         public int AccountWithUnclaimedCredits { get; set; }
-
-
     }
 }
