@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PixaiBot.UI.View
+namespace PixaiBot.UI.View;
+
+/// <summary>
+/// Logika interakcji dla klasy SettingsControlView.xaml
+/// </summary>
+public partial class SettingsControlView : UserControl
 {
-    /// <summary>
-    /// Logika interakcji dla klasy SettingsControlView.xaml
-    /// </summary>
-    public partial class SettingsControlView : UserControl
+    public SettingsControlView()
     {
-        public SettingsControlView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

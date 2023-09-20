@@ -7,31 +7,29 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Bussines_Logic
+namespace PixaiBot.Bussines_Logic;
+
+public class JsonReader
 {
-    public class JsonReader
+    public IList<UserAccount> ReadAccountFile(string filePath)
     {
-        public IList<UserAccount> ReadAccountFile(string filePath) 
-        {
-            var jsonString = File.ReadAllText(filePath);
-            var accounts = JsonSerializer.Deserialize<IList<UserAccount>>(jsonString);
-            return accounts;
-        }
+        var jsonString = File.ReadAllText(filePath);
+        var accounts = JsonSerializer.Deserialize<IList<UserAccount>>(jsonString);
+        return accounts;
+    }
 
-        public UserConfig ReadConfigFile(string filePath)
-        {
-            var jsonString = File.ReadAllText(filePath);
-            var userConfig = JsonSerializer.Deserialize<UserConfig>(jsonString);
+    public UserConfig ReadConfigFile(string filePath)
+    {
+        var jsonString = File.ReadAllText(filePath);
+        var userConfig = JsonSerializer.Deserialize<UserConfig>(jsonString);
 
-            return userConfig; 
-        }
+        return userConfig;
+    }
 
-        public AccountsStatistics ReadStatisticsFile(string filePath)
-        {
-            var jsonString = File.ReadAllText(filePath);
-            var statistics = JsonSerializer.Deserialize<AccountsStatistics>(jsonString);
-            return statistics;
-        }
-
+    public AccountsStatistics ReadStatisticsFile(string filePath)
+    {
+        var jsonString = File.ReadAllText(filePath);
+        var statistics = JsonSerializer.Deserialize<AccountsStatistics>(jsonString);
+        return statistics;
     }
 }

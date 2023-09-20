@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PixaiBot.UI.View
+namespace PixaiBot.UI.View;
+
+/// <summary>
+/// Logika interakcji dla klasy DashboardControlView.xaml
+/// </summary>
+public partial class DashboardControlView : UserControl
 {
-    /// <summary>
-    /// Logika interakcji dla klasy DashboardControlView.xaml
-    /// </summary>
-    public partial class DashboardControlView : UserControl
+    public DashboardControlView()
     {
-        public DashboardControlView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

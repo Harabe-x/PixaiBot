@@ -5,13 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Data.Interfaces
+namespace PixaiBot.Data.Interfaces;
+
+public interface IAccountLoginChecker
 {
-    public interface IAccountLoginChecker
-    {
-        bool CheckAccountLogin(UserAccount userAccount);
+    bool CheckAccountLogin(UserAccount userAccount);
 
-        int CheckAllAccountsLogin(IList<UserAccount> accountsList);
-
-    }
+    int CheckAllAccountsLogin(IList<UserAccount> accountsList);
 }

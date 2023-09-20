@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixaiBot.Data.Models
+namespace PixaiBot.Data.Models;
+
+public class AccountsStatistics
 {
-    public class AccountsStatistics
-    {
-        public int AccountsCount { get; set; }
+    public int AccountsCount { get; set; }
 
-        public int AccountWithClaimedCredits { get; set; }
+    public int AccountWithClaimedCredits { get; set; }
 
-        public int AccountWithUnclaimedCredits { get; set; }
-    }
+    public int AccountWithUnclaimedCredits { get; set; }
 }

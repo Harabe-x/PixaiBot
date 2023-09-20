@@ -6,15 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace PixaiBot.Bussines_Logic
-{
-    public class JsonWriter
-    {
+namespace PixaiBot.Bussines_Logic;
 
-        public static void WriteJson<T>(T obj, string filePath)
-        {
-            var serializedJson = JsonSerializer.Serialize(obj);
-            File.WriteAllText(filePath,serializedJson);
-        }
+public class JsonWriter
+{
+    public static void WriteJson<T>(T obj, string filePath)
+    {
+        var serializedJson = JsonSerializer.Serialize(obj);
+        File.WriteAllText(filePath, serializedJson);
     }
 }

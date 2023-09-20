@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using PixaiBot.Bussines_Logic;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Data.Interfaces
+namespace PixaiBot.Data.Interfaces;
+
+internal interface ICreditClaimer
 {
-    internal interface ICreditClaimer
-    {
-        public void ClaimCredits(UserAccount account,IToastNotificationSender toastNotificationSender = null);
-    }
+    public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null);
 }

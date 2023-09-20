@@ -5,35 +5,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace PixaiBot.UI.Base
+namespace PixaiBot.UI.Base;
+
+public class RelayCommand : ICommand
 {
-    public class RelayCommand : ICommand
+    private readonly Func<object, bool> _canExecute;
+
+    private readonly Action<object> _execute;
+
+    public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
     {
-        private readonly Func<object, bool> _canExecute;
+        _execute = execute;
+        _canExecute = canExecute;
+    }
 
-        private readonly Action<object> _execute;
+    public event EventHandler CanExecuteChanged;
 
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
+    public bool CanExecute(object parameter)
+    {
+        return _canExecute?.Invoke(parameter) ?? true;
+    }
 
-        public event EventHandler CanExecuteChanged;
+    public void Execute(object parameter)
+    {
+        _execute?.Invoke(parameter);
+    }
 
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute?.Invoke(parameter) ?? true;
-        }
-
-        public void Execute(object parameter)
-        {
-            _execute?.Invoke(parameter);
-        }
-
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-        }
+    public void RaiseCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

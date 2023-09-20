@@ -3,35 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PixaiBot.UI.View"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" Background="Transparent" WindowStyle="None" ResizeMode="NoResize"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" Background="Transparent" WindowStyle="None"
+        ResizeMode="NoResize"
         Title="MainWindowView" Height="700" Width="600" AllowsTransparency="True">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" CornerRadius="25 0 0 25">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#8165ff" Offset="1"/>
-                    <GradientStop Color="#6c5ce7" Offset="1"/>
+                    <GradientStop Color="#8165ff" Offset="1" />
+                    <GradientStop Color="#6c5ce7" Offset="1" />
                 </LinearGradientBrush>
             </Border.Background>
 
             <Grid>
-              
+
                 <StackPanel>
-                    <Image Source="../../Resources/images/PixaiLogo.png" Height="250"/>
-                    <Button  Name="DashboardBtn" Command="{Binding NavigateToDashboardCommand}" Click="DashboardBtn_OnClick" Style="{StaticResource MenuButton}">
+                    <Image Source="../../Resources/images/PixaiLogo.png" Height="250" />
+                    <Button Name="DashboardBtn" Command="{Binding NavigateToDashboardCommand}"
+                            Click="DashboardBtn_OnClick" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Home" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="SettingsButton" Text="Dashnoard"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </Button>
-                    <Button Name="SettingsBtn" Click="SettingsBtn_OnClick" Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
+                    <Button Name="SettingsBtn" Click="SettingsBtn_OnClick"
+                            Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Cog" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="Settings" Text="Settings"
@@ -47,16 +49,15 @@
                     </Button>
 
 
-
                 </StackPanel>
 
             </Grid>
 
-        </Border >
-        <Border Grid.Column="1" Background="{StaticResource White}" CornerRadius="0 25 25 0" MouseDown="Border_OnMouseDown">
+        </Border>
+        <Border Grid.Column="1" Background="{StaticResource White}" CornerRadius="0 25 25 0"
+                MouseDown="Border_OnMouseDown">
             <ContentPresenter Content="{Binding Navigation.CurrentView}" />
         </Border>
-
 
 
     </Grid>

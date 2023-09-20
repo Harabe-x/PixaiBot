@@ -11,43 +11,42 @@ using OpenQA.Selenium.Chrome;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Bussines_Logic
+namespace PixaiBot.Bussines_Logic;
+
+internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
 {
-    internal class AccountLoginChecker : LoginModule , IAccountLoginChecker
+    private ChromeDriver? _driver;
+
+    private const string _mainPageUrl = "https://pixai.art/";
+
+    private const string _accountsFileName = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
+
+    public bool CheckAccountLogin(UserAccount userAccount)
     {
-        private ChromeDriver? _driver;
+        _driver = new ChromeDriver();
 
-        private const string _mainPageUrl = "https://pixai.art/";
+        Login(_driver, userAccount);
 
-        private const string _accountsFileName = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
+        Thread.Sleep(1000);
 
-        public bool CheckAccountLogin(UserAccount userAccount)
+        if (_driver.Url == _mainPageUrl)
         {
-            _driver = new ChromeDriver();
-
-            LoginModule.Login(_driver, userAccount);
-
-            Thread.Sleep(1000);
-
-            if (_driver.Url == _mainPageUrl )
-            {
-                _driver.Close();
-                _driver.Dispose();
-                return true;
-            }
-
             _driver.Close();
             _driver.Dispose();
-            return false; 
+            return true;
         }
-        public int CheckAllAccountsLogin(IList<UserAccount> accountsList)
-        {
-            var validAccounts = accountsList.Where(CheckAccountLogin).ToList();
 
-            JsonWriter.WriteJson(validAccounts, _accountsFileName);
+        _driver.Close();
+        _driver.Dispose();
+        return false;
+    }
 
-            return validAccounts.Count;
-        }
-        
+    public int CheckAllAccountsLogin(IList<UserAccount> accountsList)
+    {
+        var validAccounts = accountsList.Where(CheckAccountLogin).ToList();
+
+        JsonWriter.WriteJson(validAccounts, _accountsFileName);
+
+        return validAccounts.Count;
     }
 }

@@ -9,76 +9,70 @@ using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
 
-namespace PixaiBot.UI.ViewModel
+namespace PixaiBot.UI.ViewModel;
+
+public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
 {
-    public class AddAccountWindowViewModel : BaseViewModel , IWindowHelper
+    public ICommand AddAccountCommand { get; }
+
+    public ICommand CloseWindowCommand { get; }
+
+
+    public AddAccountWindowViewModel(IAccountsManager accountsManager, IDataValidator dataValidator)
     {
-        public ICommand AddAccountCommand { get; }
+        _accountsManger = accountsManager;
+        _dataValidator = dataValidator;
+        AddAccountCommand = new RelayCommand((obj) => AddAccount());
+        CloseWindowCommand = new RelayCommand((obj) => CloseWindow());
+    }
 
-        public ICommand CloseWindowCommand { get; }
+    public Action Close { get; set; }
 
+    public bool CanCloseWindow { get; set; }
 
-        public AddAccountWindowViewModel(IAccountsManager accountsManager,IDataValidator dataValidator)
+    private readonly IAccountsManager _accountsManger;
+
+    private readonly IDataValidator _dataValidator;
+
+    private string _email;
+
+    public string Email
+    {
+        get => _email;
+        set
         {
-            _accountsManger = accountsManager;
-            _dataValidator = dataValidator;
-            AddAccountCommand = new RelayCommand((obj) => AddAccount());
-            CloseWindowCommand = new RelayCommand((obj) => CloseWindow());
+            _email = value;
+            OnPropertyChanged();
         }
+    }
 
-        public Action Close { get; set; }
+    private string _password;
 
-        public bool CanCloseWindow { get; set; }
-
-        private readonly IAccountsManager _accountsManger;
-
-        private readonly IDataValidator _dataValidator;
-
-        private string _email;
-
-        public string Email
+    public string Password
+    {
+        get => _password;
+        set
         {
-            get => _email;
-            set
-            {
-                _email = value;
-                OnPropertyChanged();
-            }
+            _password = value;
+            OnPropertyChanged();
         }
+    }
 
-        private string _password;
+    private void CloseWindow()
+    {
+        Close?.Invoke();
+    }
 
-        public string Password
+
+    private void AddAccount()
+    {
+        if (!_dataValidator.ValidateEmail(Email) || !_dataValidator.ValidatePassword(Password)) return;
+        var userAccount = new UserAccount
         {
-            get => _password;
-            set
-            {
-                _password = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        private void CloseWindow()
-        {
-            Close?.Invoke();
-        }
-
-
-        private void AddAccount()
-        {
-            if (!_dataValidator.ValidateEmail(Email) || !_dataValidator.ValidatePassword(Password)) return;
-            var userAccount = new UserAccount
-            {
-                Email = this.Email,
-                Password = this.Password
-            };
-            _accountsManger.AddAccount(userAccount);
-            CloseWindow();
-
-        }
-
-
-        
+            Email = Email,
+            Password = Password
+        };
+        _accountsManger.AddAccount(userAccount);
+        CloseWindow();
     }
 }

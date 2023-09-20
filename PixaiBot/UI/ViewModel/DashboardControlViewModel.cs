@@ -12,128 +12,119 @@ using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
 
-namespace PixaiBot.UI.ViewModel
+namespace PixaiBot.UI.ViewModel;
+
+internal class DashboardControlViewModel : BaseViewModel
 {
-    internal class DashboardControlViewModel : BaseViewModel
+    public ICommand ClaimCreditsCommand { get; }
+
+
+    public ICommand TestCommand { get; }
+
+    public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
+        IAccountsStatisticsManager accountsStatisticsManager, ILogger logger, IConfigManager configManager,
+        IToastNotificationSender toastNotificationSender)
     {
-        public ICommand ClaimCreditsCommand { get; }
+        _configManager = configManager;
+        _logger = logger;
+        _accountsStatisticsManager = accountsStatisticsManager;
+        _creditClaimer = creditClaimer;
+        _accountsManager = accountsManager;
+        _toastNotificationSender = toastNotificationSender;
+        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
+        TestCommand = new RelayCommand((obj) => TestMethod());
+        _timer = new DispatcherTimer();
+        StartStatisticsRefreshing();
+    }
 
+    private readonly IAccountsManager _accountsManager;
 
-        public ICommand TestCommand { get; }
+    private readonly ICreditClaimer _creditClaimer;
 
-        public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
-            IAccountsStatisticsManager accountsStatisticsManager, ILogger logger,IConfigManager configManager, IToastNotificationSender toastNotificationSender)
+    private readonly IAccountsStatisticsManager _accountsStatisticsManager;
+
+    private readonly IConfigManager _configManager;
+
+    private readonly ILogger _logger;
+
+    private readonly IToastNotificationSender _toastNotificationSender;
+
+    private readonly DispatcherTimer _timer;
+
+    private string? _accountCount;
+
+    private UserConfig _userConfig;
+
+    public string? AccountCount
+    {
+        get => _accountCount;
+        set
         {
-            _configManager = configManager;
-            _logger = logger;
-            _accountsStatisticsManager = accountsStatisticsManager;
-            _creditClaimer = creditClaimer;
-            _accountsManager = accountsManager;
-            _toastNotificationSender = toastNotificationSender;
-            ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
-            TestCommand = new RelayCommand((obj) => TestMethod());
-            _timer = new DispatcherTimer();
-            StartStatisticsRefreshing();
+            _accountCount = $"Accounts Count : {value}";
+            OnPropertyChanged();
         }
+    }
 
-        private readonly IAccountsManager _accountsManager;
+    private string? _accountWithClaimedCredits;
 
-        private readonly ICreditClaimer _creditClaimer;
-
-        private readonly IAccountsStatisticsManager _accountsStatisticsManager;
-
-        private readonly IConfigManager _configManager;
-
-        private readonly ILogger _logger;
-
-        private readonly IToastNotificationSender _toastNotificationSender;
-
-        private readonly DispatcherTimer _timer;
-
-        private string? _accountCount;
-
-        private  UserConfig _userConfig;
-
-        public string? AccountCount
+    public string? AccountWithClaimedCredits
+    {
+        get => _accountWithClaimedCredits;
+        set
         {
-            get => _accountCount;
-            set
-            {
-                _accountCount = $"Accounts Count : {value}";
-                OnPropertyChanged();
-            }
+            _accountWithClaimedCredits = $"Accounts With Claimed Credits : {value}";
+            OnPropertyChanged();
         }
-        private string? _accountWithClaimedCredits;
+    }
 
-        public string? AccountWithClaimedCredits
+    private string? _accountWithUnclaimedCredits;
+
+    public string? AccountWithUnclaimedCredits
+    {
+        get => _accountWithUnclaimedCredits;
+        set
         {
-            get => _accountWithClaimedCredits;
-            set
-            {
-                _accountWithClaimedCredits = $"Accounts With Claimed Credits : {value}";
-                OnPropertyChanged();
-            }
+            _accountWithUnclaimedCredits = $"Accounts With Unclaimed credits: {value}";
+            OnPropertyChanged();
         }
-        private string? _accountWithUnclaimedCredits;
+    }
 
-        public string? AccountWithUnclaimedCredits
-        {
-            get => _accountWithUnclaimedCredits;
-            set
-            {
-                _accountWithUnclaimedCredits = $"Accounts With Unclaimed credits: {value}";
-                OnPropertyChanged();
-            }
-        }
+    private void StartStatisticsRefreshing()
+    {
+        _timer.Interval = TimeSpan.FromSeconds(5);
+        _timer.Tick += UpdateStatistics;
+        _timer.Start();
+        UpdateStatistics(null, null);
+    }
 
-        private void StartStatisticsRefreshing()
-        {
-            _timer.Interval = TimeSpan.FromSeconds(5);
-            _timer.Tick += UpdateStatistics;
-            _timer.Start();
-            UpdateStatistics(null, null);
+    private void ClaimCredits()
+    {
+        var task = new Task(ClaimCreditsInNewThread);
+        task.Start();
+    }
 
-        }
+    private void ClaimCreditsInNewThread()
+    {
+        var accounts = _accountsManager.GetAllAccounts().ToList();
 
-        private void ClaimCredits()
-        { 
-            var task = new Task(ClaimCreditsInNewThread);
-            task.Start();
-
-        }
-
-        private void ClaimCreditsInNewThread()
-        {
-            var accounts = _accountsManager.GetAllAccounts().ToList();
-
-            foreach (var account in accounts)
-            {
-                if (_userConfig.ToastNotifications)
-                {
-                    _creditClaimer.ClaimCredits(account,_toastNotificationSender);
-                }
-                else
-                {
-                    _creditClaimer.ClaimCredits(account);
-                }
-            }
-        }
- 
-
-        private void TestMethod()
-        {
-           
-        }
-
-        private void UpdateStatistics(object? sender, EventArgs? e)
-        {
-            _accountsStatisticsManager.RefreshStatistics();
-            AccountCount = _accountsStatisticsManager.AccountsNumber.ToString();
-            AccountWithClaimedCredits = _accountsStatisticsManager.AccountsWithClaimedCredits.ToString();
-            AccountWithUnclaimedCredits = _accountsStatisticsManager.AccountsWithUnclaimedCredits.ToString();
-            _userConfig = _configManager.GetConfig();
-        }
+        foreach (var account in accounts)
+            if (_userConfig.ToastNotifications)
+                _creditClaimer.ClaimCredits(account, _toastNotificationSender);
+            else
+                _creditClaimer.ClaimCredits(account);
+    }
 
 
+    private void TestMethod()
+    {
+    }
+
+    private void UpdateStatistics(object? sender, EventArgs? e)
+    {
+        _accountsStatisticsManager.RefreshStatistics();
+        AccountCount = _accountsStatisticsManager.AccountsNumber.ToString();
+        AccountWithClaimedCredits = _accountsStatisticsManager.AccountsWithClaimedCredits.ToString();
+        AccountWithUnclaimedCredits = _accountsStatisticsManager.AccountsWithUnclaimedCredits.ToString();
+        _userConfig = _configManager.GetConfig();
     }
 }

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixaiBot.Data.Interfaces
-{
-    internal interface IWindowHelper
-    {
-        Action Close { get; set; }
+namespace PixaiBot.Data.Interfaces;
 
-        bool CanCloseWindow { get; set; }
-    }
+internal interface IWindowHelper
+{
+    Action Close { get; set; }
+
+    bool CanCloseWindow { get; set; }
 }

@@ -6,20 +6,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using PixaiBot.Data.Interfaces;
 
-namespace PixaiBot.UI.Services
+namespace PixaiBot.UI.Services;
+
+internal class DialogService : IDialogService
 {
-    internal class DialogService : IDialogService
+    public void ShowDialog<TDialog>(TDialog dialogWindow, bool isModal) where TDialog : Window
     {
-        public void ShowDialog<TDialog>(TDialog dialogWindow, bool isModal) where TDialog : Window
-        {
-            if (isModal)
-            {
-                dialogWindow.ShowDialog();
-            }
-            else
-            {
-                dialogWindow.Show();
-            }
-        }   
+        if (isModal)
+            dialogWindow.ShowDialog();
+        else
+            dialogWindow.Show();
     }
 }

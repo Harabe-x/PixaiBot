@@ -12,38 +12,32 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PixaiBot.UI.View
+namespace PixaiBot.UI.View;
+
+/// <summary>
+/// Logika interakcji dla klasy MainWindowView.xaml
+/// </summary>
+public partial class MainWindowView : Window
 {
-    /// <summary>
-    /// Logika interakcji dla klasy MainWindowView.xaml
-    /// </summary>
-    public partial class MainWindowView : Window
+    public MainWindowView()
     {
-        public MainWindowView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.DragMove(); 
-            }
-        }
-        private void ResetButtonsColors()
-        {
-         
-        }
+    private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left) DragMove();
+    }
 
-        private void DashboardBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-          
-        }
+    private void ResetButtonsColors()
+    {
+    }
 
-        private void SettingsBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-          
-        }
+    private void DashboardBtn_OnClick(object sender, RoutedEventArgs e)
+    {
+    }
+
+    private void SettingsBtn_OnClick(object sender, RoutedEventArgs e)
+    {
     }
 }

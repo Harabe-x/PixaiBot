@@ -5,14 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Data.Interfaces
+namespace PixaiBot.Data.Interfaces;
+
+internal interface IConfigManager
 {
-    internal interface IConfigManager
-    {
+    UserConfig GetConfig();
 
-        UserConfig GetConfig();
-
-        void SaveConfig(UserConfig config);
-
-    }
+    void SaveConfig(UserConfig config);
 }

@@ -6,66 +6,65 @@ using System.Threading.Tasks;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Bussines_Logic
+namespace PixaiBot.Bussines_Logic;
+
+internal class AccountsStatisticsManager : IAccountsStatisticsManager
 {
-    internal class AccountsStatisticsManager : IAccountsStatisticsManager
+    private const string AccountsStatisticsFilePath =
+        @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accountsStatistics.json";
+
+    private AccountsStatistics _accountsStatistics;
+
+    private JsonReader _jsonReader;
+
+    public AccountsStatisticsManager()
     {
-        private const string AccountsStatisticsFilePath = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accountsStatistics.json";
+        _jsonReader = new JsonReader();
+        RefreshStatistics();
+    }
 
-        private AccountsStatistics _accountsStatistics;
+    public int AccountsNumber { get; private set; }
 
-        private JsonReader _jsonReader;
+    public int AccountsWithUnclaimedCredits { get; private set; }
 
-        public AccountsStatisticsManager()
-        {
-            _jsonReader = new JsonReader();
-            RefreshStatistics();
-        }
+    public int AccountsWithClaimedCredits { get; private set; }
 
-        public int AccountsNumber { get; private set; }
+    public void RefreshStatistics()
+    {
+        _accountsStatistics = _jsonReader.ReadStatisticsFile(AccountsStatisticsFilePath);
+        AccountsNumber = _accountsStatistics.AccountsCount;
+        AccountsWithUnclaimedCredits = _accountsStatistics.AccountWithUnclaimedCredits;
+        AccountsWithClaimedCredits = _accountsStatistics.AccountWithClaimedCredits;
+    }
 
-        public int AccountsWithUnclaimedCredits { get; private set; }
+    public void IncrementAccountsNumber(int number)
+    {
+        _accountsStatistics.AccountsCount += number;
+        JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
+        RefreshStatistics();
+    }
 
-        public int AccountsWithClaimedCredits { get; private set; }
+    public void IncrementAccountsWithClaimedCreditsNumber(int number)
+    {
+        _accountsStatistics.AccountWithClaimedCredits += number;
+        JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
+        RefreshStatistics();
+    }
 
-        public void RefreshStatistics()
-        {
-            _accountsStatistics = _jsonReader.ReadStatisticsFile(AccountsStatisticsFilePath);
-            AccountsNumber = _accountsStatistics.AccountsCount;
-            AccountsWithUnclaimedCredits = _accountsStatistics.AccountWithUnclaimedCredits;
-            AccountsWithClaimedCredits = _accountsStatistics.AccountWithClaimedCredits;
-        }
+    public void IncrementAccountsWithUnclaimedCreditsNumber(int number)
+    {
+        _accountsStatistics.AccountWithUnclaimedCredits += number;
+        JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
+        RefreshStatistics();
+    }
 
-        public void IncrementAccountsNumber(int number)
-        {
-            _accountsStatistics.AccountsCount += number;
-            JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
-            RefreshStatistics();
+    public void WriteStatisticsToFile()
+    {
+        JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
+    }
 
-        }
-
-        public void IncrementAccountsWithClaimedCreditsNumber(int number)
-        {
-            _accountsStatistics.AccountWithClaimedCredits += number;
-            JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
-            RefreshStatistics();
-        }
-
-        public void IncrementAccountsWithUnclaimedCreditsNumber(int number)
-        {
-            _accountsStatistics.AccountWithUnclaimedCredits += number;
-            JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
-            RefreshStatistics();
-        }
-
-        public void WriteStatisticsToFile()
-        {
-            JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
-        }
-
-        public void ResetNumberOfAccounts()
-        {
-            _accountsStatistics.AccountsCount = 0;
-        }
+    public void ResetNumberOfAccounts()
+    {
+        _accountsStatistics.AccountsCount = 0;
     }
 }

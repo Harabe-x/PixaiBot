@@ -3,26 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:PixaiBot.UI.ViewModel"
              xmlns:view="clr-namespace:PixaiBot.UI.View"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
-             >
+             xmlns:fa="http://schemas.fontawesome.io/icons/">
 
     <!--#region DataTemplates -->
     <Application.Resources>
         <DataTemplate DataType="{x:Type TypeName=viewModel:MainWindowViewModel}">
-            <view:MainWindowView/>
+            <view:MainWindowView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type TypeName=viewModel:DashboardControlViewModel}">
-            <view:DashboardControlView/>
+            <view:DashboardControlView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type TypeName=viewModel:SettingsControlViewModel}">
-            <view:SettingsControlView/>
+            <view:SettingsControlView />
         </DataTemplate>
         <!--#endregion-->
 
         <!--#region Colors -->
 
-        <SolidColorBrush x:Key="LightPurpleColor" Color="#af9bff"/>
-        <SolidColorBrush x:Key="DarkPurpleColor" Color="#6c5ce7"/>
+        <SolidColorBrush x:Key="LightPurpleColor" Color="#af9bff" />
+        <SolidColorBrush x:Key="DarkPurpleColor" Color="#6c5ce7" />
         <SolidColorBrush x:Key="BlackColor" Color="#083353" />
         <SolidColorBrush x:Key="GreyColor" Color="#B7B7B7" />
         <SolidColorBrush x:Key="White" Color="#ffffff" />
@@ -48,7 +47,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                        BorderBrush="Transparent">
+                                BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
@@ -62,7 +61,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                BorderBrush="#a29bfe">
+                                        BorderBrush="#a29bfe">
                                     <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
@@ -76,7 +75,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                BorderBrush="#a29bfe">
+                                        BorderBrush="#a29bfe">
                                     <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
@@ -141,8 +140,8 @@
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush>
-                        <GradientStop Color="#a29bfe"/>
-                        <GradientStop Color="#8964ff"/>
+                        <GradientStop Color="#a29bfe" />
+                        <GradientStop Color="#8964ff" />
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
@@ -159,7 +158,7 @@
         <Style x:Key="FormCheckBox" TargetType="CheckBox">
             <Setter Property="Foreground" Value="{StaticResource LightPurpleColor}" />
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontWeight" Value="Normal" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Padding" Value="4,0,0,0" />
             <Setter Property="Margin" Value="0,0,4,0" />
@@ -171,23 +170,29 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Border CornerRadius="4 4 4 4 " x:Name="Border" BorderBrush="{StaticResource LightPurpleColor}" BorderThickness="2" Background="Transparent" Width="20" Height="20">
+                            <Border CornerRadius="4 4 4 4 " x:Name="Border"
+                                    BorderBrush="{StaticResource LightPurpleColor}" BorderThickness="2"
+                                    Background="Transparent" Width="20" Height="20">
                                 <Viewbox>
                                     <Canvas Width="20" Height="20">
-                                        <Rectangle x:Name="BackgroundRectangle" Width="20" Height="20" Fill="{Binding Path=Background, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        <Path x:Name="CheckMark" Stroke="#ffffff" StrokeThickness="2" Data="M5,10 L9,14 L16,7" Visibility="Collapsed"/>
+                                        <Rectangle x:Name="BackgroundRectangle" Width="20" Height="20"
+                                                   Fill="{Binding Path=Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        <Path x:Name="CheckMark" Stroke="#ffffff" StrokeThickness="2"
+                                              Data="M5,10 L9,14 L16,7" Visibility="Collapsed" />
                                     </Canvas>
                                 </Viewbox>
                             </Border>
-                            <ContentPresenter Grid.Column="1" VerticalAlignment="Center"/>
+                            <ContentPresenter Grid.Column="1" VerticalAlignment="Center" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
-                                <Setter TargetName="BackgroundRectangle" Property="Fill" Value="{StaticResource LightPurpleColor}" />
+                                <Setter TargetName="BackgroundRectangle" Property="Fill"
+                                        Value="{StaticResource LightPurpleColor}" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="BackgroundRectangle" Property="Fill" Value="{StaticResource GreyColor}" />
+                                <Setter TargetName="BackgroundRectangle" Property="Fill"
+                                        Value="{StaticResource GreyColor}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -219,15 +224,12 @@
         </Style>
 
 
-
         <!--#endregion-->
         <Style x:Key="BaldPurpleText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource LightPurpleColor}" />
             <Setter Property="FontSize" Value="23" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
-
-
 
 
     </Application.Resources>

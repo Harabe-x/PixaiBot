@@ -3,50 +3,58 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PixaiBot.UI.View"
         xmlns:helper="clr-namespace:PixaiBot.UI.Helpers"
-        mc:Ignorable="d" Background="Transparent" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterOwner"
-        Title="AddAccountWindowView" Height="200" Width="500" helper:WindowHelper.EnableClosing="True" > 
-    <Border CornerRadius="10" Background="White" MouseDown="Border_OnMouseDown" BorderThickness="2" BorderBrush="{StaticResource White}">
+        mc:Ignorable="d" Background="Transparent" AllowsTransparency="True" WindowStyle="None"
+        WindowStartupLocation="CenterOwner"
+        Title="AddAccountWindowView" Height="200" Width="500" helper:WindowHelper.EnableClosing="True">
+    <Border CornerRadius="10" Background="White" MouseDown="Border_OnMouseDown" BorderThickness="2"
+            BorderBrush="{StaticResource White}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="125"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="125" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Email" HorizontalAlignment="Center" VerticalAlignment="Center"  Style="{StaticResource BaldPurpleText}" FontSize="21" Grid.Row="0"/>
-                    <TextBlock Text="Password" HorizontalAlignment="Center" VerticalAlignment="Center"  Style="{StaticResource BaldPurpleText}" Grid.Row="1" FontSize="21" />
+                    <TextBlock Text="Email" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Style="{StaticResource BaldPurpleText}" FontSize="21" Grid.Row="0" />
+                    <TextBlock Text="Password" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Style="{StaticResource BaldPurpleText}" Grid.Row="1" FontSize="21" />
                 </Grid>
                 <Border Grid.Column="1">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <TextBox Grid.Row="0" Text="{Binding Email}" Style="{StaticResource FormTextBox}" BorderBrush="{StaticResource LightPurpleColor}" HorizontalAlignment="Stretch"  Margin="5 0 5 0"/>
-                        <TextBox Grid.Row="1" Text="{Binding Password}" BorderBrush="{StaticResource LightPurpleColor}" HorizontalAlignment="Stretch" Style="{StaticResource FormTextBox}"  Margin="5 0 5 0 "/>
+                        <TextBox Grid.Row="0" Text="{Binding Email}" Style="{StaticResource FormTextBox}"
+                                 BorderBrush="{StaticResource LightPurpleColor}" HorizontalAlignment="Stretch"
+                                 Margin="5 0 5 0" />
+                        <TextBox Grid.Row="1" Text="{Binding Password}" BorderBrush="{StaticResource LightPurpleColor}"
+                                 HorizontalAlignment="Stretch" Style="{StaticResource FormTextBox}" Margin="5 0 5 0 " />
                     </Grid>
                 </Border>
             </Grid>
 
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Style="{StaticResource PurpleButton}" Command="{Binding AddAccountCommand}" Content="Add" Margin="0 0 0 0" Width="100" VerticalAlignment="Center" />
-                <Button Grid.Row="1" Style="{StaticResource PurpleButton}" Command="{Binding CloseWindowCommand}" Background="#d63031" Content="Cancel" VerticalAlignment="Center" Width="100"  Margin="0 0 5 5" />
+                <Button Grid.Row="0" Style="{StaticResource PurpleButton}" Command="{Binding AddAccountCommand}"
+                        Content="Add" Margin="0 0 0 0" Width="100" VerticalAlignment="Center" />
+                <Button Grid.Row="1" Style="{StaticResource PurpleButton}" Command="{Binding CloseWindowCommand}"
+                        Background="#d63031" Content="Cancel" VerticalAlignment="Center" Width="100" Margin="0 0 5 5" />
             </Grid>
         </Grid>
     </Border>

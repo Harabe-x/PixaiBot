@@ -14,24 +14,18 @@ using System.Windows.Shapes;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.ViewModel;
 
-namespace PixaiBot.UI.View
+namespace PixaiBot.UI.View;
+
+public partial class AddAccountWindowView : Window
 {
-    
-    public partial class AddAccountWindowView : Window
+    public AddAccountWindowView(IAccountsManager accountsManager, IDataValidator dataValidator)
     {
-        public AddAccountWindowView(IAccountsManager accountsManager,IDataValidator dataValidator)
-        {
-            InitializeComponent();
-            this.DataContext = new AddAccountWindowViewModel(accountsManager,dataValidator);
-        }
+        InitializeComponent();
+        DataContext = new AddAccountWindowViewModel(accountsManager, dataValidator);
+    }
 
-        private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.DragMove();
-            }
-        }
-
+    private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left) DragMove();
     }
 }

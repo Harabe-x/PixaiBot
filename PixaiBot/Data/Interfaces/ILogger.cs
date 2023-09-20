@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixaiBot.Data.Interfaces
+namespace PixaiBot.Data.Interfaces;
+
+internal interface ILogger
 {
-    internal interface ILogger
-    {
-        
-        string LogFilePath { get; }
+    string LogFilePath { get; }
 
-        void Log(string message);
-
-    }
+    void Log(string message);
 }

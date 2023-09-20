@@ -9,119 +9,105 @@ using Microsoft.Win32;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Bussines_Logic
+namespace PixaiBot.Bussines_Logic;
+
+public class AccountsManager : IAccountsManager
 {
-    public class AccountsManager : IAccountsManager
+    public int AccountsCount => UpdateAccountManagerProperties();
+
+    public const string AccountsFilePath = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
+
+    private readonly JsonReader _jsonReader;
+
+    private readonly IAccountsStatisticsManager _accountsStatisticsManager;
+
+    public AccountsManager(IAccountsStatisticsManager accountsStatisticsManager)
     {
-        public int AccountsCount => UpdateAccountManagerProperties();
+        _accountsStatisticsManager = accountsStatisticsManager;
+        _jsonReader = new JsonReader();
+    }
 
-        public const string AccountsFilePath = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
-
-        private readonly JsonReader _jsonReader;
-
-        private readonly IAccountsStatisticsManager _accountsStatisticsManager;
-
-        public AccountsManager(IAccountsStatisticsManager accountsStatisticsManager)
+    public void AddAccount(UserAccount account)
+    {
+        if (!File.Exists(AccountsFilePath))
         {
-            _accountsStatisticsManager = accountsStatisticsManager;
-            _jsonReader = new JsonReader();
-             
-        }
-
-        public void AddAccount(UserAccount account)
-        {
-            if (!File.Exists(AccountsFilePath))
-            {
-                var accountsList = new List<UserAccount>();
-                accountsList.Add(account);
-                JsonWriter.WriteJson(accountsList, AccountsFilePath);
-                _accountsStatisticsManager.IncrementAccountsNumber(1);
-                UpdateAccountManagerProperties();
-
-                return;
-            }
-
-            var accountList = _jsonReader.ReadAccountFile(AccountsFilePath);
-            accountList.Add(account);
-            JsonWriter.WriteJson(accountList, AccountsFilePath);
+            var accountsList = new List<UserAccount>();
+            accountsList.Add(account);
+            JsonWriter.WriteJson(accountsList, AccountsFilePath);
             _accountsStatisticsManager.IncrementAccountsNumber(1);
             UpdateAccountManagerProperties();
+
+            return;
         }
 
-        public void RemoveAccount(IList<UserAccount> accountList, UserAccount userAccount)
+        var accountList = _jsonReader.ReadAccountFile(AccountsFilePath);
+        accountList.Add(account);
+        JsonWriter.WriteJson(accountList, AccountsFilePath);
+        _accountsStatisticsManager.IncrementAccountsNumber(1);
+        UpdateAccountManagerProperties();
+    }
+
+    public void RemoveAccount(IList<UserAccount> accountList, UserAccount userAccount)
+    {
+        if (!File.Exists(AccountsFilePath)) return;
+
+        accountList.Remove(userAccount);
+        JsonWriter.WriteJson(accountList, AccountsFilePath);
+        _accountsStatisticsManager.IncrementAccountsNumber(-1);
+
+        UpdateAccountManagerProperties();
+    }
+
+    public IEnumerable<UserAccount> GetAllAccounts()
+    {
+        return File.Exists(AccountsFilePath)
+            ? _jsonReader.ReadAccountFile(AccountsFilePath)
+            : new List<UserAccount>();
+    }
+
+    public void AddManyAccounts()
+    {
+        var dialog = new OpenFileDialog()
         {
-            if (!File.Exists(AccountsFilePath))
+            Title = "Select File:",
+            Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+        };
+
+        var result = dialog.ShowDialog();
+
+        if (result == false) return;
+
+        var importedUserAccounts = GetUserAccountsFromTxt(dialog.FileName);
+
+        foreach (var account in importedUserAccounts) AddAccount(account);
+    }
+
+    private int UpdateAccountManagerProperties()
+    {
+        return GetAllAccounts().Count();
+    }
+
+    private IEnumerable<UserAccount> GetUserAccountsFromTxt(string filePath)
+    {
+        var accountsList = File.ReadAllLines(filePath);
+        var accounts = new List<UserAccount>();
+
+        foreach (var account in accountsList)
+        {
+            var splittedLogin = account.Split(":");
+
+            if (splittedLogin.Length != 2) continue;
+
+            var userAccount = new UserAccount()
             {
-                return;
-            }
-
-            accountList.Remove(userAccount);
-            JsonWriter.WriteJson(accountList, AccountsFilePath);
-            _accountsStatisticsManager.IncrementAccountsNumber(-1);
-
-            UpdateAccountManagerProperties();
-        }
-
-        public IEnumerable<UserAccount> GetAllAccounts()
-        {
-            return File.Exists(AccountsFilePath)
-                ? _jsonReader.ReadAccountFile(AccountsFilePath)
-                : new List<UserAccount>();
-        }
-
-        public void AddManyAccounts()
-        {
-            var dialog = new OpenFileDialog()
-            {
-                Title = "Select File:",
-                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                Email = splittedLogin[0],
+                Password = splittedLogin[1]
             };
-            
-            var result = dialog.ShowDialog();
 
-            if (result == false)
-            {
-                return;
-            }
-
-            var importedUserAccounts = GetUserAccountsFromTxt(dialog.FileName);
-
-            foreach (var account in importedUserAccounts)
-            {
-                AddAccount(account);
-            }
+            accounts.Add(userAccount);
         }
 
-        private int UpdateAccountManagerProperties()
-        {
-            return GetAllAccounts().Count(); 
-        }
-
-        private IEnumerable<UserAccount> GetUserAccountsFromTxt(string filePath)
-        {
-            var accountsList = File.ReadAllLines(filePath);
-            var accounts = new List<UserAccount>();
-
-            foreach (var account in accountsList)
-            {
-                var splittedLogin = account.Split(":");
-
-                if (splittedLogin.Length != 2)
-                {
-                    continue;
-                }
-
-                var userAccount = new UserAccount()
-                {
-                    Email = splittedLogin[0],
-                    Password = splittedLogin[1]
-                };
-
-                accounts.Add(userAccount);
-            }
-
-            return accounts;
-        }
+        return accounts;
     }
 }

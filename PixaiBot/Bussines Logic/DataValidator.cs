@@ -7,35 +7,34 @@ using PixaiBot.Data.Interfaces;
 using System.Net.Mail;
 using Microsoft.IdentityModel.Tokens;
 
-namespace PixaiBot.Bussines_Logic
+namespace PixaiBot.Bussines_Logic;
+
+public class DataValidator : IDataValidator
 {
-    public class DataValidator : IDataValidator
+    public bool ValidateEmail(string email)
     {
-        public bool ValidateEmail(string email)
+        try
         {
-            try
-            {
-                var mail = new MailAddress(email);
-            }
-            catch (ArgumentNullException)
-            {
-                return false; 
-            }
-            catch (ArgumentException)
-            {
-                return false; 
-            }
-            catch (FormatException)
-            {
-                return false; 
-            }
-
-            return true;
+            var mail = new MailAddress(email);
+        }
+        catch (ArgumentNullException)
+        {
+            return false;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
+        catch (FormatException)
+        {
+            return false;
         }
 
-        public bool ValidatePassword(string password)
-        {
-            return !string.IsNullOrEmpty(password);
-        }
+        return true;
+    }
+
+    public bool ValidatePassword(string password)
+    {
+        return !string.IsNullOrEmpty(password);
     }
 }

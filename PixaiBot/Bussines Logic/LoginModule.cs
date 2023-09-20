@@ -8,40 +8,37 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Bussines_Logic
+namespace PixaiBot.Bussines_Logic;
+
+public abstract class LoginModule
 {
-    public abstract class LoginModule
+    private const string LoginUrl = "https://pixai.art/login";
+
+    private const int StartWaitTime = 1000;
+
+    protected static void Login(ChromeDriver driver, UserAccount userAccount)
     {
-        private const string LoginUrl = "https://pixai.art/login";
+        driver.Navigate().GoToUrl(LoginUrl);
 
-        private const int StartWaitTime = 1000;
+        Thread.Sleep(StartWaitTime);
 
-        protected static void Login(ChromeDriver driver,UserAccount userAccount)
-        {
+        IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName("button"));
 
-            driver.Navigate().GoToUrl(LoginUrl);
-            
-            Thread.Sleep(StartWaitTime);
+        buttons.FirstOrDefault(x => x.Text == "Log in with email")?.Click();
 
-            IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName("button"));
+        IReadOnlyCollection<IWebElement> textInputs = driver.FindElements(By.TagName("input"));
 
-            buttons.FirstOrDefault(x => x.Text == "Log in with email")?.Click();
+        if (textInputs.Count == 0)
+            return;
 
-            IReadOnlyCollection<IWebElement> textInputs = driver.FindElements(By.TagName("input"));
+        textInputs.ElementAt(0).Click();
+        textInputs.ElementAt(0).SendKeys(userAccount.Email);
 
-            if (textInputs.Count == 0)
-                return;
+        textInputs.ElementAt(1).Click();
+        textInputs.ElementAt(1).SendKeys(userAccount.Password);
 
-            textInputs.ElementAt(0).Click();
-            textInputs.ElementAt(0).SendKeys(userAccount.Email);
+        buttons = driver.FindElements(By.TagName("button"));
 
-            textInputs.ElementAt(1).Click();
-            textInputs.ElementAt(1).SendKeys(userAccount.Password);
-            
-            buttons = driver.FindElements(By.TagName("button"));
-
-            buttons.FirstOrDefault(x => x.Text == "Login")?.Click();
-
-        }
+        buttons.FirstOrDefault(x => x.Text == "Login")?.Click();
     }
 }
