@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Win32;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
@@ -19,6 +21,10 @@ internal class SettingsControlViewModel : BaseViewModel
 
     public ICommand CheckAllAccountsLoginCommand { get; }
 
+    public ICommand StartWithSystemCommand { get; }
+
+    private readonly string? _executablePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+
     public SettingsControlViewModel(IDialogService dialogService, IAccountsManager
         accountsManager, IDataValidator dataValidator, IAccountLoginChecker
         accountLoginChecker, IAccountsStatisticsManager accountsStatisticsManager, IConfigManager configManager)
@@ -32,6 +38,7 @@ internal class SettingsControlViewModel : BaseViewModel
         ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
         AddManyAccountsCommand = new RelayCommand((obj) => AddManyAccounts());
         CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLogin());
+        StartWithSystemCommand = new RelayCommand((obj) => StartWithSystem());
         InitializeUserConfig();
     }
 
@@ -106,8 +113,6 @@ internal class SettingsControlViewModel : BaseViewModel
     {
         var accounts = _accountsManager.GetAllAccounts().ToList();
 
-        var totalAccountsCount = accounts.Count;
-
         var validAccountsCount = _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
         _accountsStatisticsManager.ResetNumberOfAccounts();
@@ -121,6 +126,21 @@ internal class SettingsControlViewModel : BaseViewModel
         ShouldStartWithSystem = _userConfig.StartWithSystem;
         EnableToastNotifications = _userConfig.ToastNotifications;
         AutoClaimCredits = _userConfig.CreditsAutoClaim;
+    }
+
+    private void StartWithSystem()
+    {
+        var rk = Registry.CurrentUser.OpenSubKey
+            ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        if (ShouldStartWithSystem)
+        {
+            rk.SetValue("PixaiBot", _executablePath);
+        }
+        else
+        {
+            rk.DeleteValue("PixaiBot", false);
+        }
+       
     }
 
     public void SaveUserConfig()

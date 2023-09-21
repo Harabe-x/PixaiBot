@@ -79,9 +79,10 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
         try
         {
             _logger.Log("Trying to find dropdown menu button ...");
-            var dropdownMenuButton = _driver.FindElement(By.CssSelector(".flex-shrink-0:nth-child(8)"));
+            var dropdownMenuButton = _driver.FindElement(By.CssSelector(".shrink-0"));
             dropdownMenuButton?.Click();
 
+            
 
             _logger.Log("Trying to find profile tab ...");
             var profileButton = _driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(1)"));
@@ -131,6 +132,6 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
             Thread.Sleep(Delay);
         }
 
-        return false;
+        return true;
     }
 }

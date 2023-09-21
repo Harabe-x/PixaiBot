@@ -17,13 +17,18 @@ public class MainWindowViewModel : BaseViewModel
 
     public ICommand ExitApplicationCommand { get; }
 
+    public ICommand HideApplicationCommand { get; }
+
     public MainWindowViewModel(INavigationService navService)
     {
         NavigateToDashboardCommand = new RelayCommand((obj) => NavigateToDashboard());
         NavigateToSettingsCommand = new RelayCommand((obj) => NavigateToSettings());
         ExitApplicationCommand = new RelayCommand((obj) => ExitApplication());
         Navigation = navService;
+        HideApplicationCommand = new RelayCommand((obj) => HideApplication());
         NavigateToDashboardCommand.Execute(null);
+
+       
     }
 
     private INavigationService _navigation;
@@ -49,8 +54,14 @@ public class MainWindowViewModel : BaseViewModel
         Navigation.NavigateTo<SettingsControlViewModel>();
     }
 
+    private static void HideApplication()
+    {
+
+    }
+
     private static void ExitApplication()
     {
         Environment.Exit(0);
     }
+    
 }
