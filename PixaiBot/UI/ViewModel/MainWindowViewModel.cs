@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using PixaiBot.Data.Interfaces;
+using System.Drawing;
+using System.Windows.Forms;
 using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel;
@@ -27,8 +30,8 @@ public class MainWindowViewModel : BaseViewModel
         Navigation = navService;
         HideApplicationCommand = new RelayCommand((obj) => HideApplication());
         NavigateToDashboardCommand.Execute(null);
+        
 
-       
     }
 
     private INavigationService _navigation;
@@ -56,7 +59,8 @@ public class MainWindowViewModel : BaseViewModel
 
     private static void HideApplication()
     {
-
+         
+        Application.Current.MainWindow?.Hide();
     }
 
     private static void ExitApplication()

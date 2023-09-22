@@ -10,13 +10,14 @@ namespace PixaiBot.Bussines_Logic;
 
 internal class ConfigManager : IConfigManager
 {
-    public const string ConfigFilePath = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\config.json";
+    public  string ConfigFilePath { get; }
 
     private readonly JsonReader _jsonReader;
 
 
     public ConfigManager()
     {
+        ConfigFilePath = InitialConfiguration.UserConfigPath;
         _jsonReader = new JsonReader();
     }
 

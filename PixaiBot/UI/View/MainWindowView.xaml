@@ -41,7 +41,7 @@
                         </StackPanel>
                     </Button>
                     <Button Name="HideButton" 
-                            Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
+                            Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="EyeSlash" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="Hide" Text="Hide Application"

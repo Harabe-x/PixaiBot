@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Forms;
 
 namespace PixaiBot.UI.View;
 
@@ -19,16 +20,21 @@ namespace PixaiBot.UI.View;
 /// </summary>
 public partial class MainWindowView : Window
 {
+
     public MainWindowView()
     {
         InitializeComponent();
+        // initialise code here
+        
+
     }
 
     private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton == MouseButton.Left) DragMove();
     }
-
+    
+    [STAThread]
     private void ResetButtonsColors()
     {
     }

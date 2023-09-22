@@ -13,9 +13,8 @@ internal class Logger : ILogger
     public string LogFilePath { get; }
 
     public Logger()
-    {
-        LogFilePath =
-            $@"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\Logs\PixaiAutoClaimerLog {DateTime.Now:yyyy-MM-dd}.txt";
+    {                         
+        LogFilePath = $@"{InitialConfiguration.BotLogsPath}\{DateTime.Now:yyyy-MM-dd}.txt";
         if (File.Exists(LogFilePath)) return;
 
         File.Create(LogFilePath);

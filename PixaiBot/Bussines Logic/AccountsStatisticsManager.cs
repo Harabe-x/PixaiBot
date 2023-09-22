@@ -10,8 +10,7 @@ namespace PixaiBot.Bussines_Logic;
 
 internal class AccountsStatisticsManager : IAccountsStatisticsManager
 {
-    private const string AccountsStatisticsFilePath =
-        @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accountsStatistics.json";
+    private  string AccountsStatisticsFilePath { get; }
 
     private AccountsStatistics _accountsStatistics;
 
@@ -19,6 +18,7 @@ internal class AccountsStatisticsManager : IAccountsStatisticsManager
 
     public AccountsStatisticsManager()
     {
+        AccountsStatisticsFilePath = InitialConfiguration.StatisticsFilePath;
         _jsonReader = new JsonReader();
         RefreshStatistics();
     }

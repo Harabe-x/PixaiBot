@@ -15,7 +15,7 @@ public class AccountsManager : IAccountsManager
 {
     public int AccountsCount => UpdateAccountManagerProperties();
 
-    public const string AccountsFilePath = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
+    private string AccountsFilePath { get; }
 
     private readonly JsonReader _jsonReader;
 
@@ -23,6 +23,7 @@ public class AccountsManager : IAccountsManager
 
     public AccountsManager(IAccountsStatisticsManager accountsStatisticsManager)
     {
+        AccountsFilePath = InitialConfiguration.AccountsFilePath;
         _accountsStatisticsManager = accountsStatisticsManager;
         _jsonReader = new JsonReader();
     }
