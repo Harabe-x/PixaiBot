@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:local="clr-namespace:PixaiBot.UI.Helpers"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" Background="Transparent" WindowStyle="None"
-        ResizeMode="NoResize"
-        Title="MainWindowView" Height="700" Width="600" AllowsTransparency="True">
+        ResizeMode="NoResize" 
+        Title="MainWindowView" Height="700" Width="600" AllowsTransparency="True" local:TrayIconHelper.CanHideToTray="True" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -23,7 +24,7 @@
             <Grid>
 
                 <StackPanel>
-                    <Image Source="../../Resources/images/PixaiLogo.png" Height="250" />
+                    <Image Source="../../Resources/images/PixaiLogo.png" Height="238" Width="184" />
                     <Button Name="DashboardBtn" Command="{Binding NavigateToDashboardCommand}"
                             Click="DashboardBtn_OnClick" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">

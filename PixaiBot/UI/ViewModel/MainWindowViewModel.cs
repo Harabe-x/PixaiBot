@@ -12,7 +12,7 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel;
 
-public class MainWindowViewModel : BaseViewModel
+public class MainWindowViewModel : BaseViewModel , ITrayIconHelper
 {
     public ICommand NavigateToDashboardCommand { get; }
 
@@ -30,8 +30,6 @@ public class MainWindowViewModel : BaseViewModel
         Navigation = navService;
         HideApplicationCommand = new RelayCommand((obj) => HideApplication());
         NavigateToDashboardCommand.Execute(null);
-        
-
     }
 
     private INavigationService _navigation;
@@ -57,15 +55,20 @@ public class MainWindowViewModel : BaseViewModel
         Navigation.NavigateTo<SettingsControlViewModel>();
     }
 
-    private static void HideApplication()
+    private void HideApplication()
     {
-         
-        Application.Current.MainWindow?.Hide();
+        HideToTray?.Invoke();
     }
 
     private static void ExitApplication()
     {
         Environment.Exit(0);
     }
-    
+
+    public bool CanHideToTray()
+    {
+        return true;
+    }
+
+    public Action HideToTray { get; set; }
 }

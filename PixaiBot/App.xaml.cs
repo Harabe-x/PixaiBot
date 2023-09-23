@@ -49,6 +49,7 @@ public partial class App : Application
         base.OnStartup(e);
         var mainWindow = _serviceProvider.GetRequiredService<MainWindowView>();
         mainWindow.Show();
-        
     }
+    
+    
 }

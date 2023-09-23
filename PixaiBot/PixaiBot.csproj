@@ -5,9 +5,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\images\PixaiAutoClaimerIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\images\PixaiAutoClaimerIcon.ico" />
+    <None Remove="Resources\images\PixaiAutoClaimerLogo.png" />
     <None Remove="Resources\images\PixaiLogo.png" />
   </ItemGroup>
 
@@ -20,7 +23,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\images\PixaiLogo.png" />
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\images\PixaiAutoClaimerIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\images\PixaiAutoClaimerLogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\images\PixaiLogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
