@@ -13,7 +13,7 @@ internal class Logger : ILogger
     public string LogFilePath { get; }
 
     public Logger()
-    {                         
+    {
         LogFilePath = $@"{InitialConfiguration.BotLogsPath}\{DateTime.Now:yyyy-MM-dd}.txt";
         if (File.Exists(LogFilePath)) return;
 

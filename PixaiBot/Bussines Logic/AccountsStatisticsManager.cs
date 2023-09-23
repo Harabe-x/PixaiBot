@@ -10,7 +10,7 @@ namespace PixaiBot.Bussines_Logic;
 
 internal class AccountsStatisticsManager : IAccountsStatisticsManager
 {
-    private  string AccountsStatisticsFilePath { get; }
+    private string AccountsStatisticsFilePath { get; }
 
     private AccountsStatistics _accountsStatistics;
 

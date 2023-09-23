@@ -12,7 +12,7 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel;
 
-public class MainWindowViewModel : BaseViewModel , ITrayIconHelper
+public class MainWindowViewModel : BaseViewModel, ITrayIconHelper
 {
     public ICommand NavigateToDashboardCommand { get; }
 

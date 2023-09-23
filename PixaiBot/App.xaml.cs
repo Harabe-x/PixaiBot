@@ -38,18 +38,15 @@ public partial class App : Application
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();
-
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         InitialConfiguration.CreateConfigFile();
         InitialConfiguration.CreateStatisticsFile();
-        
+
         base.OnStartup(e);
         var mainWindow = _serviceProvider.GetRequiredService<MainWindowView>();
         mainWindow.Show();
     }
-    
-    
 }

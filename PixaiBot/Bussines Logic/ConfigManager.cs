@@ -10,7 +10,7 @@ namespace PixaiBot.Bussines_Logic;
 
 internal class ConfigManager : IConfigManager
 {
-    public  string ConfigFilePath { get; }
+    public string ConfigFilePath { get; }
 
     private readonly JsonReader _jsonReader;
 

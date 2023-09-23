@@ -6,8 +6,9 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:PixaiBot.UI.Helpers"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" Background="Transparent" WindowStyle="None"
-        ResizeMode="NoResize" 
-        Title="MainWindowView" Height="700" Width="600" AllowsTransparency="True" local:TrayIconHelper.CanHideToTray="True" >
+        ResizeMode="NoResize"
+        Title="MainWindowView" Height="700" Width="600" AllowsTransparency="True"
+        local:TrayIconHelper.CanHideToTray="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -41,7 +42,7 @@
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </Button>
-                    <Button Name="HideButton" 
+                    <Button Name="HideButton"
                             Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="EyeSlash" Style="{StaticResource SidePanelButtonIcon}" />

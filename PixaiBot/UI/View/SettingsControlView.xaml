@@ -49,7 +49,8 @@
                     <Grid>
                         <TextBlock Text="Bot Settings:" Style="{StaticResource BaldPurpleText}" Margin="20" />
                         <StackPanel VerticalAlignment="Center">
-                            <CheckBox Command="{Binding StartWithSystemCommand}" IsChecked="{Binding ShouldStartWithSystem }" Content="  Start With System"
+                            <CheckBox Command="{Binding StartWithSystemCommand}"
+                                      IsChecked="{Binding ShouldStartWithSystem }" Content="  Start With System"
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
                             <CheckBox IsChecked="{Binding AutoClaimCredits }" Content="  Credits Auto Claim"
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />

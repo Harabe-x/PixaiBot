@@ -63,7 +63,7 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
         {
             toastNotificationSender?.SendNotification("Credits claimed", $"Try again tomorrow",
                 NotificationType.Warning);
-            
+
             _driver.Quit();
             return;
         }
@@ -82,7 +82,6 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
             var dropdownMenuButton = _driver.FindElement(By.CssSelector(".shrink-0"));
             dropdownMenuButton?.Click();
 
-            
 
             _logger.Log("Trying to find profile tab ...");
             var profileButton = _driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(1)"));

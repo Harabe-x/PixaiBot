@@ -14,7 +14,7 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel;
 
-internal class DashboardControlViewModel : BaseViewModel 
+internal class DashboardControlViewModel : BaseViewModel
 {
     public ICommand ClaimCreditsCommand { get; }
 
@@ -34,7 +34,7 @@ internal class DashboardControlViewModel : BaseViewModel
         ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
         TestCommand = new RelayCommand((obj) => TestMethod());
         _timer = new DispatcherTimer();
-        
+
         StartStatisticsRefreshing();
     }
 

@@ -133,14 +133,9 @@ internal class SettingsControlViewModel : BaseViewModel
         var rk = Registry.CurrentUser.OpenSubKey
             ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         if (ShouldStartWithSystem)
-        {
             rk.SetValue("PixaiBot", _executablePath);
-        }
         else
-        {
             rk.DeleteValue("PixaiBot", false);
-        }
-       
     }
 
     public void SaveUserConfig()
