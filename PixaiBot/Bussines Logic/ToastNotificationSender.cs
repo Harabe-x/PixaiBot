@@ -12,13 +12,17 @@ public class ToastNotificationSender : IToastNotificationSender
 {
     private readonly NotificationManager _notification;
 
-    public ToastNotificationSender()
+    private readonly ILogger _logger;
+
+    public ToastNotificationSender(ILogger logger)
     {
+        _logger = logger;
         _notification = new NotificationManager();
     }
 
     public void SendNotification(string title, string message, NotificationType notificationType)
     {
+        _logger.Log($"Notification Sent, NotificationType{notificationType}", _logger.ApplicationLogFilePath);
         _notification.Show(title, message, notificationType);
     }
 }

@@ -106,8 +106,10 @@ internal class DashboardControlViewModel : BaseViewModel
 
     private void ClaimCreditsInNewThread()
     {
-        var accounts = _accountsManager.GetAllAccounts().ToList();
+        _logger.Log("Started credit claiming process ", _logger.ApplicationLogFilePath);
 
+        var accounts = _accountsManager.GetAllAccounts().ToList();
+        
         foreach (var account in accounts)
             if (_userConfig.ToastNotifications)
                 _creditClaimer.ClaimCredits(account, _toastNotificationSender);
@@ -122,10 +124,12 @@ internal class DashboardControlViewModel : BaseViewModel
 
     private void UpdateStatistics(object? sender, EventArgs? e)
     {
+
         _accountsStatisticsManager.RefreshStatistics();
         AccountCount = _accountsStatisticsManager.AccountsNumber.ToString();
         AccountWithClaimedCredits = _accountsStatisticsManager.AccountsWithClaimedCredits.ToString();
         AccountWithUnclaimedCredits = _accountsStatisticsManager.AccountsWithUnclaimedCredits.ToString();
         _userConfig = _configManager.GetConfig();
+        _logger.Log("Statistics refreshed", _logger.ApplicationLogFilePath);
     }
 }

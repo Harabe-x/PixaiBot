@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PixaiBot.Bussines_Logic;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.ViewModel;
 
@@ -21,7 +22,7 @@ public partial class AddAccountWindowView : Window
     public AddAccountWindowView(IAccountsManager accountsManager, IDataValidator dataValidator)
     {
         InitializeComponent();
-        DataContext = new AddAccountWindowViewModel(accountsManager, dataValidator);
+        DataContext = new AddAccountWindowViewModel(accountsManager, dataValidator,new Logger());
     }
 
     private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)

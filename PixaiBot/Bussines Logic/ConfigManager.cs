@@ -14,20 +14,24 @@ internal class ConfigManager : IConfigManager
 
     private readonly JsonReader _jsonReader;
 
+    private readonly ILogger _logger;
 
-    public ConfigManager()
+    public ConfigManager(ILogger logger)
     {
+        _logger = logger;
         ConfigFilePath = InitialConfiguration.UserConfigPath;
         _jsonReader = new JsonReader();
     }
 
     public UserConfig GetConfig()
     {
+        _logger.Log("Readed Config File",_logger.ApplicationLogFilePath);
         return _jsonReader.ReadConfigFile(ConfigFilePath);
     }
 
     public void SaveConfig(UserConfig config)
     {
+        _logger.Log("Writed Config File",_logger.ApplicationLogFilePath);
         JsonWriter.WriteJson(config, ConfigFilePath);
     }
 }

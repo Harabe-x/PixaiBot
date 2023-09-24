@@ -25,6 +25,6 @@ internal class Logger : ILogger
 
     public void Log(string message, string filePath)
     {
-        File.AppendAllText(filePath, $"[{DateTime.Now}] {message}\n");
+        File.AppendAllText(filePath, $"[{DateTime.Now:hh:mm:ss}] {message}\n");
     }
 }

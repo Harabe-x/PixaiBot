@@ -16,8 +16,11 @@ internal class AccountsStatisticsManager : IAccountsStatisticsManager
 
     private JsonReader _jsonReader;
 
-    public AccountsStatisticsManager()
+    private ILogger _logger;
+
+    public AccountsStatisticsManager(ILogger logger)
     {
+        _logger = logger;
         AccountsStatisticsFilePath = InitialConfiguration.StatisticsFilePath;
         _jsonReader = new JsonReader();
         RefreshStatistics();
@@ -42,13 +45,17 @@ internal class AccountsStatisticsManager : IAccountsStatisticsManager
         _accountsStatistics.AccountsCount += number;
         JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
         RefreshStatistics();
+        _logger.Log("Accounts count updated", _logger.ApplicationLogFilePath);
     }
 
     public void IncrementAccountsWithClaimedCreditsNumber(int number)
     {
+
         _accountsStatistics.AccountWithClaimedCredits += number;
         JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
         RefreshStatistics();
+        _logger.Log("Accounts with claimed credits count updated", _logger.ApplicationLogFilePath);
+
     }
 
     public void IncrementAccountsWithUnclaimedCreditsNumber(int number)
@@ -56,15 +63,20 @@ internal class AccountsStatisticsManager : IAccountsStatisticsManager
         _accountsStatistics.AccountWithUnclaimedCredits += number;
         JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
         RefreshStatistics();
+        _logger.Log("Accounts with unclaimed credits count updated", _logger.ApplicationLogFilePath);
+
     }
 
     public void WriteStatisticsToFile()
     {
         JsonWriter.WriteJson(_accountsStatistics, AccountsStatisticsFilePath);
+        _logger.Log("Writed statistics file ", _logger.ApplicationLogFilePath);
     }
 
     public void ResetNumberOfAccounts()
     {
         _accountsStatistics.AccountsCount = 0;
+        _logger.Log("Account count rested", _logger.ApplicationLogFilePath);
+
     }
 }

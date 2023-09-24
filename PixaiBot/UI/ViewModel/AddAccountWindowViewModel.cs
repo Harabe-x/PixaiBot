@@ -18,8 +18,9 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
     public ICommand CloseWindowCommand { get; }
 
 
-    public AddAccountWindowViewModel(IAccountsManager accountsManager, IDataValidator dataValidator)
+    public AddAccountWindowViewModel(IAccountsManager accountsManager, IDataValidator dataValidator,ILogger logger)
     {
+        _logger = logger; 
         _accountsManger = accountsManager;
         _dataValidator = dataValidator;
         AddAccountCommand = new RelayCommand((obj) => AddAccount());
@@ -28,6 +29,8 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
 
     public Action Close { get; set; }
 
+    private readonly ILogger _logger;
+    
     public bool CanCloseWindow { get; set; }
 
     private readonly IAccountsManager _accountsManger;
@@ -60,13 +63,20 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
 
     private void CloseWindow()
     {
+        _logger.Log("Closing Add Account Window", _logger.ApplicationLogFilePath);
+
         Close?.Invoke();
     }
 
 
     private void AddAccount()
     {
-        if (!_dataValidator.ValidateEmail(Email) || !_dataValidator.ValidatePassword(Password)) return;
+        _logger.Log("Adding new account", _logger.ApplicationLogFilePath);
+        if (!_dataValidator.ValidateEmail(Email) || !_dataValidator.ValidatePassword(Password))
+        {
+            _logger.Log("Account data validation failed",_logger.ApplicationLogFilePath);
+            return;
+        }
         var userAccount = new UserAccount
         {
             Email = Email,
@@ -74,5 +84,7 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
         };
         _accountsManger.AddAccount(userAccount);
         CloseWindow();
+        _logger.Log("Added Account", _logger.ApplicationLogFilePath);
+
     }
 }

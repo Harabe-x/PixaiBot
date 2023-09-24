@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface ILogger
+public interface ILogger
 {
     public string CreditClaimerLogFilePath { get; }
 

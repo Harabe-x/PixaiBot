@@ -37,28 +37,28 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
     {
         _driver = new ChromeDriver();
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
-        Login(_driver, account);
+        Login(_driver, account,_logger);
         if (_driver.Url == LoginUrl)
         {
             toastNotificationSender?.SendNotification("Login failed", $"Login failed for {account.Email}",
                 NotificationType.Error);
-            _logger.Log("Login failed");
+            _logger.Log("Login failed",_logger.CreditClaimerLogFilePath);
             _driver.Quit();
             return;
         }
 
-        _logger.Log("Logged in successfully");
+        _logger.Log("Logged in successfully", _logger.CreditClaimerLogFilePath);
 
         if (!GoToProfile())
         {
             toastNotificationSender?.SendNotification("Claiming process failed",
                 $"if this error persists, please open new issue on github ", NotificationType.Error);
-            _logger.Log("Going to profile failed");
+            _logger.Log("Going to profile failed", _logger.CreditClaimerLogFilePath);
             _driver.Quit();
             return;
         }
 
-        _logger.Log("Navigated to profile page");
+        _logger.Log("Navigated to profile page", _logger.CreditClaimerLogFilePath);
         if (!ClaimCreditsOnAccount())
         {
             toastNotificationSender?.SendNotification("Credits claimed", $"Try again tomorrow",
@@ -70,7 +70,7 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
 
         toastNotificationSender?.SendNotification("Claiming credits completed successfully",
             $"Claiming credits completed successfully for {account.Email}", NotificationType.Success);
-        _logger.Log($"Claiming credits completed successfully for {account.Email}");
+        _logger.Log($"Claiming credits completed successfully for {account.Email}", _logger.CreditClaimerLogFilePath);
         _driver.Quit();
     }
 
@@ -78,12 +78,12 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
     {
         try
         {
-            _logger.Log("Trying to find dropdown menu button ...");
+            _logger.Log("Trying to find dropdown menu button ...", _logger.CreditClaimerLogFilePath);
             var dropdownMenuButton = _driver.FindElement(By.CssSelector(".shrink-0"));
             dropdownMenuButton?.Click();
 
 
-            _logger.Log("Trying to find profile tab ...");
+            _logger.Log("Trying to find profile tab ...", _logger.CreditClaimerLogFilePath);
             var profileButton = _driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(1)"));
             profileButton.Click();
 
@@ -91,7 +91,7 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
         }
         catch (NoSuchElementException)
         {
-            _logger.Log("Element not found, canceling claiming process");
+            _logger.Log("Element not found, canceling claiming process", _logger.CreditClaimerLogFilePath);
             return false;
         }
     }
@@ -100,10 +100,10 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
     {
         try
         {
-            _logger.Log("Trying to find credits tab ...");
+            _logger.Log("Trying to find credits tab ...", _logger.CreditClaimerLogFilePath);
             var creditsTab = _driver.FindElement(By.CssSelector(".sc-jSUZER:nth-child(5)"));
             creditsTab?.Click();
-            _logger.Log("Finding buttons ...");
+            _logger.Log("Finding buttons ...", _logger.CreditClaimerLogFilePath);
             Thread.Sleep(500);
             var claimButton = _driver.FindElement(By.CssSelector(".MuiLoadingButton-root"));
 
@@ -118,7 +118,7 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
         }
         catch (NoSuchElementException)
         {
-            _logger.Log("Element not found, canceling claiming process");
+            _logger.Log("Element not found, canceling claiming process", _logger.CreditClaimerLogFilePath);
             return false;
         }
         catch (StaleElementReferenceException)

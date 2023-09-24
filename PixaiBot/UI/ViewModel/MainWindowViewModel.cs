@@ -22,8 +22,9 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper
 
     public ICommand HideApplicationCommand { get; }
 
-    public MainWindowViewModel(INavigationService navService)
+    public MainWindowViewModel(INavigationService navService, ILogger logger)
     {
+        _logger = logger;
         NavigateToDashboardCommand = new RelayCommand((obj) => NavigateToDashboard());
         NavigateToSettingsCommand = new RelayCommand((obj) => NavigateToSettings());
         ExitApplicationCommand = new RelayCommand((obj) => ExitApplication());
@@ -31,6 +32,8 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper
         HideApplicationCommand = new RelayCommand((obj) => HideApplication());
         NavigateToDashboardCommand.Execute(null);
     }
+
+    private readonly ILogger _logger; 
 
     private INavigationService _navigation;
 
@@ -47,21 +50,29 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper
 
     private void NavigateToDashboard()
     {
+
         Navigation.NavigateTo<DashboardControlViewModel>();
+        _logger.Log("Navigated to Dashboard",_logger.ApplicationLogFilePath);
     }
 
     private void NavigateToSettings()
     {
         Navigation.NavigateTo<SettingsControlViewModel>();
+        _logger.Log("Navigated to Settings", _logger.ApplicationLogFilePath);
+
     }
 
     private void HideApplication()
     {
         HideToTray?.Invoke();
+        _logger.Log("Hided application to tray", _logger.ApplicationLogFilePath);
+
     }
 
-    private static void ExitApplication()
+    private void ExitApplication()
     {
+        _logger.Log("=====Application Closed=====", _logger.ApplicationLogFilePath);
+
         Environment.Exit(0);
     }
 

@@ -21,11 +21,18 @@ internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
 
     private const string _accountsFileName = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
 
+    private readonly ILogger _logger;
+
+    public AccountLoginChecker(ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public bool CheckAccountLogin(UserAccount userAccount)
     {
         _driver = new ChromeDriver();
 
-        Login(_driver, userAccount);
+        Login(_driver, userAccount, _logger);
 
         Thread.Sleep(1000);
 
@@ -33,12 +40,15 @@ internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
         {
             _driver.Close();
             _driver.Dispose();
+            _logger.Log($"Valid Account {userAccount.Email}",_logger.CreditClaimerLogFilePath);
             return true;
         }
 
         _driver.Close();
         _driver.Dispose();
-        return false;
+            _logger.Log($"Invalid Account {userAccount.Email}",_logger.CreditClaimerLogFilePath);
+
+            return false;
     }
 
     public int CheckAllAccountsLogin(IList<UserAccount> accountsList)
