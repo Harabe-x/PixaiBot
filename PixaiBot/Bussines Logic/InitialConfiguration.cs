@@ -23,15 +23,16 @@ internal static class InitialConfiguration
 
     static InitialConfiguration()
     {
+       
         ApplicationDataPath =
             $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer";
         UserConfigPath =
-            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\config.json";
-        BotLogsPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\Logs";
+            $"{ApplicationDataPath}\\config.json";
+        BotLogsPath = $"{ApplicationDataPath}\\Logs";
         StatisticsFilePath =
-            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\statistics.json";
+            $"{ApplicationDataPath}statistics.json";
         AccountsFilePath =
-            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\accounts.json";
+            $"{ApplicationDataPath}\\accounts.json";
 
         if (!Directory.Exists(ApplicationDataPath)) CreateDirectories();
     }
@@ -45,22 +46,21 @@ internal static class InitialConfiguration
 
     public static void CreateConfigFile()
     {
-        if (!File.Exists(UserConfigPath))
+        if (File.Exists(UserConfigPath)) return;
+        
+        var userConfig = new UserConfig()
         {
-            var userConfig = new UserConfig()
-            {
-                StartWithSystem = false,
-                ToastNotifications = false,
-                CreditsAutoClaim = false
-            };
-            JsonWriter.WriteJson(userConfig, UserConfigPath);
-        }
+            StartWithSystem = false,
+            ToastNotifications = false,
+            CreditsAutoClaim = false
+        };
+        JsonWriter.WriteJson(userConfig, UserConfigPath);
     }
 
     public static void CreateStatisticsFile()
     {
-        if (!File.Exists(StatisticsFilePath))
-        {
+        if (File.Exists(StatisticsFilePath)) return;
+        
             var statistics = new AccountsStatistics()
             {
                 AccountsCount = 0,
@@ -68,7 +68,7 @@ internal static class InitialConfiguration
                 AccountWithClaimedCredits = 0
             };
             JsonWriter.WriteJson(statistics, StatisticsFilePath);
-        }
+        
 
         ;
     }

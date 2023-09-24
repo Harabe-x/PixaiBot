@@ -30,17 +30,4 @@ public partial class MainWindowView : Window
     {
         if (e.ChangedButton == MouseButton.Left) DragMove();
     }
-
-    [STAThread]
-    private void ResetButtonsColors()
-    {
-    }
-
-    private void DashboardBtn_OnClick(object sender, RoutedEventArgs e)
-    {
-    }
-
-    private void SettingsBtn_OnClick(object sender, RoutedEventArgs e)
-    {
-    }
 }

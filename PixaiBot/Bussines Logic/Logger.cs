@@ -10,18 +10,21 @@ namespace PixaiBot.Bussines_Logic;
 
 internal class Logger : ILogger
 {
-    public string LogFilePath { get; }
+    public string CreditClaimerLogFilePath { get; }
+
+    public string ApplicationLogFilePath { get; }
 
     public Logger()
     {
-        LogFilePath = $@"{InitialConfiguration.BotLogsPath}\{DateTime.Now:yyyy-MM-dd}.txt";
-        if (File.Exists(LogFilePath)) return;
-
-        File.Create(LogFilePath);
+        CreditClaimerLogFilePath = $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt";
+        ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt";
+        
+        if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath); ;
+        if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath); ;
     }
 
-    public void Log(string message)
+    public void Log(string message, string filePath)
     {
-        File.AppendAllText(LogFilePath, $"[{DateTime.Now}] {message}\n");
+        File.AppendAllText(filePath, $"[{DateTime.Now}] {message}\n");
     }
 }

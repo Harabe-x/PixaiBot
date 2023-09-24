@@ -37,6 +37,7 @@ internal class TrayIconHelper
                         if (trayIconHelper.CanHideToTray())
                         {
                             window.Hide();
+                           
                             var notifyIcon = new NotifyIcon()
                             {
                                 Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),

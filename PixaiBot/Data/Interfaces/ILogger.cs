@@ -8,7 +8,9 @@ namespace PixaiBot.Data.Interfaces;
 
 internal interface ILogger
 {
-    string LogFilePath { get; }
+    public string CreditClaimerLogFilePath { get; }
 
-    void Log(string message);
+    public string ApplicationLogFilePath { get; }
+
+    public void Log(string message,string filePath);
 }
