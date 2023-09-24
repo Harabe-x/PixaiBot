@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using PixaiBot.Data.Interfaces;
+using System.IO;
+using System;
 
 namespace PixaiBot.Bussines_Logic;
 
@@ -25,6 +22,6 @@ internal class Logger : ILogger
 
     public void Log(string message, string filePath)
     {
-        File.AppendAllText(filePath, $"[{DateTime.Now:hh:mm:ss}] {message}\n");
+        File.AppendAllText(filePath, $"[{DateTime.Now:HH:mm:ss}] {message}\n");
     }
 }

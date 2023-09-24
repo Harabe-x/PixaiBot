@@ -19,6 +19,8 @@ public abstract class LoginModule
 
     protected static void Login(ChromeDriver driver, UserAccount userAccount, ILogger logger)
     {
+        logger.Log("=====Launched Chrome Driver=====", logger.CreditClaimerLogFilePath);
+        
         driver.Navigate().GoToUrl(LoginUrl);
 
         Thread.Sleep(StartWaitTime);

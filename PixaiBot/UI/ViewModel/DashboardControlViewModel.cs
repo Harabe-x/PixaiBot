@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using PixaiBot.Data.Interfaces;
 using System.Windows.Threading;
-using Accessibility;
-using Notification.Wpf;
-using PixaiBot.Bussines_Logic;
-using PixaiBot.Data.Interfaces;
+using System.Threading.Tasks;
 using PixaiBot.Data.Models;
+using System.Windows.Input;
 using PixaiBot.UI.Base;
+using System.Linq;
+using System;
 
 namespace PixaiBot.UI.ViewModel;
 
 internal class DashboardControlViewModel : BaseViewModel
 {
     public ICommand ClaimCreditsCommand { get; }
-
-
-    public ICommand TestCommand { get; }
 
     public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
         IAccountsStatisticsManager accountsStatisticsManager, ILogger logger, IConfigManager configManager,
@@ -31,11 +23,9 @@ internal class DashboardControlViewModel : BaseViewModel
         _creditClaimer = creditClaimer;
         _accountsManager = accountsManager;
         _toastNotificationSender = toastNotificationSender;
-        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
-        TestCommand = new RelayCommand((obj) => TestMethod());
-        _timer = new DispatcherTimer();
-
+        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCreditsInNewThread());
         StartStatisticsRefreshing();
+        if(_userConfig.CreditsAutoClaim) StartAutoClaim();
     }
 
     private readonly IAccountsManager _accountsManager;
@@ -49,8 +39,6 @@ internal class DashboardControlViewModel : BaseViewModel
     private readonly ILogger _logger;
 
     private readonly IToastNotificationSender _toastNotificationSender;
-
-    private readonly DispatcherTimer _timer;
 
     private string? _accountCount;
 
@@ -92,19 +80,30 @@ internal class DashboardControlViewModel : BaseViewModel
 
     private void StartStatisticsRefreshing()
     {
-        _timer.Interval = TimeSpan.FromSeconds(5);
-        _timer.Tick += UpdateStatistics;
-        _timer.Start();
+        var refreshStatisticsTimer = new DispatcherTimer();
+        refreshStatisticsTimer.Interval = TimeSpan.FromSeconds(5);
+        refreshStatisticsTimer.Tick += UpdateStatistics;
+        refreshStatisticsTimer.Start();
         UpdateStatistics(null, null);
     }
 
-    private void ClaimCredits()
+    private void ClaimCreditsInNewThread()
     {
-        var task = new Task(ClaimCreditsInNewThread);
-        task.Start();
+        var creditClaimTask = new Task(ClaimCredits);
+        creditClaimTask.Start();
     }
 
-    private void ClaimCreditsInNewThread()
+    private void StartAutoClaim()
+    {
+        var autoClaimTimer = new DispatcherTimer();
+        autoClaimTimer.Interval = TimeSpan.FromHours(24);
+        autoClaimTimer.Tick += (sender, args) => ClaimCreditsInNewThread();
+        autoClaimTimer.Start();
+        
+        ClaimCreditsInNewThread();
+    }
+
+    private void ClaimCredits()
     {
         _logger.Log("Started credit claiming process ", _logger.ApplicationLogFilePath);
 
@@ -117,14 +116,8 @@ internal class DashboardControlViewModel : BaseViewModel
                 _creditClaimer.ClaimCredits(account);
     }
 
-
-    private void TestMethod()
-    {
-    }
-
     private void UpdateStatistics(object? sender, EventArgs? e)
     {
-
         _accountsStatisticsManager.RefreshStatistics();
         AccountCount = _accountsStatisticsManager.AccountsNumber.ToString();
         AccountWithClaimedCredits = _accountsStatisticsManager.AccountsWithClaimedCredits.ToString();
@@ -132,4 +125,5 @@ internal class DashboardControlViewModel : BaseViewModel
         _userConfig = _configManager.GetConfig();
         _logger.Log("Statistics refreshed", _logger.ApplicationLogFilePath);
     }
+
 }

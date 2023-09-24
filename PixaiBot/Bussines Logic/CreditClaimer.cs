@@ -44,6 +44,7 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
                 NotificationType.Error);
             _logger.Log("Login failed",_logger.CreditClaimerLogFilePath);
             _driver.Quit();
+            _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
             return;
         }
 
@@ -55,6 +56,7 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
                 $"if this error persists, please open new issue on github ", NotificationType.Error);
             _logger.Log("Going to profile failed", _logger.CreditClaimerLogFilePath);
             _driver.Quit();
+            _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
             return;
         }
 
@@ -63,8 +65,8 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
         {
             toastNotificationSender?.SendNotification("Credits claimed", $"Try again tomorrow",
                 NotificationType.Warning);
-
             _driver.Quit();
+            _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
             return;
         }
 
@@ -72,6 +74,8 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
             $"Claiming credits completed successfully for {account.Email}", NotificationType.Success);
         _logger.Log($"Claiming credits completed successfully for {account.Email}", _logger.CreditClaimerLogFilePath);
         _driver.Quit();
+        _logger.Log("=====Chrome Drive Disposed=====c", _logger.CreditClaimerLogFilePath);
+
     }
 
     private bool GoToProfile()

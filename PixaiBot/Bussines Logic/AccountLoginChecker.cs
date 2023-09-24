@@ -17,14 +17,15 @@ internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
 {
     private ChromeDriver? _driver;
 
-    private const string _mainPageUrl = "https://pixai.art/";
+    private const string MainPageUrl = "https://pixai.art/";
 
-    private const string _accountsFileName = @"C:\Users\xgra5\AppData\Roaming\PixaiAutoClaimer\accounts.json";
+    private readonly string _accountsFilePath;
 
     private readonly ILogger _logger;
 
     public AccountLoginChecker(ILogger logger)
     {
+        _accountsFilePath = InitialConfiguration.AccountsFilePath;
         _logger = logger;
     }
 
@@ -36,18 +37,19 @@ internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
 
         Thread.Sleep(1000);
 
-        if (_driver.Url == _mainPageUrl)
+        if (_driver.Url == MainPageUrl)
         {
             _driver.Close();
             _driver.Dispose();
             _logger.Log($"Valid Account {userAccount.Email}",_logger.CreditClaimerLogFilePath);
+           _logger.Log($"=====Chrome Drive Disposed=====\n",_logger.CreditClaimerLogFilePath);
             return true;
         }
 
         _driver.Close();
         _driver.Dispose();
-            _logger.Log($"Invalid Account {userAccount.Email}",_logger.CreditClaimerLogFilePath);
-
+            _logger.Log("Invalid Account",_logger.CreditClaimerLogFilePath);
+            _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
             return false;
     }
 
@@ -55,7 +57,7 @@ internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
     {
         var validAccounts = accountsList.Where(CheckAccountLogin).ToList();
 
-        JsonWriter.WriteJson(validAccounts, _accountsFileName);
+        JsonWriter.WriteJson(validAccounts, _accountsFilePath);
 
         return validAccounts.Count;
     }
