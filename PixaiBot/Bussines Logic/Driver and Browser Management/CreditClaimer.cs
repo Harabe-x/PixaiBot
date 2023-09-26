@@ -33,11 +33,15 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
         _logger = logger;
     }
 
+ 
+
     public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null)
     {
-        _driver = new ChromeDriver();
+
+        _driver = ChromeDriverFactory.CreateDriver();
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
-        Login(_driver, account,_logger);
+        _driver.Manage().Window.Minimize();
+        Login(_driver, account,_logger);    
         if (_driver.Url == LoginUrl)
         {
             toastNotificationSender?.SendNotification("Login failed", $"Login failed for {account.Email}",

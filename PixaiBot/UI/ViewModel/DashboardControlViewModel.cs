@@ -6,6 +6,7 @@ using System.Windows.Input;
 using PixaiBot.UI.Base;
 using System.Linq;
 using System;
+using System.Windows;
 
 namespace PixaiBot.UI.ViewModel;
 
@@ -25,8 +26,12 @@ internal class DashboardControlViewModel : BaseViewModel
         _toastNotificationSender = toastNotificationSender;
         ClaimCreditsCommand = new RelayCommand((obj) => ClaimCreditsInNewThread());
         StartStatisticsRefreshing();
-        if(_userConfig.CreditsAutoClaim) StartAutoClaim();
+        if (_userConfig.CreditsAutoClaim) StartAutoClaim();
     }
+
+    private const int CreditClaimerInterval = 24;
+
+    private const int StatisticsRefreshInterval = 5;
 
     private readonly IAccountsManager _accountsManager;
 
@@ -43,6 +48,19 @@ internal class DashboardControlViewModel : BaseViewModel
     private string? _accountCount;
 
     private UserConfig _userConfig;
+
+    private string _creditClaimerInfo;
+
+    public string CreditClaimerInfo
+    {
+        get => _creditClaimerInfo;
+        set
+        {
+            _creditClaimerInfo = value;
+            OnPropertyChanged();
+        }
+    }
+
 
     public string? AccountCount
     {
@@ -80,10 +98,14 @@ internal class DashboardControlViewModel : BaseViewModel
 
     private void StartStatisticsRefreshing()
     {
-        var refreshStatisticsTimer = new DispatcherTimer();
-        refreshStatisticsTimer.Interval = TimeSpan.FromSeconds(5);
+        var refreshStatisticsTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(StatisticsRefreshInterval)
+        };
+
         refreshStatisticsTimer.Tick += UpdateStatistics;
         refreshStatisticsTimer.Start();
+
         UpdateStatistics(null, null);
     }
 
@@ -95,25 +117,45 @@ internal class DashboardControlViewModel : BaseViewModel
 
     private void StartAutoClaim()
     {
-        var autoClaimTimer = new DispatcherTimer();
-        autoClaimTimer.Interval = TimeSpan.FromHours(24);
+        var autoClaimTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromHours(CreditClaimerInterval)
+        };
+
         autoClaimTimer.Tick += (sender, args) => ClaimCreditsInNewThread();
         autoClaimTimer.Start();
-        
+
         ClaimCreditsInNewThread();
     }
 
     private void ClaimCredits()
     {
         _logger.Log("Started credit claiming process ", _logger.ApplicationLogFilePath);
-
-        var accounts = _accountsManager.GetAllAccounts().ToList();
         
+        var accounts = _accountsManager.GetAllAccounts().ToList();
         foreach (var account in accounts)
+        {
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                CreditClaimerInfo = $"Claiming Credits on {account.Email}";
+            });
+            
             if (_userConfig.ToastNotifications)
+            {
                 _creditClaimer.ClaimCredits(account, _toastNotificationSender);
+            }
             else
+            {
                 _creditClaimer.ClaimCredits(account);
+            }
+        }
+        
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            CreditClaimerInfo = $"Credits Claimed!";
+        });
+
     }
 
     private void UpdateStatistics(object? sender, EventArgs? e)

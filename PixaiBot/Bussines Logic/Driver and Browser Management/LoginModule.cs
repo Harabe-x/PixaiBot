@@ -11,7 +11,7 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-public abstract class LoginModule
+public abstract  class LoginModule
 {
     private const string LoginUrl = "https://pixai.art/login";
 
@@ -64,6 +64,5 @@ public abstract class LoginModule
         buttons.FirstOrDefault(x => x.Text == "Login")?.Click();
         
         logger.Log($"Login Button Clicked", logger.CreditClaimerLogFilePath);
-
     }
 }

@@ -28,7 +28,7 @@
                            HorizontalAlignment="Center" />
                 <Button Command="{Binding ClaimCreditsCommand}" Style="{StaticResource PurpleButton}" Width="200"
                         Margin="0 30 0 0" Content="Claim Credits" />
-                <TextBlock Style="{StaticResource SecondaryText}" Text="You already claimed all credits today"
+                <TextBlock Style="{StaticResource SecondaryText}" Foreground="#2c3e50" Text="{Binding CreditClaimerInfo}"
                            FontWeight="Light" HorizontalAlignment="Center" />
             </StackPanel>
         </Grid>
