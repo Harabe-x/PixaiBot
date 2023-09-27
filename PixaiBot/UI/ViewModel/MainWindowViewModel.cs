@@ -12,7 +12,7 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel;
 
-public class MainWindowViewModel : BaseViewModel, ITrayIconHelper , IWindowHelper
+public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 {
     public ICommand NavigateToDashboardCommand { get; }
 
@@ -33,7 +33,7 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper , IWindowHelpe
         NavigateToDashboardCommand.Execute(null);
     }
 
-    private readonly ILogger _logger; 
+    private readonly ILogger _logger;
 
     private INavigationService _navigation;
 
@@ -50,30 +50,27 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper , IWindowHelpe
 
     private void NavigateToDashboard()
     {
-
         Navigation.NavigateTo<DashboardControlViewModel>();
-        _logger.Log("Navigated to Dashboard",_logger.ApplicationLogFilePath);
+        _logger.Log("Navigated to Dashboard", _logger.ApplicationLogFilePath);
     }
 
     private void NavigateToSettings()
     {
         Navigation.NavigateTo<SettingsControlViewModel>();
         _logger.Log("Navigated to Settings", _logger.ApplicationLogFilePath);
-
     }
 
     private void HideApplication()
     {
         HideToTray?.Invoke();
         _logger.Log("Hided application to tray", _logger.ApplicationLogFilePath);
-
     }
 
     private void ExitApplication()
     {
         _logger.Log("=====Application Closed=====", _logger.ApplicationLogFilePath);
 
-       Close?.Invoke();
+        Close?.Invoke();
     }
 
     public bool CanHideToTray()
@@ -87,6 +84,6 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper , IWindowHelpe
     }
 
     public Action Close { get; set; }
-    
+
     public Action HideToTray { get; set; }
 }

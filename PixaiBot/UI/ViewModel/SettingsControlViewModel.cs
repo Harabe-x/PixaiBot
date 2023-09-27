@@ -18,7 +18,7 @@ public class SettingsControlViewModel : BaseViewModel
     public ICommand ShowAddAccountWindowCommand { get; }
 
     public ICommand AddManyAccountsCommand { get; }
-      
+
     public ICommand CheckAllAccountsLoginCommand { get; }
 
     public ICommand StartWithSystemCommand { get; }

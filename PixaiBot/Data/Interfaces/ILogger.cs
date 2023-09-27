@@ -12,5 +12,5 @@ public interface ILogger
 
     public string ApplicationLogFilePath { get; }
 
-    public void Log(string message,string filePath);
+    public void Log(string message, string filePath);
 }

@@ -26,7 +26,6 @@ public static class InitialConfiguration
 
     static InitialConfiguration()
     {
-       
         ApplicationDataPath =
             $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer";
         UserConfigPath =
@@ -50,7 +49,7 @@ public static class InitialConfiguration
     public static void CreateConfigFile()
     {
         if (File.Exists(UserConfigPath)) return;
-        
+
         var userConfig = new UserConfig()
         {
             StartWithSystem = false,
@@ -63,13 +62,13 @@ public static class InitialConfiguration
     public static void CreateStatisticsFile()
     {
         if (File.Exists(StatisticsFilePath)) return;
-        
-            var statistics = new BotStatistics()
-            {
-                AccountsCount = 0,
-                BotVersion = BotVersion,
-                LastCreditClaimDateTime = DateTime.Now,
-            };
-            JsonWriter.WriteJson(statistics, StatisticsFilePath);
+
+        var statistics = new BotStatistics()
+        {
+            AccountsCount = 0,
+            BotVersion = BotVersion,
+            LastCreditClaimDateTime = DateTime.Now
+        };
+        JsonWriter.WriteJson(statistics, StatisticsFilePath);
     }
 }

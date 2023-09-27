@@ -1,5 +1,4 @@
-﻿
-using PixaiBot.Data.Interfaces;
+﻿using PixaiBot.Data.Interfaces;
 using System.IO;
 using System;
 
@@ -13,11 +12,14 @@ public class Logger : ILogger
 
     public Logger()
     {
-        CreditClaimerLogFilePath = $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt";
+        CreditClaimerLogFilePath =
+            $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt";
         ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt";
-        
-        if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath); ;
-        if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath); ;
+
+        if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath);
+        ;
+        if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath);
+        ;
     }
 
     public void Log(string message, string filePath)

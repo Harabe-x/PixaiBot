@@ -8,7 +8,7 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IWindowHelper
 {
-  public Action Close { get; set; }
+    public Action Close { get; set; }
 
-  public bool CanCloseWindow();
+    public bool CanCloseWindow();
 }

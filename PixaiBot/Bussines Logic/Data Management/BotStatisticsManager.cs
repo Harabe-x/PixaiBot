@@ -10,7 +10,6 @@ namespace PixaiBot.Bussines_Logic;
 
 public class BotStatisticsManager : IBotStatisticsManager
 {
-
     private string AccountsStatisticsFilePath { get; }
 
     private BotStatistics _botStatistics;
@@ -40,7 +39,6 @@ public class BotStatisticsManager : IBotStatisticsManager
         AccountsNumber = _botStatistics.AccountsCount;
         LastCreditClaimDateTime = _botStatistics.LastCreditClaimDateTime;
         BotVersion = _botStatistics.BotVersion;
-
     }
 
     public void IncreaseAccountsCount(int number)
@@ -76,6 +74,5 @@ public class BotStatisticsManager : IBotStatisticsManager
     {
         _botStatistics.AccountsCount = 0;
         _logger.Log("Account count rested", _logger.ApplicationLogFilePath);
-
     }
 }

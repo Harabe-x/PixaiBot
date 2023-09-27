@@ -41,16 +41,16 @@ public class AccountLoginChecker : IAccountLoginChecker
         {
             _driver.Close();
             _driver.Dispose();
-            _logger.Log($"Valid Account {userAccount.Email}",_logger.CreditClaimerLogFilePath);
-           _logger.Log($"=====Chrome Drive Disposed=====\n",_logger.CreditClaimerLogFilePath);
+            _logger.Log($"Valid Account {userAccount.Email}", _logger.CreditClaimerLogFilePath);
+            _logger.Log($"=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
             return true;
         }
 
         _driver.Close();
         _driver.Dispose();
-            _logger.Log("Invalid Account",_logger.CreditClaimerLogFilePath);
-            _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
-            return false;
+        _logger.Log("Invalid Account", _logger.CreditClaimerLogFilePath);
+        _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
+        return false;
     }
 
     public int CheckAllAccountsLogin(IList<UserAccount> accountsList)

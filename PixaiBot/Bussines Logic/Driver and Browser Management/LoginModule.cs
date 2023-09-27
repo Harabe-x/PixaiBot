@@ -18,7 +18,6 @@ public static class LoginModule
     private const int StartWaitTime = 1000;
 
 
-
     /// <summary>
     /// Logs user to pixai.art
     /// <em>This method is used by CreditClaimer and AccountChecker</em>
@@ -29,7 +28,7 @@ public static class LoginModule
     public static void Login(ChromeDriver driver, UserAccount userAccount, ILogger logger)
     {
         logger.Log("=====Launched Chrome Driver=====", logger.CreditClaimerLogFilePath);
-        
+
         driver.Navigate().GoToUrl(LoginUrl);
 
         Thread.Sleep(StartWaitTime);
@@ -53,6 +52,7 @@ public static class LoginModule
 
             return;
         }
+
         logger.Log($"Sending user credentials  to textboxes", logger.CreditClaimerLogFilePath);
 
         textInputs.ElementAt(0).Click();
@@ -71,7 +71,7 @@ public static class LoginModule
         }
 
         buttons.FirstOrDefault(x => x.Text == "Login")?.Click();
-        
+
         logger.Log($"Login Button Clicked", logger.CreditClaimerLogFilePath);
     }
 }

@@ -132,33 +132,26 @@ public class DashboardControlViewModel : BaseViewModel
     private void ClaimCredits()
     {
         _logger.Log("Started credit claiming process ", _logger.ApplicationLogFilePath);
-        
+
         var accounts = _accountsManager.GetAllAccounts().ToList();
         foreach (var account in accounts)
         {
-
             Application.Current.Dispatcher.Invoke(() =>
             {
                 CreditClaimerInfo = $"Claiming Credits on {account.Email}";
             });
-            
+
             if (_userConfig.ToastNotifications)
-            {
                 _creditClaimer.ClaimCredits(account, _toastNotificationSender);
-            }
             else
-            {
                 _creditClaimer.ClaimCredits(account);
-            }
         }
-        
+
         Application.Current.Dispatcher.Invoke(() =>
         {
             CreditClaimerInfo = $"Credits Claimed!";
             LastCreditClaimDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-            
         });
-
     }
 
     private void RefreshBotData(object? sender, EventArgs? e)
@@ -170,5 +163,4 @@ public class DashboardControlViewModel : BaseViewModel
         _userConfig = _configManager.GetConfig();
         _logger.Log("Data refreshed", _logger.ApplicationLogFilePath);
     }
-
 }

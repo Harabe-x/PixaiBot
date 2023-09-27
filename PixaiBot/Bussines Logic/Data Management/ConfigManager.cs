@@ -25,13 +25,13 @@ public class ConfigManager : IConfigManager
 
     public UserConfig GetConfig()
     {
-        _logger.Log("Readed Config File",_logger.ApplicationLogFilePath);
+        _logger.Log("Readed Config File", _logger.ApplicationLogFilePath);
         return _jsonReader.ReadConfigFile(ConfigFilePath);
     }
 
     public void SaveConfig(UserConfig config)
     {
-        _logger.Log("Writed Config File",_logger.ApplicationLogFilePath);
+        _logger.Log("Writed Config File", _logger.ApplicationLogFilePath);
         JsonWriter.WriteJson(config, ConfigFilePath);
     }
 }

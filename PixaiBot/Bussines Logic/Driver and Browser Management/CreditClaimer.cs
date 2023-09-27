@@ -33,7 +33,7 @@ public class CreditClaimer : ICreditClaimer
         _logger = logger;
     }
 
- 
+
     /// <summary>
     /// Claims credits on the given account
     /// </summary>
@@ -42,16 +42,16 @@ public class CreditClaimer : ICreditClaimer
     public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null)
     {
         _driver = ChromeDriverFactory.CreateDriver();
-        
+
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
-       
+
         _driver.Manage().Window.Minimize();
-        LoginModule.Login(_driver, account,_logger);    
+        LoginModule.Login(_driver, account, _logger);
         if (_driver.Url == LoginUrl)
         {
             toastNotificationSender?.SendNotification("Login failed", $"Login failed for {account.Email}",
                 NotificationType.Error);
-            _logger.Log("Login failed",_logger.CreditClaimerLogFilePath);
+            _logger.Log("Login failed", _logger.CreditClaimerLogFilePath);
             _driver.Quit();
             _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
             return;
@@ -84,8 +84,8 @@ public class CreditClaimer : ICreditClaimer
         _logger.Log($"Claiming credits completed successfully for {account.Email}", _logger.CreditClaimerLogFilePath);
         _driver.Quit();
         _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
-
     }
+
     /// <summary>
     ///  Navigates to profile page
     /// </summary>
@@ -111,6 +111,7 @@ public class CreditClaimer : ICreditClaimer
             return false;
         }
     }
+
     /// <summary>
     ///  Claims credits on the account
     /// </summary>
