@@ -42,11 +42,11 @@
                                    FontWeight="SemiBold" Margin="20" />
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Foreground="{StaticResource DarkGreen}" Text="{Binding AccountCount}"
-                                       Margin="20 10 20 10" FontSize="15" FontWeight="Thin" />
-                            <TextBlock Foreground="{StaticResource Magenta}" Text="{Binding AccountWithClaimedCredits}"
-                                       Margin="20 10 20 10" FontSize="15" FontWeight="Thin" />
-                            <TextBlock Foreground="{StaticResource Mint}" Text="{Binding AccountWithUnclaimedCredits }"
-                                       Margin="20 10 20 10" FontSize="15" FontWeight="Thin" />
+                                       Margin="20 10 20 10" FontSize="18" FontWeight="Thin" />
+                            <TextBlock   Foreground="{StaticResource Magenta}" Text="{Binding LastCreditClaimDateTime}"
+                                       Margin="20 10 20 10" FontSize="18" FontWeight="Thin" />
+                            <TextBlock Foreground="{StaticResource Mint}" Text="{Binding BotVersion }"
+                                       Margin="20 10 20 10" FontSize="18" FontWeight="Thin" />
                         </StackPanel>
                     </Grid>
                 </Border>

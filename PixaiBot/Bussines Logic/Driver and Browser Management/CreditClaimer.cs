@@ -15,7 +15,7 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-internal class CreditClaimer : LoginModule, ICreditClaimer
+public class CreditClaimer : ICreditClaimer
 {
     private ChromeDriver? _driver;
 
@@ -34,14 +34,19 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
     }
 
  
-
+    /// <summary>
+    /// Claims credits on the given account
+    /// </summary>
+    /// <param name="account"></param>
+    /// <param name="toastNotificationSender"></param>
     public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null)
     {
-
         _driver = ChromeDriverFactory.CreateDriver();
+        
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
+       
         _driver.Manage().Window.Minimize();
-        Login(_driver, account,_logger);    
+        LoginModule.Login(_driver, account,_logger);    
         if (_driver.Url == LoginUrl)
         {
             toastNotificationSender?.SendNotification("Login failed", $"Login failed for {account.Email}",
@@ -78,10 +83,13 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
             $"Claiming credits completed successfully for {account.Email}", NotificationType.Success);
         _logger.Log($"Claiming credits completed successfully for {account.Email}", _logger.CreditClaimerLogFilePath);
         _driver.Quit();
-        _logger.Log("=====Chrome Drive Disposed=====c", _logger.CreditClaimerLogFilePath);
+        _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
 
     }
-
+    /// <summary>
+    ///  Navigates to profile page
+    /// </summary>
+    /// <returns> Returns true if the operation is successful; otherwise false.</returns>
     private bool GoToProfile()
     {
         try
@@ -103,7 +111,10 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
             return false;
         }
     }
-
+    /// <summary>
+    ///  Claims credits on the account
+    /// </summary>
+    /// <returns>Returns true if the operation is successful; otherwise false.</returns>
     private bool ClaimCreditsOnAccount()
     {
         try
@@ -115,7 +126,7 @@ internal class CreditClaimer : LoginModule, ICreditClaimer
             Thread.Sleep(500);
             var claimButton = _driver.FindElement(By.CssSelector(".MuiLoadingButton-root"));
 
-
+            // Clicks the claim button 5 times to ensure that button was clicked 
             for (var i = 0; i < 5; i++)
             {
                 Thread.Sleep(Delay);

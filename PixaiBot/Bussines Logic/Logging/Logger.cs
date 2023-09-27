@@ -5,7 +5,7 @@ using System;
 
 namespace PixaiBot.Bussines_Logic;
 
-internal class Logger : ILogger
+public class Logger : ILogger
 {
     public string CreditClaimerLogFilePath { get; }
 

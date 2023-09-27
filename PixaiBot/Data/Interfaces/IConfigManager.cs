@@ -7,7 +7,7 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface IConfigManager
+public interface IConfigManager
 {
     UserConfig GetConfig();
 

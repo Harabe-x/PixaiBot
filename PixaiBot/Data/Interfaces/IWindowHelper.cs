@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface IWindowHelper
+public interface IWindowHelper
 {
-    Action Close { get; set; }
+  public Action Close { get; set; }
 
-    bool CanCloseWindow { get; set; }
+  public bool CanCloseWindow();
 }

@@ -10,23 +10,23 @@ using System.Windows;
 
 namespace PixaiBot.UI.ViewModel;
 
-internal class DashboardControlViewModel : BaseViewModel
+public class DashboardControlViewModel : BaseViewModel
 {
     public ICommand ClaimCreditsCommand { get; }
 
     public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
-        IAccountsStatisticsManager accountsStatisticsManager, ILogger logger, IConfigManager configManager,
+        IBotStatisticsManager botStatisticsManager, ILogger logger, IConfigManager configManager,
         IToastNotificationSender toastNotificationSender)
     {
         _configManager = configManager;
         _logger = logger;
-        _accountsStatisticsManager = accountsStatisticsManager;
+        _botStatisticsManager = botStatisticsManager;
         _creditClaimer = creditClaimer;
         _accountsManager = accountsManager;
         _toastNotificationSender = toastNotificationSender;
         ClaimCreditsCommand = new RelayCommand((obj) => ClaimCreditsInNewThread());
-        StartStatisticsRefreshing();
-        if (_userConfig.CreditsAutoClaim) StartAutoClaim();
+        StartBotDataRefreshing();
+        if (_userConfig.CreditsAutoClaim) StartCreditsAutoClaim();
     }
 
     private const int CreditClaimerInterval = 24;
@@ -37,7 +37,7 @@ internal class DashboardControlViewModel : BaseViewModel
 
     private readonly ICreditClaimer _creditClaimer;
 
-    private readonly IAccountsStatisticsManager _accountsStatisticsManager;
+    private readonly IBotStatisticsManager _botStatisticsManager;
 
     private readonly IConfigManager _configManager;
 
@@ -72,41 +72,42 @@ internal class DashboardControlViewModel : BaseViewModel
         }
     }
 
-    private string? _accountWithClaimedCredits;
+    private string? _lastCreditClaimDateTime;
 
-    public string? AccountWithClaimedCredits
+    public string? LastCreditClaimDateTime
     {
-        get => _accountWithClaimedCredits;
+        get => _lastCreditClaimDateTime;
         set
         {
-            _accountWithClaimedCredits = $"Accounts With Claimed Credits : {value}";
+            _botStatisticsManager.SetClaimDateTime(DateTime.Parse(value));
+            _lastCreditClaimDateTime = $"Last Credit Claim Date :  {value}";
             OnPropertyChanged();
         }
     }
 
-    private string? _accountWithUnclaimedCredits;
+    private string? _botVersion;
 
-    public string? AccountWithUnclaimedCredits
+    public string? BotVersion
     {
-        get => _accountWithUnclaimedCredits;
+        get => _botVersion;
         set
         {
-            _accountWithUnclaimedCredits = $"Accounts With Unclaimed credits: {value}";
+            _botVersion = $"Bot Version: {value}";
             OnPropertyChanged();
         }
     }
 
-    private void StartStatisticsRefreshing()
+    private void StartBotDataRefreshing()
     {
         var refreshStatisticsTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(StatisticsRefreshInterval)
         };
 
-        refreshStatisticsTimer.Tick += UpdateStatistics;
+        refreshStatisticsTimer.Tick += RefreshBotData;
         refreshStatisticsTimer.Start();
 
-        UpdateStatistics(null, null);
+        RefreshBotData(null, null);
     }
 
     private void ClaimCreditsInNewThread()
@@ -115,7 +116,7 @@ internal class DashboardControlViewModel : BaseViewModel
         creditClaimTask.Start();
     }
 
-    private void StartAutoClaim()
+    private void StartCreditsAutoClaim()
     {
         var autoClaimTimer = new DispatcherTimer
         {
@@ -154,18 +155,20 @@ internal class DashboardControlViewModel : BaseViewModel
         Application.Current.Dispatcher.Invoke(() =>
         {
             CreditClaimerInfo = $"Credits Claimed!";
+            LastCreditClaimDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            
         });
 
     }
 
-    private void UpdateStatistics(object? sender, EventArgs? e)
+    private void RefreshBotData(object? sender, EventArgs? e)
     {
-        _accountsStatisticsManager.RefreshStatistics();
-        AccountCount = _accountsStatisticsManager.AccountsNumber.ToString();
-        AccountWithClaimedCredits = _accountsStatisticsManager.AccountsWithClaimedCredits.ToString();
-        AccountWithUnclaimedCredits = _accountsStatisticsManager.AccountsWithUnclaimedCredits.ToString();
+        _botStatisticsManager.RefreshStatistics();
+        AccountCount = _botStatisticsManager.AccountsNumber.ToString();
+        LastCreditClaimDateTime = _botStatisticsManager.LastCreditClaimDateTime.ToString();
+        BotVersion = _botStatisticsManager.BotVersion;
         _userConfig = _configManager.GetConfig();
-        _logger.Log("Statistics refreshed", _logger.ApplicationLogFilePath);
+        _logger.Log("Data refreshed", _logger.ApplicationLogFilePath);
     }
 
 }

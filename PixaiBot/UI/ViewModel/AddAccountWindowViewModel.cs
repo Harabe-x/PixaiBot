@@ -28,11 +28,13 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
     }
 
     public Action Close { get; set; }
+    public bool CanCloseWindow()
+    {
+        return true;
+    }
 
     private readonly ILogger _logger;
     
-    public bool CanCloseWindow { get; set; }
-
     private readonly IAccountsManager _accountsManger;
 
     private readonly IDataValidator _dataValidator;

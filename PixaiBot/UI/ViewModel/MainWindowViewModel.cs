@@ -12,7 +12,7 @@ using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel;
 
-public class MainWindowViewModel : BaseViewModel, ITrayIconHelper
+public class MainWindowViewModel : BaseViewModel, ITrayIconHelper , IWindowHelper
 {
     public ICommand NavigateToDashboardCommand { get; }
 
@@ -73,7 +73,7 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper
     {
         _logger.Log("=====Application Closed=====", _logger.ApplicationLogFilePath);
 
-        Environment.Exit(0);
+       Close?.Invoke();
     }
 
     public bool CanHideToTray()
@@ -81,5 +81,12 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper
         return true;
     }
 
+    public bool CanCloseWindow()
+    {
+        return true;
+    }
+
+    public Action Close { get; set; }
+    
     public Action HideToTray { get; set; }
 }

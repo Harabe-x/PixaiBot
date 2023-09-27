@@ -8,7 +8,7 @@ using Notification.Wpf;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface IToastNotificationSender
+public interface IToastNotificationSender
 {
     public void SendNotification(string title, string message, NotificationType notificationType);
 }

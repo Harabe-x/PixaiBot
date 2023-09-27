@@ -13,12 +13,12 @@ using PixaiBot.UI.View;
 
 namespace PixaiBot.UI.ViewModel;
 
-internal class SettingsControlViewModel : BaseViewModel
+public class SettingsControlViewModel : BaseViewModel
 {
     public ICommand ShowAddAccountWindowCommand { get; }
 
     public ICommand AddManyAccountsCommand { get; }
-
+      
     public ICommand CheckAllAccountsLoginCommand { get; }
 
     public ICommand StartWithSystemCommand { get; }
@@ -27,10 +27,10 @@ internal class SettingsControlViewModel : BaseViewModel
 
     public SettingsControlViewModel(IDialogService dialogService, IAccountsManager
         accountsManager, IDataValidator dataValidator, IAccountLoginChecker
-        accountLoginChecker, IAccountsStatisticsManager accountsStatisticsManager, IConfigManager configManager)
+        accountLoginChecker, IBotStatisticsManager botStatisticsManager, IConfigManager configManager)
     {
         _configManager = configManager;
-        _accountsStatisticsManager = accountsStatisticsManager;
+        _botStatisticsManager = botStatisticsManager;
         _dialogService = dialogService;
         _accountsManager = accountsManager;
         _dataValidator = dataValidator;
@@ -50,7 +50,7 @@ internal class SettingsControlViewModel : BaseViewModel
 
     private readonly IAccountLoginChecker _accountLoginChecker;
 
-    private readonly IAccountsStatisticsManager _accountsStatisticsManager;
+    private readonly IBotStatisticsManager _botStatisticsManager;
 
     private readonly IConfigManager _configManager;
 
@@ -115,9 +115,9 @@ internal class SettingsControlViewModel : BaseViewModel
 
         var validAccountsCount = _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
-        _accountsStatisticsManager.ResetNumberOfAccounts();
+        _botStatisticsManager.ResetNumberOfAccounts();
 
-        _accountsStatisticsManager.IncrementAccountsNumber(validAccountsCount);
+        _botStatisticsManager.IncreaseAccountsCount(validAccountsCount);
     }
 
     private void InitializeUserConfig()

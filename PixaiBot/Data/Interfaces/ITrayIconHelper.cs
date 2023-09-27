@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface ITrayIconHelper
+public interface ITrayIconHelper
 {
     public bool CanHideToTray();
 

@@ -20,6 +20,8 @@ public class ToastNotificationSender : IToastNotificationSender
         _notification = new NotificationManager();
     }
 
+
+    
     public void SendNotification(string title, string message, NotificationType notificationType)
     {
         _logger.Log($"Notification Sent, NotificationType{notificationType}", _logger.ApplicationLogFilePath);

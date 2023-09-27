@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PixaiBot.Data.Models;
 
-public class AccountsStatistics
+public class BotStatistics
 {
     public int AccountsCount { get; set; }
 
-    public int AccountWithClaimedCredits { get; set; }
+    public DateTime LastCreditClaimDateTime { get; set; }
 
-    public int AccountWithUnclaimedCredits { get; set; }
+    public string? BotVersion { get; set; }
 }

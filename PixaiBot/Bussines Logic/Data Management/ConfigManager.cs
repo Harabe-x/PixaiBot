@@ -8,7 +8,7 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-internal class ConfigManager : IConfigManager
+public class ConfigManager : IConfigManager
 {
     public string ConfigFilePath { get; }
 

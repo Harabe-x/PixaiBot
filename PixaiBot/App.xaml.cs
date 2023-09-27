@@ -35,7 +35,7 @@ public partial class App : Application
         services.AddSingleton<IDataValidator, DataValidator>();
         services.AddSingleton<IConfigManager, ConfigManager>();
         services.AddSingleton<IAccountLoginChecker, AccountLoginChecker>();
-        services.AddSingleton<IAccountsStatisticsManager, AccountsStatisticsManager>();
+        services.AddSingleton<IBotStatisticsManager, BotStatisticsManager>();
         services.AddSingleton<ICreditClaimer, CreditClaimer>();
         services.AddSingleton<ILogger, Logger>();
         services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();

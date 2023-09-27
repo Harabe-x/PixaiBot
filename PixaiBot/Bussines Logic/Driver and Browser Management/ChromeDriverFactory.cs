@@ -9,6 +9,10 @@ namespace PixaiBot.Bussines_Logic
 {
     public static class ChromeDriverFactory
     {
+        /// <summary>
+        /// Creates a ChromeDriver with the default settings.
+        /// </summary>
+        /// <returns>Chrome Driver Instance</returns>
         public static ChromeDriver CreateDriver()
         {
             ChromeOptions options = new ChromeOptions();

@@ -10,7 +10,7 @@ using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.UI.Helpers;
 
-internal class TrayIconHelper
+public class TrayIconHelper
 {
     public static bool GetCanHideToTray(DependencyObject obj)
     {

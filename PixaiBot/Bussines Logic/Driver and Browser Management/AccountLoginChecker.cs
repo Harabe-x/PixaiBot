@@ -13,7 +13,7 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
+public class AccountLoginChecker : IAccountLoginChecker
 {
     private ChromeDriver? _driver;
 
@@ -31,9 +31,9 @@ internal class AccountLoginChecker : LoginModule, IAccountLoginChecker
 
     public bool CheckAccountLogin(UserAccount userAccount)
     {
-        _driver = new ChromeDriver();
+        _driver = ChromeDriverFactory.CreateDriver();
 
-        Login(_driver, userAccount, _logger);
+        LoginModule.Login(_driver, userAccount, _logger);
 
         Thread.Sleep(1000);
 

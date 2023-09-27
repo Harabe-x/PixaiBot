@@ -26,10 +26,10 @@ public class JsonReader
         return userConfig;
     }
 
-    public AccountsStatistics ReadStatisticsFile(string filePath)
+    public BotStatistics ReadStatisticsFile(string filePath)
     {
         var jsonString = File.ReadAllText(filePath);
-        var statistics = JsonSerializer.Deserialize<AccountsStatistics>(jsonString);
+        var statistics = JsonSerializer.Deserialize<BotStatistics>(jsonString);
         return statistics;
     }
 }

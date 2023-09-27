@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium.DevTools;
@@ -9,8 +10,10 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-internal static class InitialConfiguration
+public static class InitialConfiguration
 {
+    public static string BotVersion { get; }
+
     public static string UserConfigPath { get; }
 
     public static string BotLogsPath { get; }
@@ -30,10 +33,10 @@ internal static class InitialConfiguration
             $"{ApplicationDataPath}\\config.json";
         BotLogsPath = $"{ApplicationDataPath}\\Logs";
         StatisticsFilePath =
-            $"{ApplicationDataPath}statistics.json";
+            $"{ApplicationDataPath}\\statistics.json";
         AccountsFilePath =
             $"{ApplicationDataPath}\\accounts.json";
-
+        BotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         if (!Directory.Exists(ApplicationDataPath)) CreateDirectories();
     }
 
@@ -61,15 +64,12 @@ internal static class InitialConfiguration
     {
         if (File.Exists(StatisticsFilePath)) return;
         
-            var statistics = new AccountsStatistics()
+            var statistics = new BotStatistics()
             {
                 AccountsCount = 0,
-                AccountWithUnclaimedCredits = 0,
-                AccountWithClaimedCredits = 0
+                BotVersion = BotVersion,
+                LastCreditClaimDateTime = DateTime.Now,
             };
             JsonWriter.WriteJson(statistics, StatisticsFilePath);
-        
-
-        ;
     }
 }

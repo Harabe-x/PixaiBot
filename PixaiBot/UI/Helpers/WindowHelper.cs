@@ -8,7 +8,7 @@ using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.UI.Helpers;
 
-internal class WindowHelper
+public class WindowHelper
 {
     public static bool GetEnableClosing(DependencyObject obj)
     {

@@ -19,15 +19,15 @@ public class AccountsManager : IAccountsManager
 
     private readonly JsonReader _jsonReader;
 
-    private readonly IAccountsStatisticsManager _accountsStatisticsManager;
+    private readonly IBotStatisticsManager _botStatisticsManager;
 
     private readonly ILogger _logger;
 
-    public AccountsManager(IAccountsStatisticsManager accountsStatisticsManager,ILogger logger)
+    public AccountsManager(IBotStatisticsManager botStatisticsManager,ILogger logger)
     {
         _logger = logger;
         AccountsFilePath = InitialConfiguration.AccountsFilePath;
-        _accountsStatisticsManager = accountsStatisticsManager;
+        _botStatisticsManager = botStatisticsManager;
         _jsonReader = new JsonReader();
     }
 
@@ -39,7 +39,7 @@ public class AccountsManager : IAccountsManager
             var accountsList = new List<UserAccount>();
             accountsList.Add(account);
             JsonWriter.WriteJson(accountsList, AccountsFilePath);
-            _accountsStatisticsManager.IncrementAccountsNumber(1);
+            _botStatisticsManager.IncreaseAccountsCount(1);
             UpdateAccountManagerProperties();
             _logger.Log("Added account ", _logger.ApplicationLogFilePath);
 
@@ -49,7 +49,7 @@ public class AccountsManager : IAccountsManager
         var accountList = _jsonReader.ReadAccountFile(AccountsFilePath);
         accountList.Add(account);
         JsonWriter.WriteJson(accountList, AccountsFilePath);
-        _accountsStatisticsManager.IncrementAccountsNumber(1);
+        _botStatisticsManager.IncreaseAccountsCount(1);
         _logger.Log("Added account", _logger.ApplicationLogFilePath);
         UpdateAccountManagerProperties();
 
@@ -60,7 +60,7 @@ public class AccountsManager : IAccountsManager
         if (!File.Exists(AccountsFilePath)) return;
         accountList.Remove(userAccount);
         JsonWriter.WriteJson(accountList, AccountsFilePath);
-        _accountsStatisticsManager.IncrementAccountsNumber(-1);
+        _botStatisticsManager.IncreaseAccountsCount(-1);
         UpdateAccountManagerProperties();
         _logger.Log("Removed account", _logger.ApplicationLogFilePath);
 
@@ -87,7 +87,7 @@ public class AccountsManager : IAccountsManager
         var result = dialog.ShowDialog();
 
         if (result == false) return;
-
+         
         var importedUserAccounts = GetUserAccountsFromTxt(dialog.FileName);
         _logger.Log("Adding accounts in batch", _logger.ApplicationLogFilePath);
 

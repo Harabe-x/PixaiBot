@@ -11,13 +11,22 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-public abstract  class LoginModule
+public static class LoginModule
 {
     private const string LoginUrl = "https://pixai.art/login";
 
     private const int StartWaitTime = 1000;
 
-    protected static void Login(ChromeDriver driver, UserAccount userAccount, ILogger logger)
+
+
+    /// <summary>
+    /// Logs user to pixai.art
+    /// <em>This method is used by CreditClaimer and AccountChecker</em>
+    /// </summary>
+    /// <param name="driver"></param>
+    /// <param name="userAccount"></param>
+    /// <param name="logger"></param>
+    public static void Login(ChromeDriver driver, UserAccount userAccount, ILogger logger)
     {
         logger.Log("=====Launched Chrome Driver=====", logger.CreditClaimerLogFilePath);
         

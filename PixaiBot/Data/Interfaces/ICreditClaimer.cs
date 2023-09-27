@@ -8,7 +8,7 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface ICreditClaimer
+public interface ICreditClaimer
 {
     public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null);
 }
