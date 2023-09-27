@@ -1,5 +1,3 @@
-# PixaiBot
-
 ![PixaiBot Logo](https://i.imgur.com/jrkmatA.png)
 
 ## Download 
