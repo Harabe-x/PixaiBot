@@ -14,15 +14,13 @@ public interface IBotStatisticsManager
 
     public string BotVersion { get; }
 
-    public void RefreshStatistics();
-
     public void IncreaseAccountsCount(int number);
 
     public void SetClaimDateTime(DateTime creditClaimDate);
 
     public void ResetNumberOfAccounts();
 
-    public void SetApplicationVersion();
-
     public void SaveStatistics();
+
+    public event EventHandler StatisticsChanged;
 }

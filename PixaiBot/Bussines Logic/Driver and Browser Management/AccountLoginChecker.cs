@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Notification.Wpf;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using PixaiBot.Data.Interfaces;
@@ -29,7 +30,7 @@ public class AccountLoginChecker : IAccountLoginChecker
         _logger = logger;
     }
 
-    public bool CheckAccountLogin(UserAccount userAccount)
+    public bool CheckAccountLogin(UserAccount userAccount,IToastNotificationSender toastNotificationSender)
     {
         _driver = ChromeDriverFactory.CreateDriver();
 
@@ -43,6 +44,7 @@ public class AccountLoginChecker : IAccountLoginChecker
             _driver.Dispose();
             _logger.Log($"Valid Account {userAccount.Email}", _logger.CreditClaimerLogFilePath);
             _logger.Log($"=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
+            toastNotificationSender?.SendNotification("PixaiBot", $"Valid Account {userAccount.Email}",NotificationType.Success);
             return true;
         }
 
@@ -50,15 +52,16 @@ public class AccountLoginChecker : IAccountLoginChecker
         _driver.Dispose();
         _logger.Log("Invalid Account", _logger.CreditClaimerLogFilePath);
         _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
+        toastNotificationSender?.SendNotification("PixaiBot", $"Invalid Account {userAccount.Email}",NotificationType.Error);
         return false;
     }
 
-    public int CheckAllAccountsLogin(IList<UserAccount> accountsList)
+    public int CheckAllAccountsLogin(IList<UserAccount> accountsList,IToastNotificationSender toastNotificationSender = null)
     {
-        var validAccounts = accountsList.Where(CheckAccountLogin).ToList();
+        var validAccounts = accountsList.Where((account) => CheckAccountLogin(account,toastNotificationSender)).ToList();
 
         JsonWriter.WriteJson(validAccounts, _accountsFilePath);
-
+        
         return validAccounts.Count;
     }
 }

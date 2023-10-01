@@ -27,10 +27,22 @@ public class CreditClaimer : ICreditClaimer
 
     private readonly ILogger _logger;
 
+    public event EventHandler<UserAccount> CreditClaimed;
+
 
     public CreditClaimer(ILogger logger)
     {
         _logger = logger;
+    }
+
+
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, IToastNotificationSender toastNotificationSender = null)
+    {
+        foreach (var account in accounts)
+        {
+            CreditClaimed?.Invoke(this,account);
+            ClaimCredits(account,toastNotificationSender);
+        }
     }
 
 
@@ -39,7 +51,7 @@ public class CreditClaimer : ICreditClaimer
     /// </summary>
     /// <param name="account"></param>
     /// <param name="toastNotificationSender"></param>
-    public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null)
+    public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender)
     {
         _driver = ChromeDriverFactory.CreateDriver();
 
@@ -49,7 +61,7 @@ public class CreditClaimer : ICreditClaimer
         LoginModule.Login(_driver, account, _logger);
         if (_driver.Url == LoginUrl)
         {
-            toastNotificationSender?.SendNotification("Login failed", $"Login failed for {account.Email}",
+            toastNotificationSender?.SendNotification("PixaiBot", $"Login failed for {account.Email}",
                 NotificationType.Error);
             _logger.Log("Login failed", _logger.CreditClaimerLogFilePath);
             _driver.Quit();
@@ -61,8 +73,8 @@ public class CreditClaimer : ICreditClaimer
 
         if (!GoToProfile())
         {
-            toastNotificationSender?.SendNotification("Claiming process failed",
-                $"if this error persists, please open new issue on github ", NotificationType.Error);
+            toastNotificationSender?.SendNotification("PixaiBot",
+                $"Claiming process failed,if this error persists, please open new issue on github ", NotificationType.Error);
             _logger.Log("Going to profile failed", _logger.CreditClaimerLogFilePath);
             _driver.Quit();
             _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
@@ -72,14 +84,14 @@ public class CreditClaimer : ICreditClaimer
         _logger.Log("Navigated to profile page", _logger.CreditClaimerLogFilePath);
         if (!ClaimCreditsOnAccount())
         {
-            toastNotificationSender?.SendNotification("Credits claimed", $"Try again tomorrow",
+            toastNotificationSender?.SendNotification("PixaiBot", $"Credits claimed,Try again tomorrow",
                 NotificationType.Warning);
             _driver.Quit();
             _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
             return;
         }
 
-        toastNotificationSender?.SendNotification("Claiming credits completed successfully",
+        toastNotificationSender?.SendNotification("PixaiBot",
             $"Claiming credits completed successfully for {account.Email}", NotificationType.Success);
         _logger.Log($"Claiming credits completed successfully for {account.Email}", _logger.CreditClaimerLogFilePath);
         _driver.Quit();

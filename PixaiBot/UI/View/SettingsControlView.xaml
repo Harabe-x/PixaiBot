@@ -54,7 +54,7 @@
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
                             <CheckBox IsChecked="{Binding AutoClaimCredits }" Content="  Credits Auto Claim"
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
-                            <CheckBox IsChecked="{Binding EnableToastNotifications }" Content="  Toast Notifications "
+                            <CheckBox IsChecked="{Binding EnableToastNotifications }" Command="{Binding UpdateToastNotificationPreferenceCommand}"  Content="  Toast Notifications "
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
                         </StackPanel>
                     </Grid>

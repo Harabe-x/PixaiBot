@@ -9,7 +9,7 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IAccountLoginChecker
 {
-    bool CheckAccountLogin(UserAccount userAccount);
+    bool CheckAccountLogin(UserAccount userAccount,IToastNotificationSender toastNotificationSender);
 
-    int CheckAllAccountsLogin(IList<UserAccount> accountsList);
+    int CheckAllAccountsLogin(IList<UserAccount> accountsList,IToastNotificationSender toastNotificationSender = null);
 }
