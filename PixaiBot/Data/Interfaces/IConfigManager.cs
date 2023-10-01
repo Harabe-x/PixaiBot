@@ -9,7 +9,19 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IConfigManager
 {
-    UserConfig GetConfig();
+    event EventHandler ConfigChanged;
+
+    bool ShouldStartWithSystem { get; }
+
+    bool ShouldSendToastNotifications { get; }
+
+    bool ShouldAutoClaimCredits { get; }
 
     void SaveConfig(UserConfig config);
+
+    void SetStartWithSystemFlag(bool flag);
+
+    void SetToastNotificationsFlag(bool flag);
+
+    void SetCreditsAutoClaimFlag(bool flag);
 }

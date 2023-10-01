@@ -18,61 +18,95 @@ public class BotStatisticsManager : IBotStatisticsManager
 
     private ILogger _logger;
 
+    public event EventHandler? StatisticsChanged;
+
     public BotStatisticsManager(ILogger logger)
     {
         _logger = logger;
         AccountsStatisticsFilePath = InitialConfiguration.StatisticsFilePath;
         _jsonReader = new JsonReader();
-        RefreshStatistics();
-        SetApplicationVersion();
+      _botStatistics =  _jsonReader.ReadStatisticsFile(AccountsStatisticsFilePath);
+        InitializeData();
     }
 
-    public int AccountsNumber { get; private set; }
-
-    public DateTime LastCreditClaimDateTime { get; private set; }
-
-    public string BotVersion { get; private set; }
-
-    public void RefreshStatistics()
+    private void InitializeData()
     {
-        _botStatistics = _jsonReader.ReadStatisticsFile(AccountsStatisticsFilePath);
-        AccountsNumber = _botStatistics.AccountsCount;
-        LastCreditClaimDateTime = _botStatistics.LastCreditClaimDateTime;
-        BotVersion = _botStatistics.BotVersion;
+      BotVersion = _botStatistics.BotVersion;
+      LastCreditClaimDateTime = _botStatistics.LastCreditClaimDateTime;
+      AccountsNumber = _botStatistics.AccountsCount;
     }
+
+    private int _accountsNumber;
+
+    public int AccountsNumber
+    {
+        get => _accountsNumber;
+        private set
+        {
+            if (_accountsNumber == value) return;
+            _accountsNumber = value;
+            _botStatistics.AccountsCount = value;
+             SaveStatistics();
+             StatisticsChanged?.Invoke(this, EventArgs.Empty);
+
+        }
+    }
+
+    private DateTime _lastCreditClaimDateTime;
+
+    public DateTime LastCreditClaimDateTime
+    {
+        get => _lastCreditClaimDateTime;
+        private set
+        {
+            if (_lastCreditClaimDateTime == value) return;
+            _lastCreditClaimDateTime = value;
+            _botStatistics.LastCreditClaimDateTime = value;
+            SaveStatistics();
+            StatisticsChanged?.Invoke(this, EventArgs.Empty);
+
+        }
+    }
+
+    private string _botVersion;
+    
+    public string BotVersion 
+    { get => _botVersion;
+        private set
+        {
+            if (_botVersion == value) return;
+            _botStatistics.BotVersion = value;
+            _botVersion = value;
+            SaveStatistics();
+            StatisticsChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
 
     public void IncreaseAccountsCount(int number)
     {
-        _botStatistics.AccountsCount += number;
-        SaveStatistics();
-        RefreshStatistics();
+        AccountsNumber += number;
+
         _logger.Log("Accounts count updated", _logger.ApplicationLogFilePath);
     }
 
     public void SetClaimDateTime(DateTime creditClaimDate)
     {
-        _botStatistics.LastCreditClaimDateTime = creditClaimDate;
-        SaveStatistics();
+
+        LastCreditClaimDateTime = creditClaimDate ;
     }
 
-
-    public void SetApplicationVersion()
-    {
-        BotVersion = InitialConfiguration.BotVersion;
-        _botStatistics.BotVersion = InitialConfiguration.BotVersion;
-        SaveStatistics();
-        RefreshStatistics();
-    }
 
     public void SaveStatistics()
     {
         JsonWriter.WriteJson(_botStatistics, AccountsStatisticsFilePath);
+        
         _logger.Log("Writed statistics file ", _logger.ApplicationLogFilePath);
     }
 
     public void ResetNumberOfAccounts()
     {
-        _botStatistics.AccountsCount = 0;
-        _logger.Log("Account count rested", _logger.ApplicationLogFilePath);
+        AccountsNumber = 0;
+
     }
 }

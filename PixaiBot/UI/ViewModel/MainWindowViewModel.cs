@@ -8,6 +8,7 @@ using System.Windows.Input;
 using PixaiBot.Data.Interfaces;
 using System.Drawing;
 using System.Windows.Forms;
+using Notification.Wpf;
 using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.ViewModel;
@@ -22,8 +23,10 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     public ICommand HideApplicationCommand { get; }
 
-    public MainWindowViewModel(INavigationService navService, ILogger logger)
+    public MainWindowViewModel(INavigationService navService, ILogger logger,IToastNotificationSender toastNotificationASender,IConfigManager configManager)
     {
+        _configManager = configManager;
+        _toastNotificationSender = toastNotificationASender;
         _logger = logger;
         NavigateToDashboardCommand = new RelayCommand((obj) => NavigateToDashboard());
         NavigateToSettingsCommand = new RelayCommand((obj) => NavigateToSettings());
@@ -34,6 +37,10 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
     }
 
     private readonly ILogger _logger;
+
+    private readonly IToastNotificationSender _toastNotificationSender;
+
+    private readonly IConfigManager _configManager;
 
     private INavigationService _navigation;
 
@@ -62,6 +69,9 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     private void HideApplication()
     {
+        if(_configManager.ShouldSendToastNotifications)
+            _toastNotificationSender.SendNotification("PixaiBot","Application minimized to system tray",NotificationType.Information);
+
         HideToTray?.Invoke();
         _logger.Log("Hided application to tray", _logger.ApplicationLogFilePath);
     }

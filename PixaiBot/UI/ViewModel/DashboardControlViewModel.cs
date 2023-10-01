@@ -6,7 +6,9 @@ using System.Windows.Input;
 using PixaiBot.UI.Base;
 using System.Linq;
 using System;
+using System.Globalization;
 using System.Windows;
+using PixaiBot.Bussines_Logic;
 
 namespace PixaiBot.UI.ViewModel;
 
@@ -19,19 +21,29 @@ public class DashboardControlViewModel : BaseViewModel
         IToastNotificationSender toastNotificationSender)
     {
         _configManager = configManager;
+        
         _logger = logger;
+        
         _botStatisticsManager = botStatisticsManager;
+        
         _creditClaimer = creditClaimer;
+        
         _accountsManager = accountsManager;
+        
         _toastNotificationSender = toastNotificationSender;
+        
         ClaimCreditsCommand = new RelayCommand((obj) => ClaimCreditsInNewThread());
-        StartBotDataRefreshing();
-        if (_userConfig.CreditsAutoClaim) StartCreditsAutoClaim();
+        
+        _creditClaimer.CreditClaimed += CreditClaimed;
+
+        _botStatisticsManager.StatisticsChanged += StatisticsRefreshed;
+
+        StatisticsRefreshed(null, EventArgs.Empty);
+
+        if (_configManager.ShouldAutoClaimCredits) StartCreditsAutoClaim();
     }
 
     private const int CreditClaimerInterval = 24;
-
-    private const int StatisticsRefreshInterval = 5;
 
     private readonly IAccountsManager _accountsManager;
 
@@ -46,8 +58,6 @@ public class DashboardControlViewModel : BaseViewModel
     private readonly IToastNotificationSender _toastNotificationSender;
 
     private string? _accountCount;
-
-    private UserConfig _userConfig;
 
     private string _creditClaimerInfo;
 
@@ -80,7 +90,7 @@ public class DashboardControlViewModel : BaseViewModel
         set
         {
             _botStatisticsManager.SetClaimDateTime(DateTime.Parse(value));
-            _lastCreditClaimDateTime = $"Last Credit Claim Date :  {value}";
+            _lastCreditClaimDateTime = $"Last Credit Claim Date :  {DateTime.Parse(value):dd/MM HH:mm}";
             OnPropertyChanged();
         }
     }
@@ -97,18 +107,23 @@ public class DashboardControlViewModel : BaseViewModel
         }
     }
 
-    private void StartBotDataRefreshing()
+
+    private void StatisticsRefreshed(object? sender, EventArgs e)
     {
-        var refreshStatisticsTimer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(StatisticsRefreshInterval)
-        };
-
-        refreshStatisticsTimer.Tick += RefreshBotData;
-        refreshStatisticsTimer.Start();
-
-        RefreshBotData(null, null);
+        BotVersion = _botStatisticsManager.BotVersion;
+        AccountCount = _botStatisticsManager.AccountsNumber.ToString(); 
+        LastCreditClaimDateTime = _botStatisticsManager.LastCreditClaimDateTime.ToString();
     }
+
+
+    private void CreditClaimed(object? sender, UserAccount e)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            CreditClaimerInfo = $"Claiming Credits For {e.Email}";
+        });
+    }
+
 
     private void ClaimCreditsInNewThread()
     {
@@ -124,6 +139,7 @@ public class DashboardControlViewModel : BaseViewModel
         };
 
         autoClaimTimer.Tick += (sender, args) => ClaimCreditsInNewThread();
+       
         autoClaimTimer.Start();
 
         ClaimCreditsInNewThread();
@@ -131,36 +147,18 @@ public class DashboardControlViewModel : BaseViewModel
 
     private void ClaimCredits()
     {
-        _logger.Log("Started credit claiming process ", _logger.ApplicationLogFilePath);
+        if(_configManager.ShouldSendToastNotifications)
+            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _toastNotificationSender);
+        else
+            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts());
 
-        var accounts = _accountsManager.GetAllAccounts().ToList();
-        foreach (var account in accounts)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                CreditClaimerInfo = $"Claiming Credits on {account.Email}";
-            });
+        _logger.Log("Credits claimed", _logger.ApplicationLogFilePath);
+       
+        CreditClaimerInfo = "Credits Claimed.";
 
-            if (_userConfig.ToastNotifications)
-                _creditClaimer.ClaimCredits(account, _toastNotificationSender);
-            else
-                _creditClaimer.ClaimCredits(account);
-        }
+        LastCreditClaimDateTime = DateTime.Now.ToString();
 
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            CreditClaimerInfo = $"Credits Claimed!";
-            LastCreditClaimDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-        });
     }
 
-    private void RefreshBotData(object? sender, EventArgs? e)
-    {
-        _botStatisticsManager.RefreshStatistics();
-        AccountCount = _botStatisticsManager.AccountsNumber.ToString();
-        LastCreditClaimDateTime = _botStatisticsManager.LastCreditClaimDateTime.ToString();
-        BotVersion = _botStatisticsManager.BotVersion;
-        _userConfig = _configManager.GetConfig();
-        _logger.Log("Data refreshed", _logger.ApplicationLogFilePath);
-    }
+  
 }

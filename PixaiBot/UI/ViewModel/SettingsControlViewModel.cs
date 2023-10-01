@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
+using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
@@ -23,12 +24,15 @@ public class SettingsControlViewModel : BaseViewModel
 
     public ICommand StartWithSystemCommand { get; }
 
+    public ICommand UpdateToastNotificationPreferenceCommand { get; }
+
     private readonly string? _executablePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
 
     public SettingsControlViewModel(IDialogService dialogService, IAccountsManager
         accountsManager, IDataValidator dataValidator, IAccountLoginChecker
-        accountLoginChecker, IBotStatisticsManager botStatisticsManager, IConfigManager configManager)
+        accountLoginChecker, IBotStatisticsManager botStatisticsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
     {
+        _toastNotificationSender = toastNotificationSender;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _dialogService = dialogService;
@@ -37,8 +41,10 @@ public class SettingsControlViewModel : BaseViewModel
         _accountLoginChecker = accountLoginChecker;
         ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
         AddManyAccountsCommand = new RelayCommand((obj) => AddManyAccounts());
-        CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLogin());
+        CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLoginInNewThread());
         StartWithSystemCommand = new RelayCommand((obj) => StartWithSystem());
+        UpdateToastNotificationPreferenceCommand = new RelayCommand((obj) => UpdateToastNotificationPreference());
+        _configManager.ConfigChanged += UserChangedSettings;
         InitializeUserConfig();
     }
 
@@ -54,7 +60,8 @@ public class SettingsControlViewModel : BaseViewModel
 
     private readonly IConfigManager _configManager;
 
-    private UserConfig _userConfig;
+    private readonly IToastNotificationSender _toastNotificationSender;
+
 
     private bool _shouldStartWithSystem;
 
@@ -63,10 +70,8 @@ public class SettingsControlViewModel : BaseViewModel
         get => _shouldStartWithSystem;
         set
         {
-            _userConfig.StartWithSystem = value;
             _shouldStartWithSystem = value;
-            OnPropertyChanged();
-            SaveUserConfig();
+            _configManager.SetStartWithSystemFlag(value);
         }
     }
 
@@ -77,10 +82,8 @@ public class SettingsControlViewModel : BaseViewModel
         get => _enableToastNotifications;
         set
         {
-            _userConfig.ToastNotifications = value;
             _enableToastNotifications = value;
-            OnPropertyChanged();
-            SaveUserConfig();
+            _configManager.SetToastNotificationsFlag(value);
         }
     }
 
@@ -91,13 +94,27 @@ public class SettingsControlViewModel : BaseViewModel
         get => _autoClaimCredits;
         set
         {
-            _userConfig.CreditsAutoClaim = value;
             _autoClaimCredits = value;
-            OnPropertyChanged();
-            SaveUserConfig();
+            _configManager.SetCreditsAutoClaimFlag(value);
         }
     }
 
+    private void UserChangedSettings(object? sender, EventArgs e)
+    {
+        OnPropertyChanged();
+    }
+
+    private void UpdateToastNotificationPreference()
+    {
+        if (EnableToastNotifications)
+        {
+            _toastNotificationSender.SendNotification("PixaiBot", "Toast Notifications enabled,Now you will recive notifcations", NotificationType.Information);
+        }
+        else
+        {
+            _toastNotificationSender.SendNotification("PixaiBot", "Toast Notifications disabled,Now you won't receive notifications", NotificationType.Information);
+        }
+    }
 
     private void ShowAddAccountWindow()
     {
@@ -109,37 +126,42 @@ public class SettingsControlViewModel : BaseViewModel
         _accountsManager.AddManyAccounts();
     }
 
+    private void CheckAllAccountsLoginInNewThread()
+    {
+        var task = new Task(CheckAllAccountsLogin);
+        task.Start();
+    }
+
     private void CheckAllAccountsLogin()
     {
         var accounts = _accountsManager.GetAllAccounts().ToList();
 
-        var validAccountsCount = _accountLoginChecker.CheckAllAccountsLogin(accounts);
+        var validAccountsCount = 0;
+
+        validAccountsCount = EnableToastNotifications ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender) : _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
         _botStatisticsManager.ResetNumberOfAccounts();
 
         _botStatisticsManager.IncreaseAccountsCount(validAccountsCount);
     }
 
+
     private void InitializeUserConfig()
     {
-        _userConfig = _configManager.GetConfig();
-        ShouldStartWithSystem = _userConfig.StartWithSystem;
-        EnableToastNotifications = _userConfig.ToastNotifications;
-        AutoClaimCredits = _userConfig.CreditsAutoClaim;
+        ShouldStartWithSystem = _configManager.ShouldStartWithSystem;
+        EnableToastNotifications = _configManager.ShouldSendToastNotifications;
+        AutoClaimCredits = _configManager.ShouldAutoClaimCredits;
     }
+
 
     private void StartWithSystem()
     {
-        var rk = Registry.CurrentUser.OpenSubKey
+        var registryKey = Registry.CurrentUser.OpenSubKey
             ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-        if (ShouldStartWithSystem)
-            rk.SetValue("PixaiBot", _executablePath);
-        else
-            rk.DeleteValue("PixaiBot", false);
-    }
 
-    public void SaveUserConfig()
-    {
-        _configManager.SaveConfig(_userConfig);
+        if (ShouldStartWithSystem)
+            registryKey?.SetValue("PixaiBot", _executablePath);
+        else
+            registryKey?.DeleteValue("PixaiBot", false);
     }
 }

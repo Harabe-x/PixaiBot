@@ -10,5 +10,9 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ICreditClaimer
 {
-    public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null);
+    public event EventHandler<UserAccount> CreditClaimed;
+
+    public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender);
+
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,IToastNotificationSender toastNotificationSender = null);
 }
