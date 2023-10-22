@@ -9,16 +9,16 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-public class JsonReader
+public  static class JsonReader
 {
-    public IList<UserAccount> ReadAccountFile(string filePath)
+    public static IList<UserAccount> ReadAccountFile(string filePath)
     {
         var jsonString = File.ReadAllText(filePath);
         var accounts = JsonSerializer.Deserialize<IList<UserAccount>>(jsonString);
         return accounts;
     }
 
-    public UserConfig ReadConfigFile(string filePath)
+    public static UserConfig ReadConfigFile(string filePath)
     {
         var jsonString = File.ReadAllText(filePath);
         var userConfig = JsonSerializer.Deserialize<UserConfig>(jsonString);
@@ -26,7 +26,7 @@ public class JsonReader
         return userConfig;
     }
 
-    public BotStatistics ReadStatisticsFile(string filePath)
+    public static BotStatistics ReadStatisticsFile(string filePath)
     {
         var jsonString = File.ReadAllText(filePath);
         var statistics = JsonSerializer.Deserialize<BotStatistics>(jsonString);

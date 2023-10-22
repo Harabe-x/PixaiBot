@@ -8,7 +8,7 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IDataValidator
 {
-    public bool ValidateEmail(string email);
+    public bool IsEmailValid(string email);
 
-    public bool ValidatePassword(string password);
+    public bool IsPasswordValid(string password);
 }

@@ -14,8 +14,6 @@ public class BotStatisticsManager : IBotStatisticsManager
 
     private BotStatistics _botStatistics;
 
-    private JsonReader _jsonReader;
-
     private ILogger _logger;
 
     public event EventHandler? StatisticsChanged;
@@ -24,8 +22,7 @@ public class BotStatisticsManager : IBotStatisticsManager
     {
         _logger = logger;
         AccountsStatisticsFilePath = InitialConfiguration.StatisticsFilePath;
-        _jsonReader = new JsonReader();
-      _botStatistics =  _jsonReader.ReadStatisticsFile(AccountsStatisticsFilePath);
+      _botStatistics =  JsonReader.ReadStatisticsFile(AccountsStatisticsFilePath);
         InitializeData();
     }
 

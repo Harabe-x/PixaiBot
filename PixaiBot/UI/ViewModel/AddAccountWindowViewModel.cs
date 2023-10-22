@@ -75,7 +75,7 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
     private void AddAccount()
     {
         _logger.Log("Adding new account", _logger.ApplicationLogFilePath);
-        if (!_dataValidator.ValidateEmail(Email) || !_dataValidator.ValidatePassword(Password))
+        if (!_dataValidator.IsEmailValid(Email) || !_dataValidator.IsPasswordValid(Password))
         {
             _logger.Log("Account data validation failed", _logger.ApplicationLogFilePath);
             return;

@@ -11,8 +11,6 @@ namespace PixaiBot.Bussines_Logic;
 public class ConfigManager : IConfigManager
 {
 
-    private readonly JsonReader _jsonReader;
-
     private readonly ILogger _logger;
 
     private UserConfig _userConfig;
@@ -69,24 +67,23 @@ public class ConfigManager : IConfigManager
     private void InitializeData()
     {
         _userConfig = GetConfig();
-        ShouldAutoClaimCredits = _userConfig.StartWithSystem;
+        ShouldStartWithSystem = _userConfig.StartWithSystem; 
         ShouldSendToastNotifications = _userConfig.ToastNotifications;
         ShouldAutoClaimCredits = _userConfig.CreditsAutoClaim;
     }
-    
+
 
     public ConfigManager(ILogger logger)
     {
         _logger = logger;
         ConfigFilePath = InitialConfiguration.UserConfigPath;
-        _jsonReader = new JsonReader();
         InitializeData();
     }
 
     private UserConfig GetConfig()
     {
         _logger.Log("Readed Config File", _logger.ApplicationLogFilePath);
-        return _jsonReader.ReadConfigFile(ConfigFilePath);
+        return JsonReader.ReadConfigFile(ConfigFilePath);
     }
 
 

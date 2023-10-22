@@ -106,14 +106,10 @@ public class SettingsControlViewModel : BaseViewModel
 
     private void UpdateToastNotificationPreference()
     {
-        if (EnableToastNotifications)
-        {
-            _toastNotificationSender.SendNotification("PixaiBot", "Toast Notifications enabled,Now you will recive notifcations", NotificationType.Information);
-        }
-        else
-        {
-            _toastNotificationSender.SendNotification("PixaiBot", "Toast Notifications disabled,Now you won't receive notifications", NotificationType.Information);
-        }
+        _toastNotificationSender.SendNotification("PixaiBot",
+            EnableToastNotifications
+                ? "Toast Notifications enabled,Now you will recive notifcations"
+                : "Toast Notifications disabled,Now you won't receive notifications", NotificationType.Information);
     }
 
     private void ShowAddAccountWindow()
@@ -138,7 +134,9 @@ public class SettingsControlViewModel : BaseViewModel
 
         var validAccountsCount = 0;
 
-        validAccountsCount = EnableToastNotifications ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender) : _accountLoginChecker.CheckAllAccountsLogin(accounts);
+        validAccountsCount = EnableToastNotifications
+            ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender)
+            : _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
         _botStatisticsManager.ResetNumberOfAccounts();
 

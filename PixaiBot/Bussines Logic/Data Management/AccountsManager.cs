@@ -17,18 +17,19 @@ public class AccountsManager : IAccountsManager
 
     private string AccountsFilePath { get; }
 
-    private readonly JsonReader _jsonReader;
 
     private readonly IBotStatisticsManager _botStatisticsManager;
 
     private readonly ILogger _logger;
 
-    public AccountsManager(IBotStatisticsManager botStatisticsManager, ILogger logger)
+    private readonly IDataValidator _dataValidator;
+
+    public AccountsManager(IBotStatisticsManager botStatisticsManager, ILogger logger,IDataValidator dataValidator)
     {
+        _dataValidator = dataValidator;
         _logger = logger;
         AccountsFilePath = InitialConfiguration.AccountsFilePath;
         _botStatisticsManager = botStatisticsManager;
-        _jsonReader = new JsonReader();
     }
 
     public void AddAccount(UserAccount account)
@@ -45,7 +46,7 @@ public class AccountsManager : IAccountsManager
             return;
         }
 
-        var accountList = _jsonReader.ReadAccountFile(AccountsFilePath);
+        var accountList = JsonReader.ReadAccountFile(AccountsFilePath);
         accountList.Add(account);
         JsonWriter.WriteJson(accountList, AccountsFilePath);
         _botStatisticsManager.IncreaseAccountsCount(1);
@@ -68,7 +69,7 @@ public class AccountsManager : IAccountsManager
         _logger.Log("Reading account List", _logger.ApplicationLogFilePath);
 
         return File.Exists(AccountsFilePath)
-            ? _jsonReader.ReadAccountFile(AccountsFilePath)
+            ? JsonReader.ReadAccountFile(AccountsFilePath)
             : new List<UserAccount>();
     }
 
@@ -99,7 +100,8 @@ public class AccountsManager : IAccountsManager
     private IEnumerable<UserAccount> GetUserAccountsFromTxt(string filePath)
     {
         var accountsList = File.ReadAllLines(filePath);
-        var accounts = new List<UserAccount>();
+        
+        var accountsToWrite = new List<UserAccount>();
         _logger.Log("Reading accounts from txt File", _logger.ApplicationLogFilePath);
 
         foreach (var account in accountsList)
@@ -108,15 +110,19 @@ public class AccountsManager : IAccountsManager
 
             if (splittedLogin.Length != 2) continue;
 
-            var userAccount = new UserAccount()
+            if (string.IsNullOrEmpty(splittedLogin[0]) || string.IsNullOrEmpty(splittedLogin[1])) continue;
+
+            if (_dataValidator.IsEmailValid(splittedLogin[0]) && _dataValidator.IsPasswordValid(splittedLogin[1])) continue;
+          
+            var userAccount = new UserAccount
             {
                 Email = splittedLogin[0],
                 Password = splittedLogin[1]
             };
 
-            accounts.Add(userAccount);
+            accountsToWrite.Add(userAccount);
         }
 
-        return accounts;
+        return accountsToWrite;
     }
 }
