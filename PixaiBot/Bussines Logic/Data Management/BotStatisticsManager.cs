@@ -28,7 +28,7 @@ public class BotStatisticsManager : IBotStatisticsManager
 
     private void InitializeData()
     {
-      BotVersion = _botStatistics.BotVersion;
+      BotVersion = InitialConfiguration.BotVersion;
       LastCreditClaimDateTime = _botStatistics.LastCreditClaimDateTime;
       AccountsNumber = _botStatistics.AccountsCount;
     }

@@ -32,6 +32,11 @@ public class AccountsManager : IAccountsManager
         _botStatisticsManager = botStatisticsManager;
     }
 
+
+    /// <summary>
+    /// Add new account to accounts file
+    /// </summary>
+    /// <param name="account"></param>
     public void AddAccount(UserAccount account)
     {
         if (!File.Exists(AccountsFilePath))
@@ -54,6 +59,12 @@ public class AccountsManager : IAccountsManager
         UpdateAccountManagerProperties();
     }
 
+
+    /// <summary>
+    /// Removes account from accounts file
+    /// </summary>
+    /// <param name="accountList"></param>
+    /// <param name="userAccount"></param>
     public void RemoveAccount(IList<UserAccount> accountList, UserAccount userAccount)
     {
         if (!File.Exists(AccountsFilePath)) return;
@@ -64,6 +75,11 @@ public class AccountsManager : IAccountsManager
         _logger.Log("Removed account", _logger.ApplicationLogFilePath);
     }
 
+
+    /// <summary>
+    /// Returns all accounts from accounts file
+    /// </summary>
+    /// <returns></returns>
     public IEnumerable<UserAccount> GetAllAccounts()
     {
         _logger.Log("Reading account List", _logger.ApplicationLogFilePath);
@@ -73,6 +89,10 @@ public class AccountsManager : IAccountsManager
             : new List<UserAccount>();
     }
 
+    
+    /// <summary>
+    /// Opens File Dialog and extracts user accounts from txt file
+    /// </summary>
     public void AddManyAccounts()
     {
         var dialog = new OpenFileDialog()

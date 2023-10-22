@@ -92,19 +92,29 @@ public class ConfigManager : IConfigManager
         _logger.Log("Writed Config File", _logger.ApplicationLogFilePath);
         JsonWriter.WriteJson(config, ConfigFilePath);
     }
-
+    /// <summary>
+    /// Sets <see cref="ShouldStartWithSystem"/> to <paramref name="flag"/>
+    /// </summary>
+    /// <param name="flag"></param>
     public void SetStartWithSystemFlag(bool flag)
     {
         ShouldStartWithSystem = flag;
         ConfigChanged?.Invoke(this,EventArgs.Empty);
     }
-
+    /// <summary>
+    /// Sets <see cref="ShouldSendToastNotifications"/> to <paramref name="flag"/>
+    /// </summary>
+    /// <param name="flag"></param>
     public void SetToastNotificationsFlag(bool flag)
     {
         ShouldSendToastNotifications = flag;
         ConfigChanged?.Invoke(this,EventArgs.Empty);
     }
 
+    /// <summary>
+    /// Sets <see cref="ShouldAutoClaimCredits"/> to <paramref name="flag"/>
+    /// </summary>
+    /// <param name="flag"></param>
     public void SetCreditsAutoClaimFlag(bool flag)
     {
         ShouldAutoClaimCredits = flag;

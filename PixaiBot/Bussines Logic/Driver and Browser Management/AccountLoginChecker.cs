@@ -28,8 +28,14 @@ public class AccountLoginChecker : IAccountLoginChecker
     {
         _accountsFilePath = InitialConfiguration.AccountsFilePath;
         _logger = logger;
-    }
 
+    }
+    /// <summary>
+    /// Checks account login credentials 
+    /// </summary>
+    /// <param name="userAccount"></param>
+    /// <param name="toastNotificationSender"></param>
+    /// <returns>True if the account is valid</returns>
     public bool CheckAccountLogin(UserAccount userAccount,IToastNotificationSender toastNotificationSender)
     {
         _driver = ChromeDriverFactory.CreateDriver();
@@ -55,7 +61,12 @@ public class AccountLoginChecker : IAccountLoginChecker
         toastNotificationSender?.SendNotification("PixaiBot", $"Invalid Account {userAccount.Email}",NotificationType.Error);
         return false;
     }
-
+    /// <summary>
+    /// Checks all accounts login credentials
+    /// </summary>
+    /// <param name="accountsList"></param>
+    /// <param name="toastNotificationSender"></param>
+    /// <returns>Number of valid accounts</returns>
     public int CheckAllAccountsLogin(IList<UserAccount> accountsList,IToastNotificationSender toastNotificationSender = null)
     {
         var validAccounts = accountsList.Where((account) => CheckAccountLogin(account,toastNotificationSender)).ToList();

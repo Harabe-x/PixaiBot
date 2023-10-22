@@ -22,6 +22,11 @@ public class Logger : ILogger
         ;
     }
 
+    /// <summary>
+    /// Logs a message to the log file  
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="filePath"></param>
     public void Log(string message, string filePath)
     {
         File.AppendAllText(filePath, $"[{DateTime.Now:HH:mm:ss}] {message}\n");

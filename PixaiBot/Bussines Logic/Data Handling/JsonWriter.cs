@@ -10,6 +10,12 @@ namespace PixaiBot.Bussines_Logic;
 
 public class JsonWriter
 {
+    /// <summary>
+    /// Writes a json file with the given object
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
+    /// <param name="filePath"></param>
     public static void WriteJson<T>(T obj, string filePath)
     {
         var serializedJson = JsonSerializer.Serialize(obj);
