@@ -132,7 +132,6 @@ public class AccountsManager : IAccountsManager
 
             if (string.IsNullOrEmpty(splittedLogin[0]) || string.IsNullOrEmpty(splittedLogin[1])) continue;
 
-            if (_dataValidator.IsEmailValid(splittedLogin[0]) && _dataValidator.IsPasswordValid(splittedLogin[1])) continue;
           
             var userAccount = new UserAccount
             {

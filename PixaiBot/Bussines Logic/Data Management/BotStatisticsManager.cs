@@ -78,8 +78,13 @@ public class BotStatisticsManager : IBotStatisticsManager
             StatisticsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
+    
 
 
+    /// <summary>
+    /// Increases <see cref="AccountsNumber"/> by <paramref name="number"/>
+    /// </summary>
+    /// <param name="number"></param>
     public void IncreaseAccountsCount(int number)
     {
         AccountsNumber += number;
@@ -87,13 +92,19 @@ public class BotStatisticsManager : IBotStatisticsManager
         _logger.Log("Accounts count updated", _logger.ApplicationLogFilePath);
     }
 
+
+    /// <summary>
+    /// Sets <see cref="LastCreditClaimDateTime"/> to current date time
+    /// </summary>
+    /// <param name="creditClaimDate"></param>
     public void SetClaimDateTime(DateTime creditClaimDate)
     {
-
         LastCreditClaimDateTime = creditClaimDate ;
     }
 
-
+    /// <summary>
+    /// Writes statistics to file
+    /// </summary>
     public void SaveStatistics()
     {
         JsonWriter.WriteJson(_botStatistics, AccountsStatisticsFilePath);

@@ -34,6 +34,14 @@
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </Button>
+                    <Button Name="AccountManager" Command="{Binding NavigateToAccountsListCommand}"
+                            Style="{StaticResource MenuButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="User" Style="{StaticResource SidePanelButtonIcon}" />
+                            <TextBlock x:Name="AccountList" Text="Account List"
+                                       Style="{StaticResource SidePanelButton}" />
+                        </StackPanel>
+                    </Button>
                     <Button Name="SettingsBtn"
                             Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">

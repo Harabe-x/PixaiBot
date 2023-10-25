@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="PixaiBot.UI.View.AccountListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PixaiBot.UI.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="400"   Background="#ffffff">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Style="{StaticResource TitleText}" Text="Accounts List" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Style="{StaticResource SecondaryText}" Text="Here you can see your accounts list and delete accounts" HorizontalAlignment="Center" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" Width="350" Height="600" >
+            <DataGrid  Grid.Row="0" Name="DataGrid" ColumnWidth="*" IsReadOnly="True"  Background="#ffff"
+                  BorderBrush="Transparent" Width="auto" Height="auto" FontSize="14"
+                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden"
+                  AlternatingRowBackground="#FFFFFF" BorderThickness="1"
+                  AutoGenerateColumns="False" RowHeight="35" 
+                  VerticalGridLinesBrush="#B7B7B7" HorizontalGridLinesBrush="Transparent" GridLinesVisibility="Horizontal" >
+
+
+
+                <DataGrid.Resources>
+
+
+                    <!-- Style for Data Grid View Header -->
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush>
+                                    <GradientStop Color="#5352ed" Offset="0"/>
+                                    <GradientStop Color="#5352ed" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderBrush" Value="#5352ed" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Padding" Value="6" />
+                    </Style>
+
+                    <!-- Style for Data Grid View Cell -->
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="FontWeight" Value="Light"/>
+                        <Setter Property="Foreground" Value="#2f3542" />
+                        <Setter Property="Background" Value="#ffffff" />
+                        <Setter Property="BorderBrush" Value="#b7b7b7" />
+                        <Setter Property="BorderThickness" Value="0 0 1 0" />
+
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="No." Binding="{Binding GuestName}" />
+                    <DataGridTextColumn Header="Email" Binding="{Binding ReservationStatus}" />
+                    <DataGridTextColumn Header="Action" Binding="{Binding ReservationStartDate}" />
+                    
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

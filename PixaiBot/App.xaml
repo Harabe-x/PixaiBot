@@ -16,6 +16,9 @@
         <DataTemplate DataType="{x:Type TypeName=viewModel:SettingsControlViewModel}">
             <view:SettingsControlView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:AccountListViewModel}">
+            <view:AccountListView/>
+        </DataTemplate>
         <!--#endregion-->
 
         <!--#region Colors -->
@@ -223,13 +226,14 @@
             <Setter Property="Margin" Value="0 10" />
         </Style>
 
-
-        <!--#endregion-->
         <Style x:Key="BaldPurpleText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource LightPurpleColor}" />
             <Setter Property="FontSize" Value="23" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
+
+        <!--#endregion-->
+
 
 
     </Application.Resources>

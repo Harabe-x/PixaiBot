@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using PixaiBot.Data.Interfaces;
 using System.Drawing;
 using System.Windows.Forms;
 using Notification.Wpf;
+using OpenQA.Selenium.DevTools;
 using PixaiBot.UI.Base;
+using ICommand = System.Windows.Input.ICommand;
 
 namespace PixaiBot.UI.ViewModel;
 
@@ -18,6 +19,8 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
     public ICommand NavigateToDashboardCommand { get; }
 
     public ICommand NavigateToSettingsCommand { get; }
+
+    public ICommand NavigateToAccountsListCommand { get; }
 
     public ICommand ExitApplicationCommand { get; }
 
@@ -33,6 +36,7 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
         ExitApplicationCommand = new RelayCommand((obj) => ExitApplication());
         Navigation = navService;
         HideApplicationCommand = new RelayCommand((obj) => HideApplication());
+        NavigateToAccountsListCommand = new RelayCommand((obj) => NavigateToAccountsList());
         NavigateToDashboardCommand.Execute(null);
     }
 
@@ -52,6 +56,12 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
             _navigation = value;
             OnPropertyChanged();
         }
+    }
+
+    private void NavigateToAccountsList()
+    {
+        Navigation.NavigateTo<AccountListViewModel>();
+        _logger.Log("Navigated to Accounts List", _logger.ApplicationLogFilePath);
     }
 
 
