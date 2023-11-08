@@ -5,16 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using PixaiBot.Data.Interfaces;
+using PixaiBot.UI.Base;
 
 namespace PixaiBot.UI.Services;
 
 public class DialogService : IDialogService
 {
-    public void ShowDialog<TDialog>(TDialog dialogWindow, bool isModal) where TDialog : Window
+  
+
+    public void ShowDialog<TDialogView, TDialogViewModel>(TDialogView dialogWindowView, TDialogViewModel dialogWindowViewModel, bool isModal) 
+        where TDialogView : Window 
+        where TDialogViewModel : BaseViewModel
     {
-        if (isModal)
-            dialogWindow.ShowDialog();
-        else
-            dialogWindow.Show();
+        dialogWindowView.DataContext = dialogWindowViewModel;
+
+        if (isModal) dialogWindowView.ShowDialog();
+        else dialogWindowView.Show();
     }
 }

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:PixaiBot.UI.Helpers"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" Background="Transparent" WindowStyle="None"
         ResizeMode="NoResize"
-        Title="MainWindowView" Height="700" Width="600" AllowsTransparency="True"
+        Title="Pixai Bot" Height="700" Width="600" AllowsTransparency="True"
         local:TrayIconHelper.CanHideToTray="True" local:WindowHelper.EnableClosing="True">
     <Grid>
         <Grid.ColumnDefinitions>

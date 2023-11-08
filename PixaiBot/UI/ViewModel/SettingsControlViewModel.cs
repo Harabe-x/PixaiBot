@@ -30,12 +30,13 @@ public class SettingsControlViewModel : BaseViewModel
 
     public SettingsControlViewModel(IDialogService dialogService, IAccountsManager
         accountsManager, IDataValidator dataValidator, IAccountLoginChecker
-        accountLoginChecker, IBotStatisticsManager botStatisticsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
+        accountLoginChecker,ILogger logger,IBotStatisticsManager botStatisticsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
     {
         _toastNotificationSender = toastNotificationSender;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _dialogService = dialogService;
+        _logger = logger;
         _accountsManager = accountsManager;
         _dataValidator = dataValidator;
         _accountLoginChecker = accountLoginChecker;
@@ -61,6 +62,8 @@ public class SettingsControlViewModel : BaseViewModel
     private readonly IConfigManager _configManager;
 
     private readonly IToastNotificationSender _toastNotificationSender;
+
+    private readonly ILogger _logger;
 
 
     private bool _shouldStartWithSystem;
@@ -114,7 +117,7 @@ public class SettingsControlViewModel : BaseViewModel
 
     private void ShowAddAccountWindow()
     {
-        _dialogService.ShowDialog(new AddAccountWindowView(_accountsManager, _dataValidator), true);
+        _dialogService.ShowDialog(new AddAccountWindowView(),new AddAccountWindowViewModel(_accountsManager,_dataValidator,_logger),true);
     }
 
     private void AddManyAccounts()

@@ -23,7 +23,7 @@ public class CreditClaimer : ICreditClaimer
 
     private const int Delay = 50;
 
-    private const string LoginUrl = "https://pixai.art/login/";
+    private const string LoginUrl = "https://pixai.art/login";
 
     private readonly ILogger _logger;
 
@@ -59,20 +59,21 @@ public class CreditClaimer : ICreditClaimer
 
         _driver.Manage().Window.Minimize();
         LoginModule.Login(_driver, account, _logger);
-        if (_driver.Url == LoginUrl)
-        {
-            toastNotificationSender?.SendNotification("PixaiBot", $"Login failed for {account.Email}",
-                NotificationType.Error);
-            _logger.Log("Login failed", _logger.CreditClaimerLogFilePath);
-            _driver.Quit();
-            _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
-            return;
-        }
-
+        
         _logger.Log("Logged in successfully", _logger.CreditClaimerLogFilePath);
 
         if (!GoToProfile())
         {
+            if (_driver.Url == LoginUrl)
+            {
+                toastNotificationSender?.SendNotification("PixaiBot", $"Login failed for {account.Email}",
+                    NotificationType.Error);
+                _logger.Log("Login failed", _logger.CreditClaimerLogFilePath);
+                _driver.Quit();
+                _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
+                return;
+            }
+
             toastNotificationSender?.SendNotification("PixaiBot",
                 $"Claiming process failed,if this error persists, please open new issue on github ", NotificationType.Error);
             _logger.Log("Going to profile failed", _logger.CreditClaimerLogFilePath);

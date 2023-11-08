@@ -11,11 +11,15 @@ public interface IAccountsManager
 {
     public int AccountsCount { get; }
 
+    public event EventHandler AccountsListChanged;
+
     public void AddAccount(UserAccount account);
 
-    public void RemoveAccount(IList<UserAccount> accountList, UserAccount account);
+    public void RemoveAccount(UserAccount account);
 
     public IEnumerable<UserAccount> GetAllAccounts();
 
     public void AddManyAccounts();
+
+    public void EditAccount(UserAccount account,string newEmail,string newPassword);
 }

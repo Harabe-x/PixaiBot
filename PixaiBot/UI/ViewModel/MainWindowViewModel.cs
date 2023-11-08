@@ -88,8 +88,6 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     private void ExitApplication()
     {
-        _logger.Log("=====Application Closed=====", _logger.ApplicationLogFilePath);
-
         Close?.Invoke();
     }
 

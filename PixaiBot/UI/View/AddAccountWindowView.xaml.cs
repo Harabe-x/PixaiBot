@@ -19,10 +19,9 @@ namespace PixaiBot.UI.View;
 
 public partial class AddAccountWindowView : Window
 {
-    public AddAccountWindowView(IAccountsManager accountsManager, IDataValidator dataValidator)
+    public AddAccountWindowView()
     {
         InitializeComponent();
-        DataContext = new AddAccountWindowViewModel(accountsManager, dataValidator, new Logger());
     }
 
     private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)

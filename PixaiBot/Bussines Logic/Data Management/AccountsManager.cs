@@ -14,9 +14,10 @@ namespace PixaiBot.Bussines_Logic;
 public class AccountsManager : IAccountsManager
 {
     public int AccountsCount => UpdateAccountManagerProperties();
-
+    
     private string AccountsFilePath { get; }
-
+    
+    public event EventHandler? AccountsListChanged;
 
     private readonly IBotStatisticsManager _botStatisticsManager;
 
@@ -41,38 +42,66 @@ public class AccountsManager : IAccountsManager
     {
         if (!File.Exists(AccountsFilePath))
         {
+        
             var accountsList = new List<UserAccount>();
+            
             accountsList.Add(account);
+            
             JsonWriter.WriteJson(accountsList, AccountsFilePath);
+            
             _botStatisticsManager.IncreaseAccountsCount(1);
+            
             UpdateAccountManagerProperties();
+            
             _logger.Log("Added account ", _logger.ApplicationLogFilePath);
-
+            
+            AccountsListChanged?.Invoke(this,EventArgs.Empty);
+            
             return;
         }
-
-        var accountList = JsonReader.ReadAccountFile(AccountsFilePath);
+        var accountList = GetAllAccounts().ToList();
+        
         accountList.Add(account);
+        
         JsonWriter.WriteJson(accountList, AccountsFilePath);
+        
         _botStatisticsManager.IncreaseAccountsCount(1);
+        
         _logger.Log("Added account", _logger.ApplicationLogFilePath);
+        
         UpdateAccountManagerProperties();
+        
+        AccountsListChanged?.Invoke(this, EventArgs.Empty);
     }
 
 
     /// <summary>
     /// Removes account from accounts file
     /// </summary>
-    /// <param name="accountList"></param>
     /// <param name="userAccount"></param>
-    public void RemoveAccount(IList<UserAccount> accountList, UserAccount userAccount)
+    public void RemoveAccount(UserAccount userAccount)
     {
         if (!File.Exists(AccountsFilePath)) return;
-        accountList.Remove(userAccount);
-        JsonWriter.WriteJson(accountList, AccountsFilePath);
+        
+        var accountsList = GetAllAccounts().ToList();
+
+        var accountToRemove = accountsList.FirstOrDefault(x => x.Email == userAccount.Email && x.Password == userAccount.Password);
+
+        if (accountToRemove == null) return;
+        
+        accountsList.Remove(accountToRemove);
+        
         _botStatisticsManager.IncreaseAccountsCount(-1);
+
+        JsonWriter.WriteJson(accountsList, AccountsFilePath);
+
         UpdateAccountManagerProperties();
+
+        AccountsListChanged?.Invoke(this, EventArgs.Empty);
+
         _logger.Log("Removed account", _logger.ApplicationLogFilePath);
+
+
     }
 
 
@@ -112,6 +141,25 @@ public class AccountsManager : IAccountsManager
         foreach (var account in importedUserAccounts) AddAccount(account);
     }
 
+    public void EditAccount(UserAccount account, string newEmail, string newPassword)
+    {
+        if (newEmail == null || newPassword == null) return;
+
+        if(!_dataValidator.IsEmailValid(newEmail) && !_dataValidator.IsPasswordValid(newPassword)) return;
+
+        var newAccount = new UserAccount()
+        {
+            Email = newEmail,
+            Password = newPassword
+        };
+
+        AddAccount(newAccount);
+
+
+        RemoveAccount(account);
+
+    }
+
     private int UpdateAccountManagerProperties()
     {
         return GetAllAccounts().Count();
@@ -132,7 +180,6 @@ public class AccountsManager : IAccountsManager
 
             if (string.IsNullOrEmpty(splittedLogin[0]) || string.IsNullOrEmpty(splittedLogin[1])) continue;
 
-          
             var userAccount = new UserAccount
             {
                 Email = splittedLogin[0],

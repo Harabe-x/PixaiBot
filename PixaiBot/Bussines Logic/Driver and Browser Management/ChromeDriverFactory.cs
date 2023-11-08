@@ -21,6 +21,6 @@ public static class ChromeDriverFactory
         var service = ChromeDriverService.CreateDefaultService();
         service.HideCommandPromptWindow = true;
 
-        return new ChromeDriver(service, options);
+        return new ChromeDriver(/*service, options*/);
     }
 }

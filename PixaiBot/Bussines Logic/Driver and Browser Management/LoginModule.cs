@@ -73,5 +73,6 @@ public static class LoginModule
         buttons.FirstOrDefault(x => x.Text == "Login")?.Click();
 
         logger.Log($"Login Button Clicked", logger.CreditClaimerLogFilePath);
+        
     }
 }

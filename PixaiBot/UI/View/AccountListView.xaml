@@ -3,27 +3,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:PixaiBot.UI.Converters"
              xmlns:local="clr-namespace:PixaiBot.UI.View"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="400"   Background="#ffffff">
-    <Grid>
+
+
+    <UserControl.Resources>
+        <converters:RowIndexToValueConverter x:Key="IndexToValueConverter"/>
+        <converters:AddEmptyRowConverter x:Key="AddEmptyRowsConverter"/>
+    </UserControl.Resources>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
             <TextBlock Style="{StaticResource TitleText}" Text="Accounts List" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Style="{StaticResource SecondaryText}" Text="Here you can see your accounts list and delete accounts" HorizontalAlignment="Center" />
+            <TextBlock Style="{StaticResource SecondaryText}" Text="Here you can see your accounts list and edit accounts" HorizontalAlignment="Center" />
         </StackPanel>
 
-        <Grid Grid.Row="1" Width="350" Height="600" >
+        <Grid Grid.Row="1" Width="350" Height="500" >
             <DataGrid  Grid.Row="0" Name="DataGrid" ColumnWidth="*" IsReadOnly="True"  Background="#ffff"
                   BorderBrush="Transparent" Width="auto" Height="auto" FontSize="14"
                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden"
                   AlternatingRowBackground="#FFFFFF" BorderThickness="1"
-                  AutoGenerateColumns="False" RowHeight="35" 
-                  VerticalGridLinesBrush="#B7B7B7" HorizontalGridLinesBrush="Transparent" GridLinesVisibility="Horizontal" >
+                  AutoGenerateColumns="False" RowHeight="35"  MinHeight="100" SelectionMode="Single"
+                  VerticalGridLinesBrush="#B7B7B7" HorizontalGridLinesBrush="#B7B7B7" GridLinesVisibility="Vertical" ItemsSource="{Binding UserAccounts,Converter={StaticResource AddEmptyRowsConverter},ConverterParameter=13}" SelectedItem="{Binding SelectedAccount}" >
 
 
 
@@ -35,38 +43,59 @@
                         <Setter Property="Background">
                             <Setter.Value>
                                 <LinearGradientBrush>
-                                    <GradientStop Color="#5352ed" Offset="0"/>
-                                    <GradientStop Color="#5352ed" Offset="1"/>
+                                    <GradientStop Color="#a29bfe" />
+                                    <GradientStop Color="#8964ff"/>
                                 </LinearGradientBrush>
                             </Setter.Value>
                         </Setter>
                         <Setter Property="Foreground" Value="White" />
-                        <Setter Property="BorderBrush" Value="#5352ed" />
+                        <Setter Property="BorderBrush" Value="#8964ff" />
                         <Setter Property="BorderThickness" Value="1" />
                         <Setter Property="Padding" Value="6" />
                     </Style>
 
                     <!-- Style for Data Grid View Cell -->
                     <Style TargetType="DataGridCell">
-                        <Setter Property="FontWeight" Value="Light"/>
-                        <Setter Property="Foreground" Value="#2f3542" />
+                        <!--<Setter Property="FontWeight" Value="Light"/>-->
+                        <Setter Property="Foreground" Value="#000000" />
                         <Setter Property="Background" Value="#ffffff" />
-                        <Setter Property="BorderBrush" Value="#b7b7b7" />
+                        <Setter Property="BorderBrush" Value="#B7B7B7" />
                         <Setter Property="BorderThickness" Value="0 0 1 0" />
+                        <!--<Setter Property="VerticalAlignment" Value="Center" />--> 
 
                     </Style>
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="No." Binding="{Binding GuestName}" />
-                    <DataGridTextColumn Header="Email" Binding="{Binding ReservationStatus}" />
-                    <DataGridTextColumn Header="Action" Binding="{Binding ReservationStartDate}" />
-                    
+                    <DataGridTextColumn Header="No." Width="auto" IsReadOnly="True">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource IndexToValueConverter}">
+                                <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}" />
+                                <Binding Path="DataContext.UserAccounts" 
+                                         RelativeSource="{RelativeSource AncestorType={x:Type DataGrid}}" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
                 </DataGrid.Columns>
 
-            </DataGrid>
 
+            </DataGrid>
         </Grid>
 
+        <Grid Grid.Row="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Width="150" Content="Edit" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource PurpleButton}" Command="{Binding EditAccountCommand}" />
+            <Button Grid.Column="1" Width="150" Content="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource PurpleButton}" Command="{Binding RemoveAccountCommand}" Background="#e74c3c" />
+
+
+
+</Grid>
     </Grid>
+
 </UserControl>
