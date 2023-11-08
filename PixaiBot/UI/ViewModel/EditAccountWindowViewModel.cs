@@ -74,7 +74,7 @@ namespace PixaiBot.UI.ViewModel
 
         private void SaveAccount()
         {
-            if (!_dataValidator.IsEmailValid(Email))
+            if (!_dataValidator.IsEmailValid(Email) || !_dataValidator.IsPasswordValid(Password))
             {
                 return;
             }

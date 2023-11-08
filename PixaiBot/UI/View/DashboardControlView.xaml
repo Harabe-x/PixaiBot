@@ -37,7 +37,7 @@
 
         <Grid Grid.Row="2" Margin="0 -50 0 0">
             <StackPanel HorizontalAlignment="Center">
-                <Border Width="300" Height="300" BorderThickness="1" BorderBrush="{StaticResource DarkPurpleColor}">
+                <Border CornerRadius="8"  Width="300" Height="300" BorderThickness="1" BorderBrush="{StaticResource DarkPurpleColor}">
                     <Grid>
                         <TextBlock Text="Bot Details :" Foreground="{StaticResource LightPurpleColor}" FontSize="23"
                                    FontWeight="SemiBold" Margin="20" />

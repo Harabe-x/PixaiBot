@@ -56,13 +56,11 @@
 
                     <!-- Style for Data Grid View Cell -->
                     <Style TargetType="DataGridCell">
-                        <!--<Setter Property="FontWeight" Value="Light"/>-->
+                        <Setter Property="FontWeight" Value="Light"/>
                         <Setter Property="Foreground" Value="#000000" />
                         <Setter Property="Background" Value="#ffffff" />
                         <Setter Property="BorderBrush" Value="#B7B7B7" />
-                        <Setter Property="BorderThickness" Value="0 0 1 0" />
-                        <!--<Setter Property="VerticalAlignment" Value="Center" />--> 
-
+                        <Setter Property="BorderThickness" Value="0 0 0 0" />
                     </Style>
                 </DataGrid.Resources>
 
