@@ -13,13 +13,13 @@ using PixaiBot.UI.View;
 
 namespace PixaiBot.UI.ViewModel
 {
-    internal class AccountListViewModel : BaseViewModel
+    internal class AccountListControlViewModel : BaseViewModel
     {
         public ICommand EditAccountCommand { get; }
 
         public ICommand RemoveAccountCommand { get; }
 
-        public AccountListViewModel(IAccountsManager accountsManager,ILogger logger,IDialogService dialogService,IDataValidator DataValidator)
+        public AccountListControlViewModel(IAccountsManager accountsManager,ILogger logger,IDialogService dialogService,IDataValidator DataValidator)
         {
             _dataValidator = DataValidator;
             _accountsManager = accountsManager;

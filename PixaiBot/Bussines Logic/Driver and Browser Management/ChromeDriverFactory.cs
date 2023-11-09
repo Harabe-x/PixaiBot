@@ -10,7 +10,7 @@ namespace PixaiBot.Bussines_Logic;
 public static class ChromeDriverFactory
 {
     /// <summary>
-    /// Creates a ChromeDriver with the default settings.
+    /// Creates a ChromeDriver with the needed settings to hide the process.
     /// </summary>
     /// <returns>Chrome Driver Instance</returns>
     public static ChromeDriver CreateDriver()
@@ -21,6 +21,22 @@ public static class ChromeDriverFactory
         var service = ChromeDriverService.CreateDefaultService();
         service.HideCommandPromptWindow = true;
 
-        return new ChromeDriver(/*service, options*/);
+        return new ChromeDriver(service, options);
     }
+
+
+    /// <summary>
+    /// Returns ChromeDriver with default settings for debugging purposes.
+    /// </summary>
+    /// <returns></returns>
+    public static ChromeDriver CreateDriverForDebug()
+    {
+        return new ChromeDriver();
+    }
+
+
+
+
+
+
 }

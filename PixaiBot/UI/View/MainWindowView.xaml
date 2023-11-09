@@ -42,6 +42,22 @@
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </Button>
+                    <Button Name="AccountCreatorBtn"
+                            Command="{Binding NavigateToAccountCreatorCommand}" Style="{StaticResource MenuButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="UniversalAccess" Style="{StaticResource SidePanelButtonIcon}" />
+                            <TextBlock x:Name="AccountsCreator" Text="Accounts Creator"
+                                       Style="{StaticResource SidePanelButton}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Name="AccountInfoLoggerBtn"
+                            Command="{Binding NavigateToLogAccountInfoCommand}" Style="{StaticResource MenuButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="DriversLicense" Style="{StaticResource SidePanelButtonIcon}" />
+                            <TextBlock x:Name="AccountInfoLogger" Text="Accounts Info Logger" FontSize="12"
+                                       Style="{StaticResource SidePanelButton}" />
+                        </StackPanel>
+                    </Button>
                     <Button Name="SettingsBtn"
                             Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">

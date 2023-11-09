@@ -1,4 +1,4 @@
-﻿<Application x:Class="PixaiBot.App"
+﻿ <Application x:Class="PixaiBot.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:PixaiBot.UI.ViewModel"
@@ -16,9 +16,16 @@
         <DataTemplate DataType="{x:Type TypeName=viewModel:SettingsControlViewModel}">
             <view:SettingsControlView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type TypeName=viewModel:AccountListViewModel}">
+        <DataTemplate DataType="{x:Type TypeName=viewModel:AccountListControlViewModel}">
             <view:AccountListView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:LogAccountInfoControlViewModel}">
+            <view:LogAccountInfoControlView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:AccountCreatorControlViewModel}">
+            <view:AccountCreatorControlView/>
+        </DataTemplate>
+
         <!--#endregion-->
 
         <!--#region Colors -->

@@ -6,7 +6,7 @@
              xmlns:converters="clr-namespace:PixaiBot.UI.Converters"
              xmlns:local="clr-namespace:PixaiBot.UI.View"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="400"   Background="#ffffff">
+             d:DesignHeight="700" d:DesignWidth="400"   Background="Transparent">
 
 
     <UserControl.Resources>
@@ -26,10 +26,10 @@
         </StackPanel>
 
         <Grid Grid.Row="1" Width="350" Height="500" >
-            <DataGrid  Grid.Row="0" Name="DataGrid" ColumnWidth="*" IsReadOnly="True"  Background="#ffff"
+            <DataGrid  Grid.Row="0" Name="DataGrid" ColumnWidth="*" IsReadOnly="True"  Background="Transparent"
                   BorderBrush="Transparent" Width="auto" Height="auto" FontSize="14"
                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden"
-                  AlternatingRowBackground="#FFFFFF" BorderThickness="1"
+                  AlternatingRowBackground="Transparent" BorderThickness="1"
                   AutoGenerateColumns="False" RowHeight="35"  MinHeight="100" SelectionMode="Single"
                   VerticalGridLinesBrush="#B7B7B7" HorizontalGridLinesBrush="#B7B7B7" GridLinesVisibility="Vertical" ItemsSource="{Binding UserAccounts,Converter={StaticResource AddEmptyRowsConverter},ConverterParameter=13}" SelectedItem="{Binding SelectedAccount}" >
 

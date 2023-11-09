@@ -29,7 +29,9 @@ public partial class App : Application
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<DashboardControlViewModel>();
         services.AddSingleton<SettingsControlViewModel>();
-        services.AddSingleton<AccountListViewModel>();
+        services.AddSingleton<AccountListControlViewModel>();
+        services.AddSingleton<LogAccountInfoControlViewModel>();
+        services.AddSingleton<AccountCreatorControlViewModel>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IAccountsManager, AccountsManager>();
