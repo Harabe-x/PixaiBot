@@ -27,9 +27,9 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Text="Email" HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Style="{StaticResource BaldPurpleText}" FontSize="21" Grid.Row="0" />
+                               Style="{StaticResource BoldPurpleText}" FontSize="21" Grid.Row="0" />
                     <TextBlock Text="Password" HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Style="{StaticResource BaldPurpleText}" Grid.Row="1" FontSize="21" />
+                               Style="{StaticResource BoldPurpleText}" Grid.Row="1" FontSize="21" />
                 </Grid>
                 <Border Grid.Column="1">
                     <Grid>

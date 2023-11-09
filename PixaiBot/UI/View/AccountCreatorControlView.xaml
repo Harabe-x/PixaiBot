@@ -22,8 +22,33 @@
 
 
         <Grid Grid.Row="1">
+            <Border Style="{StaticResource BorderStyle}" Height="600">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <TextBlock Style="{StaticResource BoldPurpleText2}" Text="Accounts Creator :"/>
+
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Border Style="{StaticResource BorderStyle }" Width="250" Height="250">
+                            <TextBlock Text="Email Confirmation :" Style="{StaticResource BoldPurpleText2}" Margin="10" />
+                        </Border>
+
+                    </Grid>
+
+
+                </Grid>
+    
+            </Border>
 
         </Grid>
+
+  
             
     </Grid>
 </UserControl>

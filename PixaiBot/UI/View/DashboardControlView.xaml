@@ -22,7 +22,7 @@
 
         <Grid Grid.Row="1">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2">
-                <TextBlock Style="{StaticResource BaldPurpleText}" Text="Click Button Below To Start The Process"
+                <TextBlock Style="{StaticResource BoldPurpleText}" Text="Click Button Below To Start The Process"
                            HorizontalAlignment="Center" FontSize="18" />
                 <TextBlock Style="{StaticResource SecondaryText}" Text="You will need access to the internet ! "
                            HorizontalAlignment="Center" />
@@ -37,10 +37,9 @@
 
         <Grid Grid.Row="2" Margin="0 -50 0 0">
             <StackPanel HorizontalAlignment="Center">
-                <Border CornerRadius="8"  Width="300" Height="300" BorderThickness="1" BorderBrush="{StaticResource DarkPurpleColor}">
+                <Border Style="{StaticResource BorderStyle}">
                     <Grid>
-                        <TextBlock Text="Bot Details :" Foreground="{StaticResource LightPurpleColor}" FontSize="23"
-                                   FontWeight="SemiBold" Margin="20" />
+                        <TextBlock Text="Bot Details :" Style="{StaticResource BoldPurpleText2}" />
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Foreground="{StaticResource DarkGreen}" Text="{Binding AccountCount}"
                                        Margin="20 10 20 10" FontSize="17" FontWeight="Thin" />

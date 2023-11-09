@@ -74,7 +74,7 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
                 </DataGrid.Columns>
 
 
