@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Threading;
 using PixaiBot.Bussines_Logic;
+using PixaiBot.Bussines_Logic.Driver_and_Browser_Management;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Services;
@@ -42,6 +43,8 @@ public partial class App : Application
         services.AddSingleton<ICreditClaimer, CreditClaimer>();
         services.AddSingleton<ILogger, Logger>();
         services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();
+        services.AddSingleton<IProxyManager, ProxyManager>();
+        services.AddSingleton<ITempMailApiManager, TempMailApiManager>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();
