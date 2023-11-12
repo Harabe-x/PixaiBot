@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace PixaiBot.Bussines_Logic;
@@ -17,6 +18,30 @@ public static class ChromeDriverFactory
     {
         var options = new ChromeOptions();
         options.AddArgument("--window-position=-32000,-32000");
+        options.Proxy = new Proxy();
+        var service = ChromeDriverService.CreateDefaultService();
+        service.HideCommandPromptWindow = true;
+
+        return new ChromeDriver(service, options);
+    }
+
+
+    /// <summary>
+    /// Creates a ChromeDriver with the needed settings to hide the process.
+    /// </summary>
+    /// <param name="proxy">Proxy server that should be used with Chrome Driver</param>
+    /// <returns></returns>
+    public static ChromeDriver CreateDriver(string proxy)
+    {
+        var options = new ChromeOptions();
+        options.AddArgument("--window-position=-32000,-32000");
+
+        var proxyObject = new Proxy()
+        {
+            HttpProxy = proxy
+        };
+        
+        options.Proxy = proxyObject;
 
         var service = ChromeDriverService.CreateDefaultService();
         service.HideCommandPromptWindow = true;
@@ -35,8 +60,4 @@ public static class ChromeDriverFactory
     }
 
 
-
-
-
-
-}
+    }

@@ -54,7 +54,7 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <CheckBox Margin="20" IsChecked="{Binding ShouldVerifyEmail }" Style="{StaticResource FormCheckBox}" Content="  Verify Email"/>
-                            <Button Grid.Row="1" Content="Start" Width="100" HorizontalAlignment="Left" Margin="20 10 0 10 " Style="{StaticResource PurpleButton}" Height="33"/>
+                            <Button Command="{Binding StartAccountCreationCommand}" Grid.Row="1" Content="Start" Width="100" HorizontalAlignment="Left" Margin="20 10 0 10 " Style="{StaticResource PurpleButton}" Height="33"/>
                         </Grid>
                     </Grid>
 

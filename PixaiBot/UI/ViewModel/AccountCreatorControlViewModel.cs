@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using PixaiBot.Data.Interfaces;
+using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -19,17 +20,19 @@ namespace PixaiBot.UI.ViewModel
         public ICommand StartAccountCreationCommand { get; }
 
 
-        public AccountCreatorControlViewModel(IProxyManager proxyManager,ILogger logger,IDialogService dialogService,IAccountsManager accountsManager,ITempMailApiManager tempMaiLApiManager)
+        public AccountCreatorControlViewModel(IProxyManager proxyManager,ILogger logger,IDialogService dialogService,IAccountsManager accountsManager,IToastNotificationSender toastNotificationSender,IAccountCreator accountCreator,IConfigManager configManager)
         {
+            _configManager = configManager;
+            _accountCreator = accountCreator;
+            _toastNotificationSender = toastNotificationSender;
             _logger = logger;
             _dialogService = dialogService;
             _accountsManager = accountsManager;
-            _tempMailApiManager = tempMaiLApiManager;
             _proxyManager = proxyManager;
             AddProxyCommand = new RelayCommand((obj) => AddProxy());
             StartAccountCreationCommand = new RelayCommand((obj) => StartAccountCreation());
             ProxyFilePath = "Select Proxy File";
-            _tempMailApiManager.RequestFailed += TempMailApiManagerOnRequestFailed;
+            _accountCreator.AccountCreated += OnAccountCreated;
         }
 
         
@@ -42,7 +45,12 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly IAccountsManager _accountsManager;
 
-        private readonly ITempMailApiManager _tempMailApiManager;
+        private readonly IAccountCreator _accountCreator;
+
+        private readonly IToastNotificationSender _toastNotificationSender;
+
+        private readonly IConfigManager _configManager;
+
 
         private string _accountAmount;
 
@@ -108,32 +116,34 @@ namespace PixaiBot.UI.ViewModel
 
         private void AddProxy()
         {
-            MessageBox.Show(_tempMailApiManager.GetEmail(TempMailApiKey));;
-            //var dialog = new OpenFileDialog()
-            //{
-            //    Title = "Select File:",
-            //    Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-            //    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            //};
 
-            //var result = dialog.ShowDialog();
+            var dialog = new OpenFileDialog()
+            {
+                Title = "Select File:",
+                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            };
 
-            //if (result == false) return;
+            var result = dialog.ShowDialog();
 
-            //ProxyFilePath = dialog.FileName;
+            if (result == false) return;
 
-            //_proxyManager.ReadProxyFile(ProxyFilePath);
+            ProxyFilePath = dialog.FileName;
 
+            _proxyManager.ReadProxyFile(ProxyFilePath);
         }
 
-        private void TempMailApiManagerOnRequestFailed(object? sender, string e)
+        private void OnAccountCreated(object? sender, UserAccount e)
         {
-            MessageBox.Show(" !!!!!!!!!  !!!!!!!!!! !!!!!!!!!!! !!!!!! !!!!! !!!!! !!!!!!! ");
+            _accountsManager.AddAccount(e);
         }
 
         private void StartAccountCreation()
         {
-
+            if (int.TryParse(AccountAmount, out var amount))
+            {
+                _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail);
+            }
         }
     }
 }

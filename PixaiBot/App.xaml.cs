@@ -45,6 +45,7 @@ public partial class App : Application
         services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();
         services.AddSingleton<IProxyManager, ProxyManager>();
         services.AddSingleton<ITempMailApiManager, TempMailApiManager>();
+        services.AddSingleton<IAccountCreator, AccountCreator>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();
