@@ -20,7 +20,7 @@ namespace PixaiBot.UI.Converters
             if (!int.TryParse(desiredRowCount, out var desiredRowsToAdd)) return null;
             for (var i = userAccounts.Count; i < desiredRowsToAdd; i++)
             {
-                userAccounts.Add(new UserAccount());   
+                //userAccounts.Add(new UserAccount());
             }
 
             return userAccounts;

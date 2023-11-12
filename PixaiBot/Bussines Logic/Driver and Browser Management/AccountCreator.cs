@@ -39,6 +39,14 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private readonly ILogger _logger;
 
+
+        /// <summary>
+        /// Starts the account creation process
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="tempMailApiKey"></param>
+        /// <param name="shouldUseProxy"></param>
+        /// <param name="shouldVerifyEmail"></param>
         public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail)
         {
             ChromeDriver driver;
@@ -57,7 +65,10 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
             }
         }
-
+        /// <summary>
+        /// Creates account without email verification 
+        /// </summary>
+        /// <param name="driver"></param>
         private void CreateAccount(ChromeDriver driver)
         {
 
@@ -90,8 +101,15 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 Password = password
             };
             AccountCreated?.Invoke(this, createdAccount);
+
+            driver.Quit();
         }
 
+        /// <summary>
+        /// Creates an account with verified email
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="tempMailApiKey"></param>
         private void CreateAccount(ChromeDriver driver, string tempMailApiKey)
         {
             driver.Navigate().GoToUrl(StartPageUrl);
@@ -140,6 +158,9 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 Password = password
             };
             AccountCreated?.Invoke(this,createdAccount);
+
+            driver.Quit();
+
         }
 
 
