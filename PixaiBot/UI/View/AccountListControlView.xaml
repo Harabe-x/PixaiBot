@@ -65,7 +65,7 @@
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="No." Width="auto" IsReadOnly="True">
+                    <DataGridTextColumn Header="No." Width="auto" IsReadOnly="True" SortDirection="Ascending">
                         <DataGridTextColumn.Binding>
                             <MultiBinding Converter="{StaticResource IndexToValueConverter}">
                                 <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}" />

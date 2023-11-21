@@ -34,14 +34,20 @@ public static class ChromeDriverFactory
     public static ChromeDriver CreateDriver(string proxy)
     {
         var options = new ChromeOptions();
-        options.AddArgument("--window-position=-32000,-32000");
+        //options.AddArgument("--window-position=-32000,-32000");
 
         var proxyObject = new Proxy()
         {
-            HttpProxy = proxy
+            HttpProxy = proxy,
+            Kind = ProxyKind.Manual,
         };
         
         options.Proxy = proxyObject;
+
+        options.AddUserProfilePreference("webrtc.ip_handling_policy", "disable_non_proxied_udp");
+
+        options.AddArgument("--ignore-certificate-errors");
+
 
         var service = ChromeDriverService.CreateDefaultService();
         service.HideCommandPromptWindow = true;

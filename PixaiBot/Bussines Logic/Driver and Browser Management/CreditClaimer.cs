@@ -53,11 +53,11 @@ public class CreditClaimer : ICreditClaimer
     /// <param name="toastNotificationSender"></param>
     public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender)
     {
-        _driver = ChromeDriverFactory.CreateDriver();
+        _driver = ChromeDriverFactory.CreateDriverForDebug();
 
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
 
-        _driver.Manage().Window.Minimize();
+        //_driver.Manage().Window.Minimize();
         LoginModule.Login(_driver, account, _logger);
         
         _logger.Log("Logged in successfully", _logger.CreditClaimerLogFilePath);
@@ -133,9 +133,8 @@ public class CreditClaimer : ICreditClaimer
     {
         try
         {
-            _logger.Log("Trying to find credits tab ...", _logger.CreditClaimerLogFilePath);
-            var creditsTab = _driver.FindElement(By.CssSelector(".sc-jSUZER:nth-child(5)"));
-            creditsTab?.Click();
+            Thread.Sleep(100);
+            _driver.Navigate().GoToUrl(_driver.Url + "/credits");
             _logger.Log("Finding buttons ...", _logger.CreditClaimerLogFilePath);
             Thread.Sleep(500);
             var claimButton = _driver.FindElement(By.CssSelector(".MuiLoadingButton-root"));

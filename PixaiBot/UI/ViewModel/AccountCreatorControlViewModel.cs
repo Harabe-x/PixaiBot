@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
@@ -33,9 +34,11 @@ namespace PixaiBot.UI.ViewModel
             StartAccountCreationCommand = new RelayCommand((obj) => StartAccountCreation());
             ProxyFilePath = "Select Proxy File";
             _accountCreator.AccountCreated += OnAccountCreated;
+            _accountCreator.ErrorOccurred += OnErrorOccurred;
         }
 
-        
+       
+
 
         private readonly IProxyManager _proxyManager;
 
@@ -137,12 +140,17 @@ namespace PixaiBot.UI.ViewModel
         {
             _accountsManager.AddAccount(e);
         }
+        private void OnErrorOccurred(object? sender, string e)
+        {
+            _toastNotificationSender.SendNotification("PixaiBot",e,NotificationType.Error);
+        }
 
         private void StartAccountCreation()
         {
             if (int.TryParse(AccountAmount, out var amount))
             {
-                _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail);
+                var task = new Task( () => { _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail); });
+                task.Start();
             }
         }
     }

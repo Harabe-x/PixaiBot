@@ -12,6 +12,8 @@ namespace PixaiBot.Data.Interfaces
 
         string GetEmail(string apiKey);
 
+        IEnumerable<string> GetDomains(string tempMailApiKey);
+
         string GetVerificationLink(string email,string apiKey);
     }
 }

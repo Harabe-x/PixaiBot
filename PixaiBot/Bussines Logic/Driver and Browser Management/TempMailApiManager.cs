@@ -19,10 +19,14 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private List<string> _domainList;
 
-        public TempMailApiManager()
+        public TempMailApiManager(ILogger logger)
         {
             _httpClient = new HttpClient();
+            _logger = logger;
+
         }
+
+        private readonly ILogger _logger;
 
         public string GetEmail(string apiKey)
         {
@@ -31,7 +35,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             var random = new Random();
             if (_domainList == null)
             {
-                GetDomainList(apiKey);
+                GetDomains(apiKey);
             }
 
             // If the api key is invalid, the domain list will be null, so check if it is null and return an empty string 
@@ -44,8 +48,37 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             return firstEmailPart + _domainList[random.Next(_domainList.Count)];
         }
 
+        public IEnumerable<string> GetDomains(string tempMailApiKey)
+        {
+            _logger.Log("Getting domains from temp mail api", _logger.CreditClaimerLogFilePath);
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://privatix-temp-mail-v1.p.rapidapi.com/request/domains/"),
+                Headers =
+                {
+                    { "X-RapidAPI-Key", tempMailApiKey },
+                    { "X-RapidAPI-Host", "privatix-temp-mail-v1.p.rapidapi.com" }
+                }
+            };
+
+            var response = _httpClient.Send(requestMessage);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.Log("Invalid api key", _logger.CreditClaimerLogFilePath);
+
+                RequestFailed?.Invoke(this, response.ReasonPhrase);
+                return null;
+            }
+
+            var responseText = response.Content.ReadAsStringAsync().Result; 
+            return _domainList = JsonSerializer.Deserialize<List<string>>(responseText);
+        }
+
         public string GetVerificationLink(string email, string apiKey)
         {
+            _logger.Log("Getting verification link", _logger.CreditClaimerLogFilePath);
             var hashedEmail = HashEmail(email);
 
             var requestMessage = new HttpRequestMessage
@@ -63,6 +96,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
             if (!response.IsSuccessStatusCode)
             {
+                
                 RequestFailed?.Invoke(this, "An error occurred,");
                 return string.Empty;
             }
@@ -86,38 +120,15 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 stringBuilder.Append(hashedByte.ToString("x2"));
             }
 
+            _logger.Log("Hashed email to request", _logger.CreditClaimerLogFilePath);
             return stringBuilder.ToString();
-        }
-
-        private void GetDomainList(string apiKey)
-        {
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("https://privatix-temp-mail-v1.p.rapidapi.com/request/domains/"),
-                Headers =
-                {
-                    { "X-RapidAPI-Key", apiKey },
-                    { "X-RapidAPI-Host", "privatix-temp-mail-v1.p.rapidapi.com" }
-                }
-            };
-
-            var response = _httpClient.Send(requestMessage);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                RequestFailed?.Invoke(this, response.ReasonPhrase);
-                return;
-            }
-
-            var responseText = response.Content.ReadAsStringAsync().Result;
-            _domainList = JsonSerializer.Deserialize<List<string>>(responseText);
         }
 
         private string GetUrlFromString(string url)
         {
             var extractUrlRegexPattern = @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])";
             var extractedUrl = Regex.Match(url, extractUrlRegexPattern);
+            _logger.Log("Extracted url from email", _logger.CreditClaimerLogFilePath);
             return extractedUrl.Value;
         }
     }

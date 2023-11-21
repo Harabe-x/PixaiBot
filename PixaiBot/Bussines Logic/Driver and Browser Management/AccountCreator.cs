@@ -8,6 +8,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
+using Leaf.xNet;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
@@ -18,24 +19,25 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private const int WaitTime = 1;
 
-        public AccountCreator(ITempMailApiManager tempMailApiManager, ILogger logger, IProxyManager proxyManager)
+        public AccountCreator(ITempMailApiManager tempMailApiManager, ILoginCredentialsMaker loginCredentialsMaker, ILogger logger, IProxyManager proxyManager)
         {
             _proxyManager = proxyManager;
             _tempMailApiManager = tempMailApiManager;
             _logger = logger;
-
-
+            _loginCredentialsMaker = loginCredentialsMaker;
         }
 
         public event EventHandler<UserAccount>? AccountCreated;
 
         public event EventHandler<string>? ErrorOccurred;
 
-        private const string StartPageUrl = "https://pixai.art/login";
+        private const string StartPageUrl = "https://pixai.art/sign-up";
 
         private readonly IProxyManager _proxyManager;
 
         private readonly ITempMailApiManager _tempMailApiManager;
+
+        private readonly ILoginCredentialsMaker _loginCredentialsMaker;
 
         private readonly ILogger _logger;
 
@@ -49,90 +51,97 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
         /// <param name="shouldVerifyEmail"></param>
         public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail)
         {
-            ChromeDriver driver;
-
             for (var i = 0; i < amount; i++)
             {
 
-                if(_shouldStop) return;
+                if (_shouldStop) return;
 
-                driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriverForDebug();
+                   using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriverForDebug();
+                   _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
+                   driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+                try
+                {
+                    CreateAccount(driver, shouldVerifyEmail, tempMailApiKey);
+                }
+                catch (Exception e)
+                {
+                    _logger.Log("Chrome drive threw exception\n" + e.Message,_logger.CreditClaimerLogFilePath);
+                    ErrorOccurred?.Invoke(this, "Chrome drive Exception occurred");
+                    _shouldStop = true;
+                }
+                finally
+                {
+                    driver.Quit();
+                    _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
 
-                if (shouldVerifyEmail) CreateAccount(driver, tempMailApiKey);
-                else CreateAccount(driver);
-
-            }
+                }
+            } 
         }
         /// <summary>
         /// Creates account without email verification 
         /// </summary>
         /// <param name="driver"></param>
-        private void CreateAccount(ChromeDriver driver)
+        private void CreateAccount(ChromeDriver driver, bool shouldVerifyEmail, string tempMailApiKey)
         {
 
+            _logger.Log("Account creation process started",_logger.CreditClaimerLogFilePath);
             driver.Navigate().GoToUrl(StartPageUrl);
 
+            var email = shouldVerifyEmail ? _loginCredentialsMaker.GenerateEmail(tempMailApiKey) : _loginCredentialsMaker.GenerateEmail();
+            var password = _loginCredentialsMaker.GeneratePassword();
 
-            var email = MakeEmail();
+            LogInWithEmail(driver);
 
-            var password = MakePassword();
+            EnterEmailAndPassword(driver, email, password);
 
-            IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName("button"));
+            ClickSignIn(driver);
 
-            buttons.FirstOrDefault(x => x.Text == "Log in with email")?.Click();
+            Thread.Sleep(TimeSpan.FromSeconds(2.5));
+            
+            var isRegisteredSuccessfully = CheckRegistrationSuccess(driver);
 
-            driver.FindElement(By.CssSelector("*:nth-child(1) > *:nth-child(4) > *:nth-child(1)")).Click();
-
-            var emailTextBox = driver.FindElement(By.CssSelector("* > * > *:nth-child(2) > * > *:nth-child(1) > * > *"));
-            emailTextBox.Click();
-            emailTextBox.SendKeys(email);
-
-            var passwordTextBox = driver.FindElement(By.CssSelector("*:nth-child(2) > * > *:nth-child(2) > * > *"));
-            passwordTextBox.Click();
-            passwordTextBox.SendKeys(password);
-
-            driver.FindElement(By.CssSelector("#\\:r2\\:")).Click();
-
-            var createdAccount = new UserAccount()
+            if (!isRegisteredSuccessfully)
             {
-                Email = email,
-                Password = password
-            };
-            AccountCreated?.Invoke(this, createdAccount);
-
-            driver.Quit();
-        }
-
-        /// <summary>
-        /// Creates an account with verified email
-        /// </summary>
-        /// <param name="driver"></param>
-        /// <param name="tempMailApiKey"></param>
-        private void CreateAccount(ChromeDriver driver, string tempMailApiKey)
-        {
-            driver.Navigate().GoToUrl(StartPageUrl);
-
-            Thread.Sleep(TimeSpan.FromSeconds(WaitTime));
-
-            var email = _tempMailApiManager.GetEmail(tempMailApiKey);
-        
-            if (string.IsNullOrEmpty(email))
-            {
-                _logger.Log("Invalid ApiKey",
-                _logger.CreditClaimerLogFilePath);
-                ErrorOccurred?.Invoke(this, "Invalid api key");
+                _logger.Log("Too many requests!", _logger.CreditClaimerLogFilePath);
+                ErrorOccurred?.Invoke(this, "Too many requests");
                 _shouldStop = true;
                 return;
             }
-            var password = MakePassword();
 
+
+            _logger.Log($"Account registred{{ Email:{email}, Password : {password} }} ",_logger.CreditClaimerLogFilePath);
+
+
+            var createdAccount = new UserAccount()
+            {
+                Email = email,
+                Password = password
+            };
+
+            AccountCreated?.Invoke(this, createdAccount);
+
+            if (!shouldVerifyEmail) return;
+            
+            ClickProfile(driver);
+
+            ResendVerificationLink(driver);
+
+            VerifyEmail(createdAccount, driver, tempMailApiKey);
+        }
+
+
+        private void LogInWithEmail(ISearchContext driver)
+        {
+            _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
             IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName("button"));
-
             buttons.FirstOrDefault(x => x.Text == "Log in with email")?.Click();
+        }
 
-            driver.FindElement(By.CssSelector("*:nth-child(1) > *:nth-child(4) > *:nth-child(1)")).Click();
+
+        private void EnterEmailAndPassword(ISearchContext driver, string email, string password)
+        {
+            _logger.Log("Sending email & password to textboxes ", _logger.CreditClaimerLogFilePath);
 
             var emailTextBox = driver.FindElement(By.CssSelector("* > * > *:nth-child(2) > * > *:nth-child(1) > * > *"));
             emailTextBox.Click();
@@ -141,47 +150,60 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             var passwordTextBox = driver.FindElement(By.CssSelector("*:nth-child(2) > * > *:nth-child(2) > * > *"));
             passwordTextBox.Click();
             passwordTextBox.SendKeys(password);
+        }
 
+
+        private  void ClickSignIn(ISearchContext driver)
+        {
             driver.FindElement(By.CssSelector("#\\:r2\\:")).Click();
 
-            Thread.Sleep(TimeSpan.FromSeconds(10));
+            _logger.Log("Register button clicked", _logger.CreditClaimerLogFilePath);
 
-            var verificationLink = _tempMailApiManager.GetVerificationLink(email, tempMailApiKey);
+        }
 
+
+        private void ClickProfile(ISearchContext driver)
+        {
+            _logger.Log("Navigating to account settings", _logger.CreditClaimerLogFilePath);
+
+            var dropdownMenuButton = driver.FindElement(By.CssSelector(".shrink-0"));
+            dropdownMenuButton?.Click();
+
+            var profileButton = driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(3)"));
+            profileButton?.Click();
+        }
+
+
+        private  void ResendVerificationLink(ISearchContext driver)
+        {
+            var resendVerificationLinkButton = driver.FindElement(By.CssSelector("*:nth-child(3) *:nth-child(2) > *:nth-child(4)"));
+            resendVerificationLinkButton.Click();
+            _logger.Log("Resend button clicked", _logger.CreditClaimerLogFilePath);
+
+        }
+
+
+        private  bool CheckRegistrationSuccess(IWebDriver driver)
+        {
+            _logger.Log("Checking if account registration was successful",_logger.CreditClaimerLogFilePath);
+            return driver.Url != StartPageUrl;
+        }
+
+        public void VerifyEmail(UserAccount userAccount, ChromeDriver driver, string tempMailApiKey)
+        {
+            var verificationLink = string.Empty;
+            while (string.IsNullOrEmpty(verificationLink))
+            {
+                verificationLink = _tempMailApiManager.GetVerificationLink(userAccount.Email, tempMailApiKey);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            }
             driver.Navigate().GoToUrl(verificationLink);
 
-            Thread.Sleep(TimeSpan.FromMilliseconds(300));
+            Thread.Sleep(TimeSpan.FromSeconds(2.5));
 
-            var createdAccount = new UserAccount()
-            {
-                Email = email,
-                Password = password
-            };
-            AccountCreated?.Invoke(this,createdAccount);
-
-            driver.Quit();
-
+            _logger.Log("Email verified",_logger.ApplicationLogFilePath);
         }
-
-
-        private static string MakeEmail()
-        {
-            const string letters = "abcdefghijklmnopqrstuvwxyz";
-            var random = new Random();
-            var firstEmailPart =
-                new string(Enumerable.Repeat(letters, 6).Select(x => x[random.Next(letters.Length)]).ToArray());
-            return firstEmailPart + "@gmail.com";
-        }
-
-        private static string MakePassword()
-        {
-            const string characters = "abcd[{efghij@#$klmnopqrstu}]vw.><xyz!%^&*";
-            var random = new Random();
-            return new string(Enumerable.Repeat(characters, 8).Select(x => x[random.Next(characters.Length)])
-                .ToArray());
-        }
-
-
 
     }
 }
+
