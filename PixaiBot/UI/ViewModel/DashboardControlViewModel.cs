@@ -7,8 +7,11 @@ using PixaiBot.UI.Base;
 using System.Linq;
 using System;
 using System.Globalization;
+using System.Threading;
 using System.Windows;
+using System.Windows.Media;
 using PixaiBot.Bussines_Logic;
+using Brush = System.Drawing.Brush;
 
 namespace PixaiBot.UI.ViewModel;
 
@@ -21,19 +24,19 @@ public class DashboardControlViewModel : BaseViewModel
         IToastNotificationSender toastNotificationSender)
     {
         _configManager = configManager;
-        
+
         _logger = logger;
-        
+
         _botStatisticsManager = botStatisticsManager;
-        
+
         _creditClaimer = creditClaimer;
-        
+
         _accountsManager = accountsManager;
-        
+
         _toastNotificationSender = toastNotificationSender;
-        
+
         ClaimCreditsCommand = new RelayCommand((obj) => ClaimCreditsInNewThread());
-        
+
         _creditClaimer.CreditClaimed += CreditClaimed;
 
         _botStatisticsManager.StatisticsChanged += StatisticsRefreshed;
@@ -41,7 +44,22 @@ public class DashboardControlViewModel : BaseViewModel
         StatisticsRefreshed(null, EventArgs.Empty);
 
         if (_configManager.ShouldAutoClaimCredits) StartCreditsAutoClaim();
+        
+       _regularBrush =  new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8964ff"));
+
+       _redBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
+
+       ClaimCreditButtonBrushColor = _regularBrush;
+        
+        ClaimCreditButtonText = "Claim Credits";
     }
+
+    private readonly SolidColorBrush _redBrush;
+
+    private readonly SolidColorBrush _regularBrush; 
+
+
+    private CancellationTokenSource _cancellationTokenSource;
 
     private const int CreditClaimerInterval = 24;
 
@@ -61,6 +79,8 @@ public class DashboardControlViewModel : BaseViewModel
 
     private string _creditClaimerInfo;
 
+    private bool _isClaimingCredits;
+
     public string CreditClaimerInfo
     {
         get => _creditClaimerInfo;
@@ -71,6 +91,31 @@ public class DashboardControlViewModel : BaseViewModel
         }
     }
 
+
+    private SolidColorBrush _claimCreditButtonButtonColor;
+
+    public SolidColorBrush ClaimCreditButtonBrushColor
+    {
+        get => _claimCreditButtonButtonColor;
+        set
+        {
+            _claimCreditButtonButtonColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    private string _claimCreditButtonText;
+
+    public string ClaimCreditButtonText
+    {
+        get => _claimCreditButtonText;
+        set
+        {
+            _claimCreditButtonText = value;
+            OnPropertyChanged();
+        }
+    }
 
     public string? AccountCount
     {
@@ -111,7 +156,7 @@ public class DashboardControlViewModel : BaseViewModel
     private void StatisticsRefreshed(object? sender, EventArgs e)
     {
         BotVersion = _botStatisticsManager.BotVersion;
-        AccountCount = _botStatisticsManager.AccountsNumber.ToString(); 
+        AccountCount = _botStatisticsManager.AccountsNumber.ToString();
         LastCreditClaimDateTime = _botStatisticsManager.LastCreditClaimDateTime.ToString();
     }
 
@@ -139,7 +184,7 @@ public class DashboardControlViewModel : BaseViewModel
         };
 
         autoClaimTimer.Tick += (sender, args) => ClaimCreditsInNewThread();
-       
+
         autoClaimTimer.Start();
 
         ClaimCreditsInNewThread();
@@ -147,18 +192,41 @@ public class DashboardControlViewModel : BaseViewModel
 
     private void ClaimCredits()
     {
-        if(_configManager.ShouldSendToastNotifications)
-            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _toastNotificationSender);
+        if (_isClaimingCredits)
+        {
+            ClaimCreditButtonText = "Claim Credits"; 
+            
+            _isClaimingCredits = false;
+            
+            ClaimCreditButtonBrushColor = _regularBrush;
+            
+            _cancellationTokenSource.Cancel();
+           
+            return;
+        }
+
+        _cancellationTokenSource = new CancellationTokenSource();
+
+        ClaimCreditButtonText = "Stop Claiming";
+
+        ClaimCreditButtonBrushColor = _redBrush;
+
+
+        _isClaimingCredits = true;
+
+        if (_configManager.ShouldSendToastNotifications)
+            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _cancellationTokenSource.Token, _toastNotificationSender);
         else
-            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts());
+            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _cancellationTokenSource.Token);
 
         _logger.Log("Credits claimed", _logger.ApplicationLogFilePath);
-       
+
         CreditClaimerInfo = "Credits Claimed.";
 
         LastCreditClaimDateTime = DateTime.Now.ToString();
-
     }
 
-  
+
+
+
 }

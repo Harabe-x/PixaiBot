@@ -139,19 +139,21 @@ namespace PixaiBot.UI.ViewModel
         private void OnAccountCreated(object? sender, UserAccount e)
         {
             _accountsManager.AddAccount(e);
+            if (_configManager.ShouldSendToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot", $"Account Created", NotificationType.Success); }
+
         }
         private void OnErrorOccurred(object? sender, string e)
         {
-            _toastNotificationSender.SendNotification("PixaiBot",e,NotificationType.Error);
+            if(_configManager.ShouldSendToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot",e,NotificationType.Error); }
         }
 
         private void StartAccountCreation()
         {
-            if (int.TryParse(AccountAmount, out var amount))
-            {
-                var task = new Task( () => { _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail); });
-                task.Start();
-            }
+            if (!int.TryParse(AccountAmount, out var amount) || amount < 125) return;
+
+            var task = new Task( () => { _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail); });
+            
+            task.Start();
         }
     }
 }

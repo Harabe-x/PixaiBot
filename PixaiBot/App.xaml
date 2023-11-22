@@ -150,7 +150,6 @@
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush>
-                        <GradientStop Color="#a29bfe" />
                         <GradientStop Color="#8964ff" />
                     </LinearGradientBrush>
                 </Setter.Value>

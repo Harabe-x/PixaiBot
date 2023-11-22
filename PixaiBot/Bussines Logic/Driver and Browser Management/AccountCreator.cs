@@ -56,7 +56,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
                 if (_shouldStop) return;
 
-                   using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriverForDebug();
+                   using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriver();
                    _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
@@ -110,7 +110,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             }
 
 
-            _logger.Log($"Account registred{{ Email:{email}, Password : {password} }} ",_logger.CreditClaimerLogFilePath);
+            _logger.Log($"Account registered{{ Email:{email}, Password : {password} }} ",_logger.CreditClaimerLogFilePath);
 
 
             var createdAccount = new UserAccount()

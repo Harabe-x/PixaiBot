@@ -27,7 +27,7 @@
                 <TextBlock Style="{StaticResource SecondaryText}" Text="You will need access to the internet ! "
                            HorizontalAlignment="Center" />
                 <Button Command="{Binding ClaimCreditsCommand}" Style="{StaticResource PurpleButton}" Width="200"
-                        Margin="0 30 0 0" Content="Claim Credits" />
+                        Margin="0 30 0 0" Content="{Binding ClaimCreditButtonText}"  Background="{Binding ClaimCreditButtonBrushColor}" />
                 <TextBlock Style="{StaticResource SecondaryText}" Foreground="#2c3e50"
                            Text="{Binding CreditClaimerInfo}"
                            FontWeight="Light" HorizontalAlignment="Center" />

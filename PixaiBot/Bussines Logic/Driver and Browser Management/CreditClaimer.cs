@@ -23,9 +23,16 @@ public class CreditClaimer : ICreditClaimer
 
     private const int Delay = 50;
 
+    private const int LongDelay = 500;
+
+    private const int MaxRetries = 5; 
+
     private const string LoginUrl = "https://pixai.art/login";
 
     private readonly ILogger _logger;
+
+    private readonly IToastNotificationSender _toastNotificationSender;
+
 
     public event EventHandler<UserAccount> CreditClaimed;
 
@@ -36,10 +43,14 @@ public class CreditClaimer : ICreditClaimer
     }
 
 
-    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, IToastNotificationSender toastNotificationSender = null)
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,CancellationToken cancellationToken,IToastNotificationSender toastNotificationSender = null)
     {
         foreach (var account in accounts)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
             CreditClaimed?.Invoke(this,account);
             ClaimCredits(account,toastNotificationSender);
         }
@@ -53,7 +64,7 @@ public class CreditClaimer : ICreditClaimer
     /// <param name="toastNotificationSender"></param>
     public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender)
     {
-        _driver = ChromeDriverFactory.CreateDriverForDebug();
+        _driver = ChromeDriverFactory.CreateDriver();
 
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
 
@@ -133,14 +144,14 @@ public class CreditClaimer : ICreditClaimer
     {
         try
         {
-            Thread.Sleep(100);
+            Thread.Sleep(Delay);
             _driver.Navigate().GoToUrl(_driver.Url + "/credits");
             _logger.Log("Finding buttons ...", _logger.CreditClaimerLogFilePath);
-            Thread.Sleep(500);
+            Thread.Sleep(LongDelay);
             var claimButton = _driver.FindElement(By.CssSelector(".MuiLoadingButton-root"));
 
             // Clicks the claim button 5 times to ensure that button was clicked 
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < MaxRetries; i++)
             {
                 Thread.Sleep(Delay);
                 claimButton.Click();
