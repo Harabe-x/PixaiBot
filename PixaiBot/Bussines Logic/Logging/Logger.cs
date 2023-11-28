@@ -12,13 +12,7 @@ public class Logger : ILogger
 
     public Logger()
     {
-        CreditClaimerLogFilePath =
-            $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt";
-        ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt";
-
-        if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath);
-        ;
-        if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath);
+        CreditClaimerLogFilePath = $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt"; ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt"; if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath); if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath);
         ;
     }
 

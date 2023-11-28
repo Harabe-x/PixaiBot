@@ -48,7 +48,6 @@ public static class ChromeDriverFactory
 
         options.AddArgument("--ignore-certificate-errors");
 
-
         var service = ChromeDriverService.CreateDefaultService();
         service.HideCommandPromptWindow = true;
 

@@ -10,6 +10,7 @@ using System.Windows;
 using Notification.Wpf;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 

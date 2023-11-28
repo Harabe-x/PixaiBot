@@ -224,6 +224,11 @@ public class DashboardControlViewModel : BaseViewModel
         CreditClaimerInfo = "Credits Claimed.";
 
         LastCreditClaimDateTime = DateTime.Now.ToString();
+
+        ClaimCreditButtonText = "Claim Credits";
+
+        ClaimCreditButtonBrushColor = _regularBrush;
+
     }
 
 

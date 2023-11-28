@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using PixaiBot.Bussines_Logic;
 using PixaiBot.Bussines_Logic.Data_Management;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management;
+using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Services;
@@ -48,6 +49,8 @@ public partial class App : Application
         services.AddSingleton<IProxyManager, ProxyManager>();
         services.AddSingleton<ITempMailApiManager, TempMailApiManager>();
         services.AddSingleton<IAccountCreator, AccountCreator>();
+        services.AddSingleton<IPixaiDataReader, PixaiDataReader>();
+        services.AddSingleton<IPixaiNavigation, PixaiNavigation>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();

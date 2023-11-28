@@ -17,8 +17,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
     {
         private bool _shouldStop;
 
-        private const int WaitTime = 1;
-
         public AccountCreator(ITempMailApiManager tempMailApiManager, ILoginCredentialsMaker loginCredentialsMaker, ILogger logger, IProxyManager proxyManager)
         {
             _proxyManager = proxyManager;
@@ -56,7 +54,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
                 if (_shouldStop) return;
 
-                   using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriver();
+                   using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriverForDebug();
                    _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
@@ -92,7 +90,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             var password = _loginCredentialsMaker.GeneratePassword();
 
             LogInWithEmail(driver);
-
             EnterEmailAndPassword(driver, email, password);
 
             ClickSignIn(driver);
@@ -109,11 +106,10 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 return;
             }
 
-
             _logger.Log($"Account registered{{ Email:{email}, Password : {password} }} ",_logger.CreditClaimerLogFilePath);
 
 
-            var createdAccount = new UserAccount()
+            var createdAccount = new UserAccount
             {
                 Email = email,
                 Password = password
@@ -122,7 +118,9 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             AccountCreated?.Invoke(this, createdAccount);
 
             if (!shouldVerifyEmail) return;
-            
+
+            OpenDropdownMenu(driver);
+
             ClickProfile(driver);
 
             ResendVerificationLink(driver);
@@ -153,7 +151,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
         }
 
 
-        private  void ClickSignIn(ISearchContext driver)
+        private void ClickSignIn(ISearchContext driver)
         {
             driver.FindElement(By.CssSelector("#\\:r2\\:")).Click();
 
@@ -166,11 +164,16 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
         {
             _logger.Log("Navigating to account settings", _logger.CreditClaimerLogFilePath);
 
+            var profileButton = driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(3)"));
+           
+            profileButton?.Click();
+        }
+
+        private void OpenDropdownMenu(ISearchContext driver)
+        {
+            _logger.Log("Trying to find dropdown menu", _logger.CreditClaimerLogFilePath);
             var dropdownMenuButton = driver.FindElement(By.CssSelector(".shrink-0"));
             dropdownMenuButton?.Click();
-
-            var profileButton = driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(3)"));
-            profileButton?.Click();
         }
 
 
@@ -179,7 +182,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             var resendVerificationLinkButton = driver.FindElement(By.CssSelector("*:nth-child(3) *:nth-child(2) > *:nth-child(4)"));
             resendVerificationLinkButton.Click();
             _logger.Log("Resend button clicked", _logger.CreditClaimerLogFilePath);
-
         }
 
 

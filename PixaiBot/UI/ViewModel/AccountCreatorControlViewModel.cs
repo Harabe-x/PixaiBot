@@ -149,7 +149,7 @@ namespace PixaiBot.UI.ViewModel
 
         private void StartAccountCreation()
         {
-            if (!int.TryParse(AccountAmount, out var amount) || amount < 125) return;
+            if (!int.TryParse(AccountAmount, out var amount) || amount > 125) return;
 
             var task = new Task( () => { _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail); });
             
