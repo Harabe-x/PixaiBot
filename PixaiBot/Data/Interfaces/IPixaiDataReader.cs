@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace PixaiBot.Data.Interfaces
 {
-    internal interface IPixaiDataReader
+    internal interface IPixaiDataReader  
     {
-        public string GetUsername(ChromeDriver driver);
+        public string GetUsername(ISearchContext searchContext);
 
-        public string GetCreditsCount(ChromeDriver driver);
+        public string GetCreditsCount(ISearchContext searchContext);
 
-        public string GetEmailVerificationStatus(ChromeDriver driver);
+        public string GetEmailVerificationStatus(ISearchContext searchContext);
 
-        public string GetFollowersCount(ChromeDriver driver);
+        public string GetFollowersCount(ISearchContext searchContext);
 
-        public string GetFollowingCount(ChromeDriver driver);
+        public string GetFollowingCount(ISearchContext searchContext);
     }
 }

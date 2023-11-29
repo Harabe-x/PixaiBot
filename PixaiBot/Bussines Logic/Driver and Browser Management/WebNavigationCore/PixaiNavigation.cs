@@ -22,12 +22,12 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         private readonly ILogger _logger;
 
-        public void GoBack(ChromeDriver driver)
+        public void GoBack(IWebDriver driver)
         {
             driver.Navigate().Back();
         }
 
-        public void GoToRegistrationPage(ChromeDriver driver)
+        public void GoToRegistrationPage(ISearchContext driver)
         {
             _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
 
@@ -42,7 +42,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             }
         }
 
-        public void GoToLoginPage(ChromeDriver driver)
+        public void GoToLoginPage(ISearchContext driver)
         {
             _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
 
@@ -57,7 +57,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             }
         }
 
-        public void SendCredentialsToTextBoxes(ChromeDriver driver, string email, string password)
+        public void SendCredentialsToTextBoxes(ISearchContext driver, string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 throw new ArgumentException("login credentials can't be null");
@@ -80,7 +80,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         }
 
-        public void ClickOnRegisterButton(ChromeDriver driver)
+        public void ClickOnRegisterButton(ISearchContext driver)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             _logger.Log("Login button clicked", _logger.CreditClaimerLogFilePath);
         }
 
-        public void ClickOnLoginButton(ChromeDriver driver)
+        public void ClickOnLoginButton(ISearchContext driver)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             _logger.Log("Login button clicked", _logger.CreditClaimerLogFilePath);
         }
 
-        public void GoToProfile(ChromeDriver driver)
+        public void GoToProfile(ISearchContext driver)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             }
         }
 
-        public void GoToProfileSettings(ChromeDriver driver)
+        public void GoToProfileSettings(ISearchContext driver)
         {
             _logger.Log("Navigating to account settings", _logger.CreditClaimerLogFilePath);
 
@@ -140,14 +140,14 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             }
         }
 
-        public void GoToCreditsTab(ChromeDriver driver)
+        public void GoToCreditsTab(IWebDriver driver)
         {
             if (driver.Url is "https://pixai.art") throw new InvalidPageContentException("Url should not be the url of the home page");
 
             NavigateToUrl(driver, driver.Url + "/credits");
         }
 
-        public void ClickDropdownMenu(ChromeDriver driver)
+        public void ClickDropdownMenu(IWebDriver driver)
         {
 
             if (driver.Url is "https://pixai.art/login" or "https://pixai.art/sign-up") throw new InvalidPageContentException("Url should not be the url of the login page or registration page");
@@ -165,13 +165,13 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         }
 
-        public void GoToMyWorkTab(ChromeDriver driver)
+        public void GoToMyWorkTab(IWebDriver driver)
         {
             if (driver.Url is "https://pixai.art") throw new InvalidPageContentException("Url should not be the url of the home page");
             NavigateToUrl(driver, driver.Url + "/artwork");
         }
 
-        public void NavigateToUrl(ChromeDriver driver, string url)
+        public void NavigateToUrl(IWebDriver driver, string url)
         {
             driver.Navigate().GoToUrl(url);
 
