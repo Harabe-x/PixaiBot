@@ -19,12 +19,15 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private List<string> _domainList;
 
-        public TempMailApiManager(ILogger logger)
+        public TempMailApiManager(ILogger logger, ITcpServerConnector tcpServerConnector)
         {
             _httpClient = new HttpClient();
+            _tcpServerConnector = tcpServerConnector;
             _logger = logger;
 
         }
+
+        private readonly ITcpServerConnector _tcpServerConnector;
 
         private readonly ILogger _logger;
 
@@ -50,6 +53,8 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         public IEnumerable<string> GetDomains(string tempMailApiKey)
         {
+            _tcpServerConnector.SendMessage("cGetting domains from temp mail api");
+
             _logger.Log("Getting domains from temp mail api", _logger.CreditClaimerLogFilePath);
             var requestMessage = new HttpRequestMessage
             {
@@ -66,18 +71,24 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
             if (!response.IsSuccessStatusCode)
             {
+                _tcpServerConnector.SendMessage("rInvalid api key");
                 _logger.Log("Invalid api key", _logger.CreditClaimerLogFilePath);
 
                 RequestFailed?.Invoke(this, response.ReasonPhrase);
                 return null;
             }
+            _tcpServerConnector.SendMessage("gReceived domain list successfully ");
 
-            var responseText = response.Content.ReadAsStringAsync().Result; 
+            var responseText = response.Content.ReadAsStringAsync().Result;
             return _domainList = JsonSerializer.Deserialize<List<string>>(responseText);
         }
 
         public string GetVerificationLink(string email, string apiKey)
         {
+
+            _tcpServerConnector.SendMessage("cGetting Verification link");
+
+
             _logger.Log("Getting verification link", _logger.CreditClaimerLogFilePath);
             var hashedEmail = HashEmail(email);
 
@@ -96,18 +107,25 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
             if (!response.IsSuccessStatusCode)
             {
-                
+                _tcpServerConnector.SendMessage("rGetting verification link failed ");
+
                 RequestFailed?.Invoke(this, "An error occurred,");
                 return string.Empty;
             }
 
             var responseText = response.Content.ReadAsStringAsync().Result;
 
+            _tcpServerConnector.SendMessage("cReceived text from temp mail api");
+
+
             return GetUrlFromString(responseText);
         }
 
         private string HashEmail(string email)
         {
+            _tcpServerConnector.SendMessage("cHashed email for request");
+
+
             using var md5 = MD5.Create();
 
             var inputBytes = Encoding.UTF8.GetBytes(email);

@@ -18,8 +18,11 @@ public class BotStatisticsManager : IBotStatisticsManager
 
     public event EventHandler? StatisticsChanged;
 
-    public BotStatisticsManager(ILogger logger)
+    private readonly ITcpServerConnector _tcpServerConnector;
+
+    public BotStatisticsManager(ILogger logger,ITcpServerConnector tcpServerConnector )
     {
+        _tcpServerConnector = tcpServerConnector;
         _logger = logger;
         AccountsStatisticsFilePath = InitialConfiguration.StatisticsFilePath;
       _botStatistics =  JsonReader.ReadStatisticsFile(AccountsStatisticsFilePath);
@@ -88,6 +91,7 @@ public class BotStatisticsManager : IBotStatisticsManager
     public void IncreaseAccountsCount(int number)
     {
         AccountsNumber += number;
+        _tcpServerConnector.SendMessage("cIncreasing account count");
 
         _logger.Log("Accounts count updated", _logger.ApplicationLogFilePath);
     }
@@ -99,6 +103,7 @@ public class BotStatisticsManager : IBotStatisticsManager
     /// <param name="creditClaimDate"></param>
     public void SetClaimDateTime(DateTime creditClaimDate)
     {
+        _tcpServerConnector.SendMessage("cSetting Last Claim Date");
         LastCreditClaimDateTime = creditClaimDate ;
     }
 
@@ -108,8 +113,8 @@ public class BotStatisticsManager : IBotStatisticsManager
     public void SaveStatistics()
     {
         JsonWriter.WriteJson(_botStatistics, AccountsStatisticsFilePath);
-        
-        _logger.Log("Writed statistics file ", _logger.ApplicationLogFilePath);
+        _tcpServerConnector.SendMessage("gWritten statistics file");
+        _logger.Log("Written statistics file ", _logger.ApplicationLogFilePath);
     }
 
     public void ResetNumberOfAccounts()

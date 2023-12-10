@@ -21,7 +21,7 @@ public class DashboardControlViewModel : BaseViewModel
 
     public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
         IBotStatisticsManager botStatisticsManager, ILogger logger, IConfigManager configManager,
-        IToastNotificationSender toastNotificationSender)
+        IToastNotificationSender toastNotificationSender,ITcpServerConnector tcpServerConnector)
     {
         _configManager = configManager;
 
@@ -30,6 +30,8 @@ public class DashboardControlViewModel : BaseViewModel
         _botStatisticsManager = botStatisticsManager;
 
         _creditClaimer = creditClaimer;
+
+        _tcpServerConnector = tcpServerConnector;
 
         _accountsManager = accountsManager;
 
@@ -58,6 +60,7 @@ public class DashboardControlViewModel : BaseViewModel
 
     private readonly SolidColorBrush _regularBrush; 
 
+    private readonly ITcpServerConnector _tcpServerConnector;
 
     private CancellationTokenSource _cancellationTokenSource;
 
@@ -194,6 +197,8 @@ public class DashboardControlViewModel : BaseViewModel
     {
         if (_isClaimingCredits)
         {
+            _tcpServerConnector.SendMessage("rCredits Claiming Process Stopped");
+
             ClaimCreditButtonText = "Claim Credits"; 
             
             _isClaimingCredits = false;
@@ -211,6 +216,8 @@ public class DashboardControlViewModel : BaseViewModel
 
         ClaimCreditButtonBrushColor = _redBrush;
 
+        _tcpServerConnector.SendMessage("cCredits Claiming Process Started");
+
 
         _isClaimingCredits = true;
 
@@ -226,6 +233,9 @@ public class DashboardControlViewModel : BaseViewModel
         LastCreditClaimDateTime = DateTime.Now.ToString();
 
         ClaimCreditButtonText = "Claim Credits";
+
+        _tcpServerConnector.SendMessage("gCredits Claimed");
+
 
         ClaimCreditButtonBrushColor = _regularBrush;
 

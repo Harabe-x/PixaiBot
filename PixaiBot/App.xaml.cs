@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Threading;
 using PixaiBot.Bussines_Logic;
+using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Bussines_Logic.Data_Management;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore;
@@ -42,15 +43,16 @@ public partial class App : Application
         services.AddSingleton<IConfigManager, ConfigManager>();
         services.AddSingleton<IAccountLoginChecker, AccountLoginChecker>();
         services.AddSingleton<IBotStatisticsManager, BotStatisticsManager>();
-        services.AddSingleton<ICreditClaimer, CreditClaimer>();
+        services.AddSingleton<ICreditClaimer, CreditClaimerV2>();
         services.AddSingleton<ILogger, Logger>();
         services.AddSingleton<ILoginCredentialsMaker,LoginCredentialsMaker>();
         services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();
         services.AddSingleton<IProxyManager, ProxyManager>();
         services.AddSingleton<ITempMailApiManager, TempMailApiManager>();
-        services.AddSingleton<IAccountCreator, AccountCreator>();
+        services.AddSingleton<IAccountCreator, AccountCreatorV2>();
         services.AddSingleton<IPixaiDataReader, PixaiDataReader>();
         services.AddSingleton<IPixaiNavigation, PixaiNavigation>();
+        services.AddSingleton<ITcpServerConnector, TcpServerConnector>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();

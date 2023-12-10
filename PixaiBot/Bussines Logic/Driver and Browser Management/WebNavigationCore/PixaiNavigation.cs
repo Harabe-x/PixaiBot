@@ -13,169 +13,178 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 {
     internal class PixaiNavigation : IPixaiNavigation
     {
+        private const string LoginPageUrl = "https://pixai.art/login";
+
+        private const string RegistrationPageUrl = "https://pixai.art/sign-up";
+
+        private const string HomePageUrl = "https://pixai.art/";
+
         private const int PageLoadWaitTime = 1000;
 
-        public PixaiNavigation(ILogger logger)
+        public PixaiNavigation(ILogger logger,ITcpServerConnector tcpServerConnector)
         {
+            _tcpServerConnector = tcpServerConnector;
             _logger = logger;
         }
 
         private readonly ILogger _logger;
+
+        private readonly ITcpServerConnector _tcpServerConnector;
+
+        public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext)
+        {
+            _tcpServerConnector.SendMessage("yFinding button to resend verification link");
+
+            ClickElement(searchContext, "*:nth-child(3) *:nth-child(2) > *:nth-child(4)");
+        }
 
         public void GoBack(IWebDriver driver)
         {
             driver.Navigate().Back();
         }
 
-        public void GoToRegistrationPage(ISearchContext driver)
+        public void NavigateRegistrationPage(ISearchContext driver)
         {
             _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-
-            try
-            {
-                IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName("button"));
-                buttons.FirstOrDefault(x => x.Text == "Log in with email")?.Click();
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
+            _tcpServerConnector.SendMessage("yFinding button to navigate to registration form");
+            ClickElementWithSpecifiedText(driver, "button", "Register");
         }
 
         public void GoToLoginPage(ISearchContext driver)
         {
             _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-
-            try
-            {
-                IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName("button"));
-                buttons.FirstOrDefault(x => x.Text == "Log in with email")?.Click();
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
+            _tcpServerConnector.SendMessage("yFinding button to navigate to registration form");
+            ClickElementWithSpecifiedText(driver,"button", "Log in with email");
         }
 
-        public void SendCredentialsToTextBoxes(ISearchContext driver, string email, string password)
+        public void SendLoginCredentialsToTextBoxes(ISearchContext driver, string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-                throw new ArgumentException("login credentials can't be null");
+                throw new ArgumentException("Login credentials can't be null or empty");
 
             _logger.Log("Sending email & password to textboxes ", _logger.CreditClaimerLogFilePath);
-            try
-            {
-                var emailTextBox = driver.FindElement(By.CssSelector("* > * > *:nth-child(2) > * > *:nth-child(1) > * > *"));
-                emailTextBox.Click();
-                emailTextBox.SendKeys(email);
 
-                var passwordTextBox = driver.FindElement(By.CssSelector("*:nth-child(2) > * > *:nth-child(2) > * > *"));
-                passwordTextBox.Click();
-                passwordTextBox.SendKeys(password);
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
+            _tcpServerConnector.SendMessage("ySending email & password to textboxes");
 
+            SendKeysToElement(driver, "* > * > *:nth-child(2) > * > *:nth-child(1) > * > *",email);
+
+            SendKeysToElement(driver, "*:nth-child(2) > * > *:nth-child(2) > * > *",password);
         }
 
         public void ClickOnRegisterButton(ISearchContext driver)
         {
-            try
-            {
-                driver.FindElement(By.CssSelector("#\\:r2\\:")).Click();
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
+            _logger.Log("Clicking register button", _logger.CreditClaimerLogFilePath);
 
-            Thread.Sleep(TimeSpan.FromMilliseconds(PageLoadWaitTime));
+            _tcpServerConnector.SendMessage("yClicking register button");
 
-            _logger.Log("Login button clicked", _logger.CreditClaimerLogFilePath);
+            ClickElementWithSpecifiedText(driver, "button", "Sign Up");
+
         }
 
         public void ClickOnLoginButton(ISearchContext driver)
         {
-            try
-            {
-                driver.FindElement(By.CssSelector("#\\:r2\\:")).Click();
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
+            _logger.Log("Clicking login button ", _logger.CreditClaimerLogFilePath);
 
-            Thread.Sleep(TimeSpan.FromMilliseconds(PageLoadWaitTime));
+            _tcpServerConnector.SendMessage("yClicking login button");
 
-            _logger.Log("Login button clicked", _logger.CreditClaimerLogFilePath);
+            ClickElementWithSpecifiedText(driver,"button","Login");
+
         }
 
-        public void GoToProfile(ISearchContext driver)
+        public void NavigateToProfile(ISearchContext driver)
         {
-            try
-            {
-                var profileButton = driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(1)"));
-                profileButton?.Click();
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
+            _logger.Log("Navigating to profile", _logger.CreditClaimerLogFilePath);
+
+            _tcpServerConnector.SendMessage("yNavigating to profile");
+         
+            ClickElement(driver, ".MuiMenuItem-root:nth-child(1)");
         }
 
-        public void GoToProfileSettings(ISearchContext driver)
+        public void NavigateToProfileSettings(ISearchContext driver)
         {
             _logger.Log("Navigating to account settings", _logger.CreditClaimerLogFilePath);
 
-            try
-            {
-                var profileButton = driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(3)"));
-                profileButton?.Click();
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
+            _tcpServerConnector.SendMessage("yNavigating to account settings");
+            
+            ClickElement(driver,".MuiMenuItem-root:nth-child(3)");
         }
 
         public void GoToCreditsTab(IWebDriver driver)
         {
-            if (driver.Url is "https://pixai.art") throw new InvalidPageContentException("Url should not be the url of the home page");
-
             NavigateToUrl(driver, driver.Url + "/credits");
         }
 
         public void ClickDropdownMenu(IWebDriver driver)
         {
-
-            if (driver.Url is "https://pixai.art/login" or "https://pixai.art/sign-up") throw new InvalidPageContentException("Url should not be the url of the login page or registration page");
-
-            _logger.Log("Dropdown Menu Opened", _logger.CreditClaimerLogFilePath);
-            try
-            {
-                var dropdownMenuButton = driver.FindElement(By.CssSelector(".shrink-0"));
-                dropdownMenuButton?.Click();
-            }
-            catch (Exception e)
-            {
-                throw new ChromeDriverException("ChromeDriver exception occurred", e);
-            }
-
+            _tcpServerConnector.SendMessage("yClicking dropdown menu");
+            ClickElement(driver, ".shrink-0");
         }
-
-        public void GoToMyWorkTab(IWebDriver driver)
+        public void NavigateToMyWorkTab(IWebDriver driver)
         {
-            if (driver.Url is "https://pixai.art") throw new InvalidPageContentException("Url should not be the url of the home page");
+            _tcpServerConnector.SendMessage("yNavigating to my work tab");
             NavigateToUrl(driver, driver.Url + "/artwork");
         }
 
         public void NavigateToUrl(IWebDriver driver, string url)
         {
             driver.Navigate().GoToUrl(url);
+            _tcpServerConnector.SendMessage($"yNavigating to {url}");
 
             Thread.Sleep(TimeSpan.FromMilliseconds(PageLoadWaitTime));
         }
+
+        public void ClickClaimCreditButton(ISearchContext searchContext)
+        {
+            try
+            {
+                ClickElement(searchContext, ".MuiLoadingButton-root");
+            }
+            catch (ElementClickInterceptedException e)
+            {
+                ClickClaimCreditButton(searchContext);
+            }
+          
+        }
+
+
+        private static void ClickElement(ISearchContext driver, string cssSelector)
+        {
+            try
+            {
+                driver.FindElement(By.CssSelector(cssSelector)).Click();
+            }
+            catch (Exception e)
+            {
+                throw new ChromeDriverException("ChromeDriver exception occurred", e);
+            }
+        }
+
+        private static void ClickElementWithSpecifiedText(ISearchContext driver, string tagName, string text)
+        {
+            try
+            {
+                IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName(tagName));
+                buttons.FirstOrDefault(x => x.Text == text )?.Click();
+            }
+            catch (Exception e)
+            {
+                throw new ChromeDriverException("ChromeDriver exception occurred", e);
+            }
+        }
+
+        private static void SendKeysToElement(ISearchContext driver, string cssSelector, string keys)
+        {
+            try
+            {
+               var element = driver.FindElement(By.CssSelector(cssSelector));
+               element.Click();
+               element.SendKeys(keys);
+            }
+            catch (Exception e)
+            {
+                throw new ChromeDriverException("ChromeDriver exception occurred", e);
+            }
+        }
+
     }
 }

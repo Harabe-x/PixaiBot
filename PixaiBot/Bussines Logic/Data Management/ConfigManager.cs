@@ -19,8 +19,11 @@ public class ConfigManager : IConfigManager
 
     public event EventHandler? ConfigChanged;
 
-
     private bool _shouldStartWithSystem;
+
+    private readonly ITcpServerConnector _tcpServerConnector;
+
+
 
     public bool ShouldStartWithSystem
     {
@@ -73,8 +76,9 @@ public class ConfigManager : IConfigManager
     }
 
 
-    public ConfigManager(ILogger logger)
+    public ConfigManager(ILogger logger, ITcpServerConnector tcpServerConnector)
     {
+        _tcpServerConnector = tcpServerConnector;
         _logger = logger;
         ConfigFilePath = InitialConfiguration.UserConfigPath;
         InitializeData();
@@ -82,14 +86,14 @@ public class ConfigManager : IConfigManager
 
     private UserConfig GetConfig()
     {
-        _logger.Log("Readed Config File", _logger.ApplicationLogFilePath);
+        _logger.Log("Read Config File", _logger.ApplicationLogFilePath);
         return JsonReader.ReadConfigFile(ConfigFilePath);
     }
 
 
     public void SaveConfig(UserConfig config)
     {
-        _logger.Log("Writed Config File", _logger.ApplicationLogFilePath);
+        _logger.Log("Written Config File", _logger.ApplicationLogFilePath);
         JsonWriter.WriteJson(config, ConfigFilePath);
     }
     /// <summary>
@@ -98,6 +102,8 @@ public class ConfigManager : IConfigManager
     /// <param name="flag"></param>
     public void SetStartWithSystemFlag(bool flag)
     {
+        _tcpServerConnector.SendMessage("cSetting Start With System Flag");
+
         ShouldStartWithSystem = flag;
         ConfigChanged?.Invoke(this,EventArgs.Empty);
     }
@@ -107,6 +113,8 @@ public class ConfigManager : IConfigManager
     /// <param name="flag"></param>
     public void SetToastNotificationsFlag(bool flag)
     {
+        _tcpServerConnector.SendMessage("cSetting Send Toast Notifications Flag");
+
         ShouldSendToastNotifications = flag;
         ConfigChanged?.Invoke(this,EventArgs.Empty);
     }
@@ -117,6 +125,7 @@ public class ConfigManager : IConfigManager
     /// <param name="flag"></param>
     public void SetCreditsAutoClaimFlag(bool flag)
     {
+        _tcpServerConnector.SendMessage("cSetting Credits Auto Claim Flag");
         ShouldAutoClaimCredits = flag;
         ConfigChanged?.Invoke(this,EventArgs.Empty);
     }

@@ -10,6 +10,12 @@ namespace PixaiBot.Bussines_Logic;
 
 public static class ChromeDriverFactory
 {
+
+    /// <summary>
+    /// Implicit Wait Time for Chrome Driver
+    /// </summary>
+    private const int MaxWaitTime = 5;
+
     /// <summary>
     /// Creates a ChromeDriver with the needed settings to hide the process.
     /// </summary>
@@ -17,12 +23,20 @@ public static class ChromeDriverFactory
     public static ChromeDriver CreateDriver()
     {
         var options = new ChromeOptions();
+
         options.AddArgument("--window-position=-32000,-32000");
+
         options.Proxy = new Proxy();
+
         var service = ChromeDriverService.CreateDefaultService();
+
         service.HideCommandPromptWindow = true;
 
-        return new ChromeDriver(service, options);
+        var driver = new ChromeDriver(service, options);
+
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
+
+        return driver;
     }
 
 
@@ -34,24 +48,28 @@ public static class ChromeDriverFactory
     public static ChromeDriver CreateDriver(string proxy)
     {
         var options = new ChromeOptions();
-        //options.AddArgument("--window-position=-32000,-32000");
+
+        options.AddArgument("--window-position=-32000,-32000");
 
         var proxyObject = new Proxy()
         {
             HttpProxy = proxy,
             Kind = ProxyKind.Manual,
         };
-        
-        options.Proxy = proxyObject;
 
-        options.AddUserProfilePreference("webrtc.ip_handling_policy", "disable_non_proxied_udp");
+        options.Proxy = proxyObject;
 
         options.AddArgument("--ignore-certificate-errors");
 
         var service = ChromeDriverService.CreateDefaultService();
+
         service.HideCommandPromptWindow = true;
 
-        return new ChromeDriver(service, options);
+        var driver = new ChromeDriver(service, options);
+
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
+
+        return driver;
     }
 
 
@@ -61,8 +79,10 @@ public static class ChromeDriverFactory
     /// <returns></returns>
     public static ChromeDriver CreateDriverForDebug()
     {
-        return new ChromeDriver();
-    }
+        var driver = new ChromeDriver();
 
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
 
+        return driver;
     }
+}

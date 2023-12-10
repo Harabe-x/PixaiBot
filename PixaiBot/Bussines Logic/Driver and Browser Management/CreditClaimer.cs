@@ -1,4 +1,4 @@
-﻿using System;
+﻿        using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -65,7 +65,7 @@ public class CreditClaimer : ICreditClaimer
     /// <param name="toastNotificationSender"></param>
     public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender)
     {
-        _driver = ChromeDriverFactory.CreateDriver();
+        _driver = ChromeDriverFactory.CreateDriverForDebug();
 
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
 
