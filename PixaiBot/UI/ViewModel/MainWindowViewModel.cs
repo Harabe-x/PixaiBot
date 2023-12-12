@@ -30,12 +30,13 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     public ICommand HideApplicationCommand { get; }
 
-    public MainWindowViewModel(INavigationService navService, ILogger logger,IToastNotificationSender toastNotificationASender,IConfigManager configManager)
+    public MainWindowViewModel(ITcpServerConnector tcpServerConnector,INavigationService navService, ILogger logger,IToastNotificationSender toastNotificationASender,IConfigManager configManager)
     {
         _configManager = configManager;
         _toastNotificationSender = toastNotificationASender;
         _logger = logger;
         Navigation = navService;
+        _tcpServerConnector = tcpServerConnector;
         NavigateToAccountCreatorCommand = new RelayCommand((obj) => NavigateToAccountCreator());
         NavigateToLogAccountInfoCommand = new RelayCommand((obj) => NavigateToLogAccountInfo());
         NavigateToDashboardCommand = new RelayCommand((obj) => NavigateToDashboard());
@@ -52,6 +53,8 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     private readonly IConfigManager _configManager;
 
+    private readonly ITcpServerConnector _tcpServerConnector;
+
     private INavigationService _navigation;
 
     public INavigationService Navigation
@@ -66,18 +69,23 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     private void NavigateToAccountsList()
     {
+        _tcpServerConnector.SendMessage("mNavigating to Account list");
         Navigation.NavigateTo<AccountListControlViewModel>();
         _logger.Log("Navigated to Accounts List control", _logger.ApplicationLogFilePath);
     }
 
     private void NavigateToLogAccountInfo()
     {
+        _tcpServerConnector.SendMessage("mNavigating to Account info logger");
+
         Navigation.NavigateTo<LogAccountInfoControlViewModel>();
         _logger.Log("Navigated to Accounts Logger control",_logger.ApplicationLogFilePath);
     }
 
     private void NavigateToAccountCreator()
     {
+        _tcpServerConnector.SendMessage("mNavigating to Account Creator");
+
         Navigation.NavigateTo<AccountCreatorControlViewModel>();
         _logger.Log("Navigated to Account Creator control", _logger.ApplicationLogFilePath);
     }
@@ -85,23 +93,31 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     private void NavigateToDashboard()
     {
+        _tcpServerConnector.SendMessage("mNavigating to Dashboard");
+
         Navigation.NavigateTo<DashboardControlViewModel>();
         _logger.Log("Navigated to Dashboard control", _logger.ApplicationLogFilePath);
     }
 
     private void NavigateToSettings()
     {
+        _tcpServerConnector.SendMessage("m Navigating to Settings");
+
         Navigation.NavigateTo<SettingsControlViewModel>();
         _logger.Log("Navigated to Settings control", _logger.ApplicationLogFilePath);
     }
 
     private void HideApplication()
     {
-        if(_configManager.ShouldSendToastNotifications)
+
+        if (_configManager.ShouldSendToastNotifications)
             _toastNotificationSender.SendNotification("PixaiBot","Application minimized to system tray",NotificationType.Information);
 
         HideToTray?.Invoke();
         _logger.Log("Hided application to tray", _logger.ApplicationLogFilePath);
+
+        _tcpServerConnector.SendMessage("c Application Hided");
+
     }
 
     private void ExitApplication()

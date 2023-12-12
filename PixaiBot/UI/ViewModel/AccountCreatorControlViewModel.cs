@@ -21,12 +21,13 @@ namespace PixaiBot.UI.ViewModel
         public ICommand StartAccountCreationCommand { get; }
 
 
-        public AccountCreatorControlViewModel(IProxyManager proxyManager,ILogger logger,IDialogService dialogService,IAccountsManager accountsManager,IToastNotificationSender toastNotificationSender,IAccountCreator accountCreator,IConfigManager configManager)
+        public AccountCreatorControlViewModel(ITcpServerConnector tcpServerConnector,IProxyManager proxyManager,ILogger logger,IDialogService dialogService,IAccountsManager accountsManager,IToastNotificationSender toastNotificationSender,IAccountCreator accountCreator,IConfigManager configManager)
         {
             _configManager = configManager;
             _accountCreator = accountCreator;
             _toastNotificationSender = toastNotificationSender;
             _logger = logger;
+            _tcpServerConnector = tcpServerConnector; 
             _dialogService = dialogService;
             _accountsManager = accountsManager;
             _proxyManager = proxyManager;
@@ -53,6 +54,8 @@ namespace PixaiBot.UI.ViewModel
         private readonly IToastNotificationSender _toastNotificationSender;
 
         private readonly IConfigManager _configManager;
+
+        private readonly ITcpServerConnector _tcpServerConnector;
 
 
         private string _accountAmount;
@@ -120,6 +123,8 @@ namespace PixaiBot.UI.ViewModel
         private void AddProxy()
         {
 
+            _tcpServerConnector.SendMessage("mUser Adding proxy ");
+
             var dialog = new OpenFileDialog()
             {
                 Title = "Select File:",
@@ -138,17 +143,22 @@ namespace PixaiBot.UI.ViewModel
 
         private void OnAccountCreated(object? sender, UserAccount e)
         {
+            _tcpServerConnector.SendMessage($"mAccount Created: {e.Email}:{e.Password}");
             _accountsManager.AddAccount(e);
             if (_configManager.ShouldSendToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot", $"Account Created", NotificationType.Success); }
 
         }
         private void OnErrorOccurred(object? sender, string e)
         {
+            _tcpServerConnector.SendMessage($"rError Occurred: {e}");
             if(_configManager.ShouldSendToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot",e,NotificationType.Error); }
         }
 
         private void StartAccountCreation()
         {
+
+            _tcpServerConnector.SendMessage("mUser Starting account creation");
+
             if (!int.TryParse(AccountAmount, out var amount) || amount > 125) return;
 
             var task = new Task( () => { _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail); });

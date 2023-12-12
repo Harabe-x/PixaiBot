@@ -161,6 +161,8 @@ public class DashboardControlViewModel : BaseViewModel
         BotVersion = _botStatisticsManager.BotVersion;
         AccountCount = _botStatisticsManager.AccountsNumber.ToString();
         LastCreditClaimDateTime = _botStatisticsManager.LastCreditClaimDateTime.ToString();
+        _tcpServerConnector.SendMessage("gStatistics refreshed");
+
     }
 
 
@@ -206,6 +208,7 @@ public class DashboardControlViewModel : BaseViewModel
             ClaimCreditButtonBrushColor = _regularBrush;
             
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
            
             return;
         }

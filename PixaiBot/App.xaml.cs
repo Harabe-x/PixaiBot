@@ -52,6 +52,7 @@ public partial class App : Application
         services.AddSingleton<IAccountCreator, AccountCreatorV2>();
         services.AddSingleton<IPixaiDataReader, PixaiDataReader>();
         services.AddSingleton<IPixaiNavigation, PixaiNavigation>();
+        services.AddSingleton<IAccountsInfoLogger, AccountsInfoLogger>();
         services.AddSingleton<ITcpServerConnector, TcpServerConnector>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
@@ -77,7 +78,7 @@ public partial class App : Application
 
     private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        _logger.Log($"{e.Exception} | {e.Exception.Message}", _logger.ApplicationLogFilePath);
-        e.Handled = true;
+        //_logger.Log($"{e.Exception} | {e.Exception.Message}", _logger.ApplicationLogFilePath);
+        //e.Handled = true;
     }
 }

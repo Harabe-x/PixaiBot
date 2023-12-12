@@ -155,7 +155,7 @@ public class AccountsManager : IAccountsManager
     {
         if (newEmail == null || newPassword == null) return;
 
-        if(!_dataValidator.IsEmailValid(newEmail) && !_dataValidator.IsPasswordValid(newPassword)) return;
+        if(!_dataValidator.IsEmailValid(newEmail) || !_dataValidator.IsPasswordValid(newPassword)) return;
 
         var newAccount = new UserAccount()
         {

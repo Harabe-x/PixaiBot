@@ -46,7 +46,7 @@ public class SettingsControlViewModel : BaseViewModel
         StartWithSystemCommand = new RelayCommand((obj) => StartWithSystem());
         UpdateToastNotificationPreferenceCommand = new RelayCommand((obj) => UpdateToastNotificationPreference());
         _configManager.ConfigChanged += UserChangedSettings;
-        InitializeUserConfig();
+        InitializeUserSettings();
     }
 
     private readonly IDialogService _dialogService;
@@ -111,7 +111,7 @@ public class SettingsControlViewModel : BaseViewModel
     {
         _toastNotificationSender.SendNotification("PixaiBot",
             EnableToastNotifications
-                ? "Toast Notifications enabled,Now you will recive notifcations"
+                ? "Toast Notifications enabled,Now you will receive notifications"
                 : "Toast Notifications disabled,Now you won't receive notifications", NotificationType.Information);
     }
 
@@ -147,7 +147,7 @@ public class SettingsControlViewModel : BaseViewModel
     }
 
 
-    private void InitializeUserConfig()
+    private void InitializeUserSettings()
     {
         ShouldStartWithSystem = _configManager.ShouldStartWithSystem;
         EnableToastNotifications = _configManager.ShouldSendToastNotifications;

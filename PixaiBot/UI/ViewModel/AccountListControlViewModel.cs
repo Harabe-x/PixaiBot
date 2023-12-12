@@ -19,18 +19,21 @@ namespace PixaiBot.UI.ViewModel
 
         public ICommand RemoveAccountCommand { get; }
 
-        public AccountListControlViewModel(IAccountsManager accountsManager,ILogger logger,IDialogService dialogService,IDataValidator DataValidator)
+        public AccountListControlViewModel(ITcpServerConnector tcpServerConnector,IAccountsManager accountsManager,ILogger logger,IDialogService dialogService,IDataValidator DataValidator)
         {
             _dataValidator = DataValidator;
             _accountsManager = accountsManager;
             _dialogService = dialogService;
-            _logger = logger; 
+            _logger = logger;
+            _tcpServerConnector = tcpServerConnector; 
             RemoveAccountCommand = new RelayCommand((obj) => RemoveAccount());
             EditAccountCommand = new RelayCommand((obj) => EditAccount());
             UserAccounts = new ObservableCollection<UserAccount>(_accountsManager.GetAllAccounts());
             _accountsManager.AccountsListChanged += AccountsManagerOnAccountsListChanged;
             
         }
+
+        private readonly ITcpServerConnector _tcpServerConnector; 
 
         private readonly ILogger _logger;
 
@@ -71,7 +74,7 @@ namespace PixaiBot.UI.ViewModel
 
 
             _logger.Log("Remove account command called", _logger.ApplicationLogFilePath);
-
+            _tcpServerConnector.SendMessage("gAccount Removed");
             _accountsManager.RemoveAccount(SelectedAccount);
         }
 
@@ -82,6 +85,7 @@ namespace PixaiBot.UI.ViewModel
             if (SelectedAccount == null) return;
 
             if (string.IsNullOrEmpty(SelectedAccount.Email) || string.IsNullOrEmpty(SelectedAccount.Password)) return;
+            _tcpServerConnector.SendMessage("mUser editing  account info");
 
             _dialogService.ShowDialog(new EditAccountWindowView(),new EditAccountWindowViewModel(_accountsManager,_logger,SelectedAccount,_dataValidator),true);
 
@@ -92,6 +96,8 @@ namespace PixaiBot.UI.ViewModel
         {
             UserAccounts = new ObservableCollection<UserAccount>(_accountsManager.GetAllAccounts());
             _logger.Log("Accounts list refreshed",_logger.ApplicationLogFilePath);
+            _tcpServerConnector.SendMessage("c Accounts list updated");
+
         }
 
     }

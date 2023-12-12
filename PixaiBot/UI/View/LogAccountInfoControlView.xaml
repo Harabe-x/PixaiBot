@@ -4,21 +4,55 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PixaiBot.UI.View"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Background="#ffffff"
              d:DesignHeight="700" d:DesignWidth="400">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <StackPanel>
-                <TextBlock Style="{StaticResource TitleText}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Account info logger" />
-                <TextBlock Style="{StaticResource SecondaryText}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Here you can log account to text file " />
-            </StackPanel>
+        <StackPanel Grid.Row="0">
+            <TextBlock FontWeight="Regular" Foreground="#2d3436" Style="{StaticResource TitleText}"
+                       HorizontalAlignment="Center" Text="Account Info Logger" VerticalAlignment="Center" />
+            <TextBlock FontWeight="Regular" Style="{StaticResource SecondaryText}" HorizontalAlignment="Center"
+                       Text="Here you can log your accounts info to text file" VerticalAlignment="Center" />
+        </StackPanel>
 
+
+        <Grid Grid.Row="1">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2">
+                <TextBlock Style="{StaticResource BoldPurpleText}" Text="Click Button Below To Start The Process"
+                           HorizontalAlignment="Center" FontSize="18" />
+                <TextBlock Style="{StaticResource SecondaryText}" Text="You will need access to the internet ! "
+                           HorizontalAlignment="Center" />
+                <Button Command="{Binding ClaimCreditsCommand}" Style="{StaticResource PurpleButton}" Width="200"
+                        Margin="0 30 0 0" Content="{Binding ClaimCreditButtonText}"  Background="{Binding ClaimCreditButtonBrushColor}" />
+                <TextBlock Style="{StaticResource SecondaryText}" Foreground="#2c3e50"
+                           Text="{Binding CreditClaimerInfo}"
+                           FontWeight="Light" HorizontalAlignment="Center" />
+            </StackPanel>
         </Grid>
-            
+
+
+        <Grid Grid.Row="2" Margin="0 -50 0 0">
+            <StackPanel HorizontalAlignment="Center">
+                <Border Style="{StaticResource BorderStyle}">
+                    <Grid>
+                        <TextBlock Text="Bot Details :" Style="{StaticResource BoldPurpleText2}" Margin="10" />
+                        <StackPanel VerticalAlignment="Center">
+                            <CheckBox Content="  Log Email Verification Status" Style="{StaticResource FormCheckBox}" Margin="10"/>
+                            <CheckBox Content="  Log Following Count" Style="{StaticResource FormCheckBox}" Margin="10"/>
+                            <CheckBox Content="  Log Followers Count" Style="{StaticResource FormCheckBox}" Margin="10"/>
+                            <CheckBox Content="  Log Username" Style="{StaticResource FormCheckBox}" Margin="12.5"/>
+                            <CheckBox Content="  Log Account Id" Style="{StaticResource FormCheckBox}" Margin="10"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+
     </Grid>
 </UserControl>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
@@ -20,7 +21,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             _loginCredentialsMaker = loginCredentialsMaker;
             _tcpServerConnector = tcpServerConnector;
             _pixaiNavigation = pixaiNavigation;
-            _tcpServerConnector = tcpServerConnector;
         }
 
         private bool _shouldStop;
@@ -59,7 +59,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
                 if (_shouldStop) return;
 
-                using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriverForDebug();
+                using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriver();
               
                 _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
@@ -69,6 +69,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 }
                 catch (Exception e)
                 {
+                    _tcpServerConnector.SendMessage("rChrome drive threw exception\n" + e.Message);
                     _logger.Log("Chrome drive threw exception\n" + e.Message, _logger.CreditClaimerLogFilePath);
                     ErrorOccurred?.Invoke(this, "Chrome drive Exception occurred");
                     _shouldStop = true;
@@ -104,16 +105,18 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 return;
             }
 
+
+            //In some cases, after pressing the button to go to account settings, the user remains on the home page, so the code is executed until the url is correct.
             while (driver.Url != "https://pixai.art/profile/edit")
             {
                 _pixaiNavigation.ClickDropdownMenu(driver);
                 _pixaiNavigation.NavigateToProfileSettings(driver);
             }
 
-            _pixaiNavigation.NavigateToProfileSettings(driver);
-            // Clicks the Resend button 5 times to ensure that button was clicked 
-             _pixaiNavigation.ClickResendEmailVerificationLinkButton(driver);
+            _pixaiNavigation.NavigateToProfileSettings(driver); 
+            _pixaiNavigation.ClickResendEmailVerificationLinkButton(driver);
 
+          
 
             VerifyEmail(userAccount,driver,tempMailApiKey);
 
@@ -122,11 +125,25 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
         private void VerifyEmail(UserAccount userAccount, ChromeDriver driver, string tempMailApiKey)
         {
             var verificationLink = string.Empty;
-            while (string.IsNullOrEmpty(verificationLink))
+            const int maxAttempts = 10; 
+            var attemptCount = 0;
+
+            while (string.IsNullOrEmpty(verificationLink) && attemptCount < maxAttempts)
             {
                 verificationLink = _tempMailApiManager.GetVerificationLink(userAccount.Email, tempMailApiKey);
-                Thread.Sleep(TimeSpan.FromSeconds(5));
+                if (!string.IsNullOrEmpty(verificationLink)) continue;
+                Thread.Sleep(TimeSpan.FromSeconds(5)); 
+                attemptCount++;
             }
+
+            if (string.IsNullOrEmpty(verificationLink))
+            {
+                _logger.Log("Email verification link not found", _logger.ApplicationLogFilePath);
+                ErrorOccurred?.Invoke(this, "Email verification link not found after maximum attempts.");
+                _tcpServerConnector.SendMessage("rEmail verification link not found after maximum attempts.");
+                return;
+            }
+           
             driver.Navigate().GoToUrl(verificationLink);
             
             Thread.Sleep(TimeSpan.FromSeconds(2.5));

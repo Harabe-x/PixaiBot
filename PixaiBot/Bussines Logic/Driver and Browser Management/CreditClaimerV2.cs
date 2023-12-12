@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Notification.Wpf;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
@@ -31,14 +32,15 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private readonly IPixaiNavigation _pixaiNavigation;
 
-        public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender)
+        public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null)
         {
 
 
-            using var driver = ChromeDriverFactory.CreateDriverForDebug();
+            using var driver = ChromeDriverFactory.CreateDriver();
 
             _logger.Log("=====Launched Chrome Driver=====",_logger.CreditClaimerLogFilePath);
 
+            toastNotificationSender?.SendNotification("PixaiBot", "Launched Chrome Driver",NotificationType.Success);
 
             _tcpServerConnector.SendMessage("gLaunched Chrome Driver");
 
