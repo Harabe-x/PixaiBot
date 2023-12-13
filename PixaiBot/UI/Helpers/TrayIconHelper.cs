@@ -34,22 +34,21 @@ public class TrayIconHelper
                 if (window.DataContext is ITrayIconHelper trayIconHelper)
                     trayIconHelper.HideToTray += () =>
                     {
-                        if (trayIconHelper.CanHideToTray())
-                        {
-                            window.Hide();
+                        if (!trayIconHelper.CanHideToTray()) return;
+                        
+                        window.Hide();
 
-                            var notifyIcon = new NotifyIcon()
-                            {
-                                Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
-                                Visible = true,
-                                Text = "Pixai Auto Claimer"
-                            };
-                            notifyIcon.Click += (s, e) =>
-                            {
-                                window.Show();
-                                notifyIcon.Visible = false;
-                            };
-                        }
+                        var notifyIcon = new NotifyIcon()
+                        {
+                            Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
+                            Visible = true,
+                            Text = "Pixai Auto Claimer"
+                        };
+                        notifyIcon.Click += (s, e) =>
+                        {
+                            window.Show();
+                            notifyIcon.Visible = false;
+                        };
                     };
             };
     }

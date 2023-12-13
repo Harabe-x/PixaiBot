@@ -14,6 +14,10 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
+
+//TODO: Refactor      
+
+
 public class AccountLoginChecker : IAccountLoginChecker
 {
     private ChromeDriver? _driver;

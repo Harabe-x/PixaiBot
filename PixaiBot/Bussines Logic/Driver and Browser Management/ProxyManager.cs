@@ -31,8 +31,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         public string GetRandomProxy()
         {
-            if (_proxyList.Count == 0) return "Proxy list is empty";
-            return _proxyList[_random.Next(0, _proxyList.Count)];
+            return _proxyList.Count == 0 ? "Proxy list is empty" : _proxyList[_random.Next(0, _proxyList.Count)];
         }
 
         public void ReadProxyFile(string filePath)

@@ -11,6 +11,8 @@ using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 {
+    //TODO: Refactor
+
     public class TempMailApiManager : ITempMailApiManager
     {
         public event EventHandler<string> RequestFailed;

@@ -46,10 +46,8 @@ public class AccountsManager : IAccountsManager
         if (!File.Exists(AccountsFilePath))
         {
         
-            var accountsList = new List<UserAccount>();
-            
-            accountsList.Add(account);
-            
+            var accountsList = new List<UserAccount> { account };
+
             JsonWriter.WriteJson(accountsList, AccountsFilePath);
             
             _botStatisticsManager.IncreaseAccountsCount(1);

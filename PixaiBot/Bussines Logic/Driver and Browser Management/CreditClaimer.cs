@@ -16,6 +16,9 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
+//TODO: Safely remove this class    
+
+
 public class CreditClaimer : ICreditClaimer
 {
     private ChromeDriver? _driver;

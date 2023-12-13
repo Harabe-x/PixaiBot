@@ -13,6 +13,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 {
+
+    //TODO: Safely remove this class    
+
     internal class AccountCreator : IAccountCreator
     {
         private bool _shouldStop;

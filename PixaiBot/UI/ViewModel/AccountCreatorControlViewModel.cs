@@ -156,7 +156,6 @@ namespace PixaiBot.UI.ViewModel
 
         private void StartAccountCreation()
         {
-
             _tcpServerConnector.SendMessage("mUser Starting account creation");
 
             if (!int.TryParse(AccountAmount, out var amount) || amount > 125) return;

@@ -8,6 +8,9 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
+
+//TODO: Refactor    
+
 public class BotStatisticsManager : IBotStatisticsManager
 {
     private string AccountsStatisticsFilePath { get; }

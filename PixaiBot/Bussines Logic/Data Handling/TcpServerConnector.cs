@@ -8,6 +8,7 @@ using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.Bussines_Logic.Data_Handling
 {
+    //TODO: Safely remove this class    
     internal class TcpServerConnector : ITcpServerConnector
     {
         public void SendMessage(string message)

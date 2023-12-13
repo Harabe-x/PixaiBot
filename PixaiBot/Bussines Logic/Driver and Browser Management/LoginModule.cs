@@ -17,6 +17,8 @@ public static class LoginModule
 
     private const int StartWaitTime = 1000;
 
+    //TODO: Safely remove this class    
+
 
     /// <summary>
     /// Logs user to pixai.art

@@ -21,7 +21,7 @@ public class DashboardControlViewModel : BaseViewModel
 
     public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
         IBotStatisticsManager botStatisticsManager, ILogger logger, IConfigManager configManager,
-        IToastNotificationSender toastNotificationSender,ITcpServerConnector tcpServerConnector)
+        IToastNotificationSender toastNotificationSender, ITcpServerConnector tcpServerConnector)
     {
         _configManager = configManager;
 
@@ -46,19 +46,19 @@ public class DashboardControlViewModel : BaseViewModel
         StatisticsRefreshed(null, EventArgs.Empty);
 
         if (_configManager.ShouldAutoClaimCredits) StartCreditsAutoClaim();
-        
-       _regularBrush =  new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8964ff"));
 
-       _redBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
+        _regularBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8964ff"));
 
-       ClaimCreditButtonBrushColor = _regularBrush;
-        
+        _redBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
+
+        ClaimCreditButtonBrushColor = _regularBrush;
+
         ClaimCreditButtonText = "Claim Credits";
     }
 
     private readonly SolidColorBrush _redBrush;
 
-    private readonly SolidColorBrush _regularBrush; 
+    private readonly SolidColorBrush _regularBrush;
 
     private readonly ITcpServerConnector _tcpServerConnector;
 
@@ -201,19 +201,20 @@ public class DashboardControlViewModel : BaseViewModel
         {
             _tcpServerConnector.SendMessage("rCredits Claiming Process Stopped");
 
-            ClaimCreditButtonText = "Claim Credits"; 
-            
+            ClaimCreditButtonText = "Claim Credits";
+
             _isClaimingCredits = false;
-            
+
             ClaimCreditButtonBrushColor = _regularBrush;
-            
+
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
-           
+
             return;
         }
 
         _cancellationTokenSource = new CancellationTokenSource();
+
 
         ClaimCreditButtonText = "Stop Claiming";
 

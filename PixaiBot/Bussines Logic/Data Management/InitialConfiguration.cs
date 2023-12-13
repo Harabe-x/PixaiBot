@@ -10,6 +10,8 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
+
+//TODO: Refactor      
 public static class InitialConfiguration
 {
     /// <summary>

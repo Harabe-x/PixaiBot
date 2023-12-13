@@ -27,7 +27,7 @@ namespace PixaiBot.UI.Converters
             }
             catch
             {
-                return null;
+                return null ;
             }
 
             if (rowIndex >= 0 && rowIndex < accountsList.Count && !string.IsNullOrEmpty(accountsList[rowIndex].Email))

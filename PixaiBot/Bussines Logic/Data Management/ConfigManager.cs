@@ -8,6 +8,9 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
+
+//TODO: Possible refactor  
+
 public class ConfigManager : IConfigManager
 {
 
