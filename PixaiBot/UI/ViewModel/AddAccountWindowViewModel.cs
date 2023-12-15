@@ -8,16 +8,18 @@ using System.Windows.Input;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
+using PixaiBot.UI.Models;
 
 namespace PixaiBot.UI.ViewModel;
 
 public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
 {
+    #region Commands
     public ICommand AddAccountCommand { get; }
 
     public ICommand CloseWindowCommand { get; }
-
-
+    #endregion
+    #region Constructor
     public AddAccountWindowViewModel(IAccountsManager accountsManager, IDataValidator dataValidator, ILogger logger)
     {
         _logger = logger;
@@ -26,44 +28,8 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
         AddAccountCommand = new RelayCommand((obj) => AddAccount());
         CloseWindowCommand = new RelayCommand((obj) => CloseWindow());
     }
-
-    public Action Close { get; set; }
-
-    public bool CanCloseWindow()
-    {
-        return true;
-    }
-
-    private readonly ILogger _logger;
-
-    private readonly IAccountsManager _accountsManger;
-
-    private readonly IDataValidator _dataValidator;
-
-    private string _email;
-
-    public string Email
-    {
-        get => _email;
-        set
-        {
-            _email = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private string _password;
-
-    public string Password
-    {
-        get => _password;
-        set
-        {
-            _password = value;
-            OnPropertyChanged();
-        }
-    }
-
+#endregion
+    #region Methods 
     private void CloseWindow()
     {
         _logger.Log("Closing Add Account Window", _logger.ApplicationLogFilePath);
@@ -90,4 +56,44 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
         CloseWindow();
         _logger.Log("Added Account", _logger.ApplicationLogFilePath);
     }
+    public bool CanCloseWindow()
+    {
+        return true;
+    }
+    #endregion
+    #region Fields  
+
+    public Action Close { get; set; }
+
+    private readonly ILogger _logger;
+
+    private readonly IAccountsManager _accountsManger;
+
+    private readonly AddAccountModel _addAccountModel;
+
+    private readonly IDataValidator _dataValidator;
+
+
+    public string Email
+    {
+        get => _addAccountModel.Email;
+        set
+        {
+            _addAccountModel.Email = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string Password
+    {
+        get => _addAccountModel.Password;
+        set
+        {
+            _addAccountModel.Password = value;
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
 }

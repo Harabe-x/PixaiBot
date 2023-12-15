@@ -110,7 +110,7 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
     private void HideApplication()
     {
 
-        if (_configManager.ShouldSendToastNotifications)
+        if (_configManager.GetConfig().ToastNotifications)
             _toastNotificationSender.SendNotification("PixaiBot","Application minimized to system tray",NotificationType.Information);
 
         HideToTray?.Invoke();

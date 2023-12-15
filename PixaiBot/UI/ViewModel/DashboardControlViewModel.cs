@@ -45,7 +45,7 @@ public class DashboardControlViewModel : BaseViewModel
 
         StatisticsRefreshed(null, EventArgs.Empty);
 
-        if (_configManager.ShouldAutoClaimCredits) StartCreditsAutoClaim();
+        if (_configManager.GetConfig().StartWithSystem) StartCreditsAutoClaim();
 
         _regularBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8964ff"));
 
@@ -225,7 +225,7 @@ public class DashboardControlViewModel : BaseViewModel
 
         _isClaimingCredits = true;
 
-        if (_configManager.ShouldSendToastNotifications)
+        if (_configManager.GetConfig().ToastNotifications)
             _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _cancellationTokenSource.Token, _toastNotificationSender);
         else
             _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _cancellationTokenSource.Token);

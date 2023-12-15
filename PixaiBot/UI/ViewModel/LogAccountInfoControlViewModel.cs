@@ -103,7 +103,7 @@ namespace PixaiBot.UI.ViewModel
 
         public void StartLogging()
         {
-            if (_configManager.ShouldSendToastNotifications)
+            if (_configManager.GetConfig().ToastNotifications)
                 _toastNotificationSender.SendNotification("PixaiBot", "Account Info Logging Started", NotificationType.Information);
 
             if (_isRunning)

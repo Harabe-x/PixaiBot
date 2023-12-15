@@ -42,11 +42,10 @@ public class SettingsControlViewModel : BaseViewModel
         _accountLoginChecker = accountLoginChecker;
         ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
         AddManyAccountsCommand = new RelayCommand((obj) => AddManyAccounts());
-        CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLoginInNewThread());
+        CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLogin());
         StartWithSystemCommand = new RelayCommand((obj) => StartWithSystem());
         UpdateToastNotificationPreferenceCommand = new RelayCommand((obj) => UpdateToastNotificationPreference());
-        _configManager.ConfigChanged += UserChangedSettings;
-        InitializeUserSettings();
+        _userConfig = _configManager.GetConfig();
     }
 
     private readonly IDialogService _dialogService;
@@ -65,46 +64,39 @@ public class SettingsControlViewModel : BaseViewModel
 
     private readonly ILogger _logger;
 
-
-    private bool _shouldStartWithSystem;
+    private readonly UserConfig _userConfig;
 
     public bool ShouldStartWithSystem
     {
-        get => _shouldStartWithSystem;
+        get => _userConfig.StartWithSystem;
         set
         {
-            _shouldStartWithSystem = value;
-            _configManager.SetStartWithSystemFlag(value);
+            _userConfig.StartWithSystem = value;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
         }
     }
-
-    private bool _enableToastNotifications;
-
+    
     public bool EnableToastNotifications
     {
-        get => _enableToastNotifications;
+        get => _userConfig.ToastNotifications;
         set
         {
-            _enableToastNotifications = value;
-            _configManager.SetToastNotificationsFlag(value);
+            _userConfig.ToastNotifications = value;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
         }
     }
-
-    private bool _autoClaimCredits;
 
     public bool AutoClaimCredits
     {
-        get => _autoClaimCredits;
+        get => _userConfig.CreditsAutoClaim;
         set
         {
-            _autoClaimCredits = value;
-            _configManager.SetCreditsAutoClaimFlag(value);
+            _userConfig.CreditsAutoClaim = value;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
         }
-    }
-
-    private void UserChangedSettings(object? sender, EventArgs e)
-    {
-        OnPropertyChanged();
     }
 
     private void UpdateToastNotificationPreference()
@@ -112,7 +104,8 @@ public class SettingsControlViewModel : BaseViewModel
         _toastNotificationSender.SendNotification("PixaiBot",
             EnableToastNotifications
                 ? "Toast Notifications enabled,Now you will receive notifications"
-                : "Toast Notifications disabled,Now you won't receive notifications", NotificationType.Information);
+                : "Toast Notifications disabled,Now you won't receive notifications",
+                NotificationType.Information);
     }
 
     private void ShowAddAccountWindow()
@@ -125,36 +118,27 @@ public class SettingsControlViewModel : BaseViewModel
         _accountsManager.AddManyAccounts();
     }
 
-    private void CheckAllAccountsLoginInNewThread()
-    {
-        var task = new Task(CheckAllAccountsLogin);
-        task.Start();
-    }
-
     private void CheckAllAccountsLogin()
     {
-        var accounts = _accountsManager.GetAllAccounts().ToList();
+        var accountCheckTask = new Task(() =>
+        {
+            var accounts = _accountsManager.GetAllAccounts().ToList();
 
-        var validAccountsCount = 0;
+            var validAccountsCount = 0;
 
-        validAccountsCount = EnableToastNotifications
-            ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender)
-            : _accountLoginChecker.CheckAllAccountsLogin(accounts);
+            validAccountsCount = EnableToastNotifications
+                ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender)
+                : _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
-        _botStatisticsManager.ResetNumberOfAccounts();
+            _botStatisticsManager.ResetNumberOfAccounts();
 
-        _botStatisticsManager.IncreaseAccountsCount(validAccountsCount);
+            _botStatisticsManager.IncreaseAccountsCount(validAccountsCount);
+        });
+
+        accountCheckTask.Start();
     }
 
-
-    private void InitializeUserSettings()
-    {
-        ShouldStartWithSystem = _configManager.ShouldStartWithSystem;
-        EnableToastNotifications = _configManager.ShouldSendToastNotifications;
-        AutoClaimCredits = _configManager.ShouldAutoClaimCredits;
-    }
-
-
+ 
     private void StartWithSystem()
     {
         var registryKey = Registry.CurrentUser.OpenSubKey

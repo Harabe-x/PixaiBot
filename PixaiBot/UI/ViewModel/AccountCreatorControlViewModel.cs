@@ -145,13 +145,13 @@ namespace PixaiBot.UI.ViewModel
         {
             _tcpServerConnector.SendMessage($"mAccount Created: {e.Email}:{e.Password}");
             _accountsManager.AddAccount(e);
-            if (_configManager.ShouldSendToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot", $"Account Created", NotificationType.Success); }
+            if (_configManager.GetConfig().ToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot", $"Account Created", NotificationType.Success); }
 
         }
         private void OnErrorOccurred(object? sender, string e)
         {
             _tcpServerConnector.SendMessage($"rError Occurred: {e}");
-            if(_configManager.ShouldSendToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot",e,NotificationType.Error); }
+            if(_configManager.GetConfig().ToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot",e,NotificationType.Error); }
         }
 
         private void StartAccountCreation()
