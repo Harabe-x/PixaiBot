@@ -16,6 +16,7 @@ namespace PixaiBot.UI.ViewModel;
 
 public class SettingsControlViewModel : BaseViewModel
 {
+    #region Commands
     public ICommand ShowAddAccountWindowCommand { get; }
 
     public ICommand AddManyAccountsCommand { get; }
@@ -25,9 +26,8 @@ public class SettingsControlViewModel : BaseViewModel
     public ICommand StartWithSystemCommand { get; }
 
     public ICommand UpdateToastNotificationPreferenceCommand { get; }
-
-    private readonly string? _executablePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
-
+    #endregion
+    #region Constructor
     public SettingsControlViewModel(IDialogService dialogService, IAccountsManager
         accountsManager, IDataValidator dataValidator, IAccountLoginChecker
         accountLoginChecker,ILogger logger,IBotStatisticsManager botStatisticsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
@@ -47,57 +47,9 @@ public class SettingsControlViewModel : BaseViewModel
         UpdateToastNotificationPreferenceCommand = new RelayCommand((obj) => UpdateToastNotificationPreference());
         _userConfig = _configManager.GetConfig();
     }
+    #endregion
+    #region Methods
 
-    private readonly IDialogService _dialogService;
-
-    private readonly IAccountsManager _accountsManager;
-
-    private readonly IDataValidator _dataValidator;
-
-    private readonly IAccountLoginChecker _accountLoginChecker;
-
-    private readonly IBotStatisticsManager _botStatisticsManager;
-
-    private readonly IConfigManager _configManager;
-
-    private readonly IToastNotificationSender _toastNotificationSender;
-
-    private readonly ILogger _logger;
-
-    private readonly UserConfig _userConfig;
-
-    public bool ShouldStartWithSystem
-    {
-        get => _userConfig.StartWithSystem;
-        set
-        {
-            _userConfig.StartWithSystem = value;
-            _configManager.SaveConfig(_userConfig);
-            OnPropertyChanged();
-        }
-    }
-    
-    public bool EnableToastNotifications
-    {
-        get => _userConfig.ToastNotifications;
-        set
-        {
-            _userConfig.ToastNotifications = value;
-            _configManager.SaveConfig(_userConfig);
-            OnPropertyChanged();
-        }
-    }
-
-    public bool AutoClaimCredits
-    {
-        get => _userConfig.CreditsAutoClaim;
-        set
-        {
-            _userConfig.CreditsAutoClaim = value;
-            _configManager.SaveConfig(_userConfig);
-            OnPropertyChanged();
-        }
-    }
 
     private void UpdateToastNotificationPreference()
     {
@@ -149,4 +101,60 @@ public class SettingsControlViewModel : BaseViewModel
         else
             registryKey?.DeleteValue("PixaiBot", false);
     }
+    #endregion
+    #region Fields
+    private readonly IDialogService _dialogService;
+
+    private readonly string? _executablePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+
+    private readonly IAccountsManager _accountsManager;
+
+    private readonly IDataValidator _dataValidator;
+
+    private readonly IAccountLoginChecker _accountLoginChecker;
+
+    private readonly IBotStatisticsManager _botStatisticsManager;
+
+    private readonly IConfigManager _configManager;
+
+    private readonly IToastNotificationSender _toastNotificationSender;
+
+    private readonly ILogger _logger;
+
+    private readonly UserConfig _userConfig;
+
+    public bool ShouldStartWithSystem
+    {
+        get => _userConfig.StartWithSystem;
+        set
+        {
+            _userConfig.StartWithSystem = value;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
+        }
+    }
+
+    public bool EnableToastNotifications
+    {
+        get => _userConfig.ToastNotifications;
+        set
+        {
+            _userConfig.ToastNotifications = value;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
+        }
+    }
+
+    public bool AutoClaimCredits
+    {
+        get => _userConfig.CreditsAutoClaim;
+        set
+        {
+            _userConfig.CreditsAutoClaim = value;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
 }

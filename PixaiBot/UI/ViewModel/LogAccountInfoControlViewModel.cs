@@ -16,8 +16,10 @@ namespace PixaiBot.UI.ViewModel
     internal class LogAccountInfoControlViewModel : BaseViewModel
     {
 
+        #region Commands
         public ICommand StartLoggingCommand { get; }
-
+        #endregion
+        #region Constructor 
         public LogAccountInfoControlViewModel(IAccountsInfoLogger accountsInfoLogger, ITcpServerConnector tcpServerConnector,
             IAccountsManager accountsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
         {
@@ -30,6 +32,35 @@ namespace PixaiBot.UI.ViewModel
 
             _accountInfoLoggerrSettings = new AccountInfoLoggerSettings();
         }
+        #endregion
+        #region Methods
+
+        public void StartLogging()
+        {
+            if (_configManager.GetConfig().ToastNotifications)
+                _toastNotificationSender.SendNotification("PixaiBot", "Account Info Logging Started", NotificationType.Information);
+
+            if (_isRunning)
+            {
+                _cancellationTokenSource.Cancel();
+                _isRunning = false;
+            }
+            else
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+            }
+
+            var accounts = _accountsManager.GetAllAccounts();
+
+            _isRunning = true;
+
+            _accountsInfoLogger.StartLoggingAccountsInfo(accounts, _accountInfoLoggerrSettings,
+                _cancellationTokenSource.Token);
+        }
+
+        #endregion
+        #region Fields
+
         private readonly IAccountsInfoLogger _accountsInfoLogger;
 
         private readonly ITcpServerConnector _tcpServerConnector;
@@ -50,7 +81,7 @@ namespace PixaiBot.UI.ViewModel
         public bool ShouldLogAccountId
         {
             get => _accountInfoLoggerrSettings.ShouldLogAccountId;
-            
+
             set
             {
                 _accountInfoLoggerrSettings.ShouldLogAccountId = value;
@@ -61,7 +92,7 @@ namespace PixaiBot.UI.ViewModel
         public bool ShouldLogAccountUsername
         {
             get => _accountInfoLoggerrSettings.ShouldLogAccountUsername;
-           
+
             set
             {
                 _accountInfoLoggerrSettings.ShouldLogAccountUsername = value;
@@ -72,7 +103,7 @@ namespace PixaiBot.UI.ViewModel
         public bool ShouldLogEmailVerificationStatus
         {
             get => _accountInfoLoggerrSettings.ShouldLogEmailVerificationStatus;
-            
+
             set
             {
                 _accountInfoLoggerrSettings.ShouldLogEmailVerificationStatus = value;
@@ -100,29 +131,8 @@ namespace PixaiBot.UI.ViewModel
                 OnPropertyChanged();
             }
         }
+        #endregion  
 
-        public void StartLogging()
-        {
-            if (_configManager.GetConfig().ToastNotifications)
-                _toastNotificationSender.SendNotification("PixaiBot", "Account Info Logging Started", NotificationType.Information);
-
-            if (_isRunning)
-            {
-                _cancellationTokenSource.Cancel();
-                _isRunning = false;
-            }
-            else 
-            {
-                _cancellationTokenSource = new CancellationTokenSource();
-            }
-
-            var accounts = _accountsManager.GetAllAccounts();
-
-            _isRunning = true;
-
-            _accountsInfoLogger.StartLoggingAccountsInfo(accounts, _accountInfoLoggerrSettings,
-                _cancellationTokenSource.Token);
-        }
 
 
     }

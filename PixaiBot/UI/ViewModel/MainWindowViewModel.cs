@@ -16,6 +16,8 @@ namespace PixaiBot.UI.ViewModel;
 
 public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 {
+    #region Commands
+
     public ICommand NavigateToDashboardCommand { get; }
 
     public ICommand NavigateToSettingsCommand { get; }
@@ -30,7 +32,11 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 
     public ICommand HideApplicationCommand { get; }
 
-    public MainWindowViewModel(ITcpServerConnector tcpServerConnector,INavigationService navService, ILogger logger,IToastNotificationSender toastNotificationASender,IConfigManager configManager)
+
+    #endregion
+    #region Constructor
+
+    public MainWindowViewModel(ITcpServerConnector tcpServerConnector, INavigationService navService, ILogger logger, IToastNotificationSender toastNotificationASender, IConfigManager configManager)
     {
         _configManager = configManager;
         _toastNotificationSender = toastNotificationASender;
@@ -47,25 +53,8 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
         NavigateToDashboardCommand.Execute(null);
     }
 
-    private readonly ILogger _logger;
-
-    private readonly IToastNotificationSender _toastNotificationSender;
-
-    private readonly IConfigManager _configManager;
-
-    private readonly ITcpServerConnector _tcpServerConnector;
-
-    private INavigationService _navigation;
-
-    public INavigationService Navigation
-    {
-        get => _navigation;
-        set
-        {
-            _navigation = value;
-            OnPropertyChanged();
-        }
-    }
+    #endregion
+    #region Methods
 
     private void NavigateToAccountsList()
     {
@@ -79,7 +68,7 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
         _tcpServerConnector.SendMessage("mNavigating to Account info logger");
 
         Navigation.NavigateTo<LogAccountInfoControlViewModel>();
-        _logger.Log("Navigated to Accounts Logger control",_logger.ApplicationLogFilePath);
+        _logger.Log("Navigated to Accounts Logger control", _logger.ApplicationLogFilePath);
     }
 
     private void NavigateToAccountCreator()
@@ -111,7 +100,7 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
     {
 
         if (_configManager.GetConfig().ToastNotifications)
-            _toastNotificationSender.SendNotification("PixaiBot","Application minimized to system tray",NotificationType.Information);
+            _toastNotificationSender.SendNotification("PixaiBot", "Application minimized to system tray", NotificationType.Information);
 
         HideToTray?.Invoke();
         _logger.Log("Hided application to tray", _logger.ApplicationLogFilePath);
@@ -135,7 +124,34 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
         return true;
     }
 
+    #endregion
+    #region Fields
+
     public Action Close { get; set; }
 
     public Action HideToTray { get; set; }
+
+    private readonly ILogger _logger;
+
+    private readonly IToastNotificationSender _toastNotificationSender;
+
+    private readonly IConfigManager _configManager;
+
+    private readonly ITcpServerConnector _tcpServerConnector;
+
+    private INavigationService _navigation;
+
+    public INavigationService Navigation
+    {
+        get => _navigation;
+        set
+        {
+            _navigation = value;
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
+
 }

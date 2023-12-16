@@ -11,9 +11,11 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ICreditClaimer
 {
-    public event EventHandler<UserAccount> CreditClaimed;
+    public event EventHandler<UserAccount> CreditsClaimed;
 
-    public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender);
+    public event EventHandler<UserAccount> ProcessStartedForAccount;
 
-    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,CancellationToken cancellationToken,IToastNotificationSender toastNotificationSender = null);
+    public void ClaimCredits(UserAccount account);
+
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,CancellationToken cancellationToken);
 }

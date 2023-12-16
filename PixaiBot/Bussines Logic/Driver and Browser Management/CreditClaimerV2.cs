@@ -15,7 +15,9 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
     {
         private const string LoginUrl = "https://pixai.art/login";
 
-        public event EventHandler<UserAccount>? CreditClaimed;
+        public event EventHandler<UserAccount>? CreditsClaimed;
+
+        public event EventHandler<UserAccount>? ProcessStartedForAccount;
 
         public CreditClaimerV2(ILogger logger, IPixaiNavigation pixaiNavigation,ITcpServerConnector tcpServerConnector)
         {
@@ -32,15 +34,13 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private readonly IPixaiNavigation _pixaiNavigation;
 
-        public void ClaimCredits(UserAccount account, IToastNotificationSender toastNotificationSender = null)
+        public void ClaimCredits(UserAccount account)
         {
 
 
             using var driver = ChromeDriverFactory.CreateDriver();
 
             _logger.Log("=====Launched Chrome Driver=====",_logger.CreditClaimerLogFilePath);
-
-            toastNotificationSender?.SendNotification("PixaiBot", "Launched Chrome Driver",NotificationType.Success);
 
             _tcpServerConnector.SendMessage("gLaunched Chrome Driver");
 
@@ -80,8 +80,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             _logger.Log("=====Chrome Drive Closed=====\n",_logger.ApplicationLogFilePath);
         }
 
-        public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken,
-            IToastNotificationSender toastNotificationSender = null)
+        public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken)
         {
 
             _tcpServerConnector.SendMessage($"cClaiming credits on {accounts.Count()} accounts");
@@ -90,9 +89,11 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             {
                 if (cancellationToken.IsCancellationRequested) return;
 
-                ClaimCredits(account, toastNotificationSender);
+                ProcessStartedForAccount?.Invoke(this,account);
 
-                CreditClaimed?.Invoke(this, account);
+                ClaimCredits(account);
+
+                CreditsClaimed?.Invoke(this, account);
 
             }
         }

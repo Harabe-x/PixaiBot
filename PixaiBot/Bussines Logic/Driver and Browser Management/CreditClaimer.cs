@@ -38,7 +38,7 @@ public class CreditClaimer : ICreditClaimer
     private readonly IToastNotificationSender _toastNotificationSender;
 
 
-    public event EventHandler<UserAccount> CreditClaimed;
+    public event EventHandler<UserAccount> CreditsClaimed;
 
 
     public CreditClaimer(ILogger logger)
@@ -55,7 +55,7 @@ public class CreditClaimer : ICreditClaimer
             {
                 return;
             }
-            CreditClaimed?.Invoke(this,account);
+            CreditsClaimed?.Invoke(this,account);
             ClaimCredits(account,toastNotificationSender);
         }
     }

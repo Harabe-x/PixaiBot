@@ -10,7 +10,9 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using Notification.Wpf;
 using PixaiBot.Bussines_Logic;
+using PixaiBot.UI.Models;
 using Brush = System.Drawing.Brush;
 
 namespace PixaiBot.UI.ViewModel;
@@ -19,233 +21,143 @@ public class DashboardControlViewModel : BaseViewModel
 {
     public ICommand ClaimCreditsCommand { get; }
 
-    public DashboardControlViewModel(ICreditClaimer creditClaimer, IAccountsManager accountsManager,
-        IBotStatisticsManager botStatisticsManager, ILogger logger, IConfigManager configManager,
-        IToastNotificationSender toastNotificationSender, ITcpServerConnector tcpServerConnector)
+
+    public DashboardControlViewModel(ICreditClaimer creditClaimer,IToastNotificationSender notificationSender,IAccountsManager accountManager,IConfigManager configManager,IBotStatisticsManager botStatisticsManager)
     {
+        _dashboardControlModel = new DashboardControlModel();
+
+        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
+
+        _accountsManager = accountManager;
         _configManager = configManager;
-
-        _logger = logger;
-
         _botStatisticsManager = botStatisticsManager;
-
         _creditClaimer = creditClaimer;
+        _creditClaimer.CreditClaimed += UpdateBotOperationStatus;
 
-        _tcpServerConnector = tcpServerConnector;
-
-        _accountsManager = accountsManager;
-
-        _toastNotificationSender = toastNotificationSender;
-
-        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCreditsInNewThread());
-
-        _creditClaimer.CreditClaimed += CreditClaimed;
-
-        _botStatisticsManager.StatisticsChanged += StatisticsRefreshed;
-
-        StatisticsRefreshed(null, EventArgs.Empty);
-
-        if (_configManager.GetConfig().StartWithSystem) StartCreditsAutoClaim();
-
-        _regularBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8964ff"));
-
-        _redBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
-
-        ClaimCreditButtonBrushColor = _regularBrush;
-
-        ClaimCreditButtonText = "Claim Credits";
+        ClaimButtonText = "Start Claiming";
+        BotOperationStatus = "idle.";
     }
 
-    private readonly SolidColorBrush _redBrush;
+    
 
-    private readonly SolidColorBrush _regularBrush;
+    #region Methods
 
-    private readonly ITcpServerConnector _tcpServerConnector;
+    public void ClaimCredits()
+    {
+        if (IsRunning)
+        {
+            IsRunning = false;
+            ClaimButtonText = "Start Claiming";
+            BotOperationStatus = "idle.";
+            _tokenSource.Cancel();
+            _tokenSource.Dispose();
+            return;
+        }
+        else
+        {
+             IsRunning = true;
+            _tokenSource = new CancellationTokenSource();
+            ClaimButtonText = "Stop";
+        }
 
-    private CancellationTokenSource _cancellationTokenSource;
+        Task.Run(() =>
+        {
+            if(_configManager.GetConfig().ToastNotifications) _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(),_tokenSource.Token,_notificationSender);
+            else _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(),_tokenSource.Token);
+            IsRunning = false;
+            ClaimButtonText = "Start Claiming";
+            BotOperationStatus = "idle.";
+            _tokenSource.Cancel();
+            _tokenSource.Dispose();
+        });
+    }
+    private void UpdateBotOperationStatus(object? sender, UserAccount e)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            BotOperationStatus = $"Claiming credits for {e.Email}";
+        });
+    }
 
-    private const int CreditClaimerInterval = 24;
+    #endregion  
+
+
+    #region Fields
+
+    private CancellationTokenSource _tokenSource;
+
+    private readonly DashboardControlModel _dashboardControlModel;
 
     private readonly IAccountsManager _accountsManager;
-
-    private readonly ICreditClaimer _creditClaimer;
 
     private readonly IBotStatisticsManager _botStatisticsManager;
 
     private readonly IConfigManager _configManager;
 
-    private readonly ILogger _logger;
+    private readonly ICreditClaimer _creditClaimer;
 
-    private readonly IToastNotificationSender _toastNotificationSender;
+    private readonly IToastNotificationSender _notificationSender;
 
-    private string? _accountCount;
-
-    private string _creditClaimerInfo;
-
-    private bool _isClaimingCredits;
-
-    public string CreditClaimerInfo
+    public bool IsRunning
     {
-        get => _creditClaimerInfo;
+        get => _dashboardControlModel.IsRunning;
         set
         {
-            _creditClaimerInfo = value;
+            _dashboardControlModel.IsRunning = value;
             OnPropertyChanged();
         }
     }
 
-
-    private SolidColorBrush _claimCreditButtonButtonColor;
-
-    public SolidColorBrush ClaimCreditButtonBrushColor
+    public string BotVersion
     {
-        get => _claimCreditButtonButtonColor;
+        get => _dashboardControlModel.BotVersion;
         set
         {
-            _claimCreditButtonButtonColor = value;
+             _dashboardControlModel.BotVersion = value;
+             OnPropertyChanged();
+        }
+    }
+
+    public string AccountsCount
+    {
+        get => _dashboardControlModel.AccountsCount;
+        set
+        {
+            _dashboardControlModel.AccountsCount = value;
             OnPropertyChanged();
         }
     }
 
-
-    private string _claimCreditButtonText;
-
-    public string ClaimCreditButtonText
+    public string LastCreditClaimDate
     {
-        get => _claimCreditButtonText;
+        get => _dashboardControlModel.LastCreditClaimDateTime;
         set
         {
-            _claimCreditButtonText = value;
+            _dashboardControlModel.LastCreditClaimDateTime = value;
             OnPropertyChanged();
         }
     }
 
-    public string? AccountCount
+    public string ClaimButtonText
     {
-        get => _accountCount;
+        get => _dashboardControlModel.ClaimButtonText;
         set
         {
-            _accountCount = $"Accounts Count : {value}";
+            _dashboardControlModel.ClaimButtonText = value;
             OnPropertyChanged();
         }
     }
 
-    private string? _lastCreditClaimDateTime;
-
-    public string? LastCreditClaimDateTime
+    public string BotOperationStatus
     {
-        get => _lastCreditClaimDateTime;
+        get => _dashboardControlModel.BotOperationStatus;
         set
         {
-            _botStatisticsManager.SetClaimDateTime(DateTime.Parse(value));
-            _lastCreditClaimDateTime = $"Last Credit Claim Date :  {DateTime.Parse(value):dd/MM HH:mm}";
+            _dashboardControlModel.BotOperationStatus = value;
             OnPropertyChanged();
         }
     }
 
-    private string? _botVersion;
-
-    public string? BotVersion
-    {
-        get => _botVersion;
-        set
-        {
-            _botVersion = $"Bot Version: {value}";
-            OnPropertyChanged();
-        }
-    }
-
-
-    private void StatisticsRefreshed(object? sender, EventArgs e)
-    {
-        BotVersion = _botStatisticsManager.BotVersion;
-        AccountCount = _botStatisticsManager.AccountsNumber.ToString();
-        LastCreditClaimDateTime = _botStatisticsManager.LastCreditClaimDateTime.ToString();
-        _tcpServerConnector.SendMessage("gStatistics refreshed");
-
-    }
-
-
-    private void CreditClaimed(object? sender, UserAccount e)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            CreditClaimerInfo = $"Claiming Credits For {e.Email}";
-        });
-    }
-
-
-    private void ClaimCreditsInNewThread()
-    {
-        var creditClaimTask = new Task(ClaimCredits);
-        creditClaimTask.Start();
-    }
-
-    private void StartCreditsAutoClaim()
-    {
-        var autoClaimTimer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromHours(CreditClaimerInterval)
-        };
-
-        autoClaimTimer.Tick += (sender, args) => ClaimCreditsInNewThread();
-
-        autoClaimTimer.Start();
-
-        ClaimCreditsInNewThread();
-    }
-
-    private void ClaimCredits()
-    {
-        if (_isClaimingCredits)
-        {
-            _tcpServerConnector.SendMessage("rCredits Claiming Process Stopped");
-
-            ClaimCreditButtonText = "Claim Credits";
-
-            _isClaimingCredits = false;
-
-            ClaimCreditButtonBrushColor = _regularBrush;
-
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
-
-            return;
-        }
-
-        _cancellationTokenSource = new CancellationTokenSource();
-
-
-        ClaimCreditButtonText = "Stop Claiming";
-
-        ClaimCreditButtonBrushColor = _redBrush;
-
-        _tcpServerConnector.SendMessage("cCredits Claiming Process Started");
-
-
-        _isClaimingCredits = true;
-
-        if (_configManager.GetConfig().ToastNotifications)
-            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _cancellationTokenSource.Token, _toastNotificationSender);
-        else
-            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _cancellationTokenSource.Token);
-
-        _logger.Log("Credits claimed", _logger.ApplicationLogFilePath);
-
-        CreditClaimerInfo = "Credits Claimed.";
-
-        LastCreditClaimDateTime = DateTime.Now.ToString();
-
-        ClaimCreditButtonText = "Claim Credits";
-
-        _tcpServerConnector.SendMessage("gCredits Claimed");
-
-
-        ClaimCreditButtonBrushColor = _regularBrush;
-
-    }
-
-
-
+    #endregion  
 
 }

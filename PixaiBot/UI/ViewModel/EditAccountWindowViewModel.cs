@@ -53,8 +53,9 @@ namespace PixaiBot.UI.ViewModel
         {
             return true;
         }
-#endregion
+        #endregion
         #region Fields
+
         public string Email
         {
             get => _editAccountModel.Email;
