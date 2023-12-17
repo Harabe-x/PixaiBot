@@ -106,7 +106,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             }
 
 
-            //In some cases, after pressing the button to go to account settings, the user remains on the home page, so the code is executed until the url is correct.
+            //In some cases, after pressing the button to go to account model, the user remains on the home page, so the code is executed until the url is correct.
             while (driver.Url != "https://pixai.art/profile/edit")
             {
                 _pixaiNavigation.ClickDropdownMenu(driver);

@@ -17,7 +17,7 @@ public static class ChromeDriverFactory
     private const int MaxWaitTime = 5;
 
     /// <summary>
-    /// Creates a ChromeDriver with the needed settings to hide the process.
+    /// Creates a ChromeDriver with the needed model to hide the process.
     /// </summary>
     /// <returns>Chrome Driver Instance</returns>
     public static ChromeDriver CreateDriver()
@@ -41,7 +41,7 @@ public static class ChromeDriverFactory
 
 
     /// <summary>
-    /// Creates a ChromeDriver with the needed settings to hide the process.
+    /// Creates a ChromeDriver with the needed model to hide the process.
     /// </summary>
     /// <param name="proxy">Proxy server that should be used with Chrome Driver</param>
     /// <returns></returns>
@@ -74,7 +74,7 @@ public static class ChromeDriverFactory
 
 
     /// <summary>
-    /// Returns ChromeDriver with default settings for debugging purposes.
+    /// Returns ChromeDriver with default model for debugging purposes.
     /// </summary>
     /// <returns></returns>
     public static ChromeDriver CreateDriverForDebug()

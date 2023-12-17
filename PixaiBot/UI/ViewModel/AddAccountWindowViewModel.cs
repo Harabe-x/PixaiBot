@@ -25,6 +25,7 @@ public class AddAccountWindowViewModel : BaseViewModel, IWindowHelper
         _logger = logger;
         _accountsManger = accountsManager;
         _dataValidator = dataValidator;
+        _addAccountModel = new AddAccountModel();
         AddAccountCommand = new RelayCommand((obj) => AddAccount());
         CloseWindowCommand = new RelayCommand((obj) => CloseWindow());
     }

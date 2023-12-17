@@ -165,7 +165,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private void ClickProfile(ISearchContext driver)
         {
-            _logger.Log("Navigating to account settings", _logger.CreditClaimerLogFilePath);
+            _logger.Log("Navigating to account model", _logger.CreditClaimerLogFilePath);
 
             var profileButton = driver.FindElement(By.CssSelector(".MuiMenuItem-root:nth-child(3)"));
            

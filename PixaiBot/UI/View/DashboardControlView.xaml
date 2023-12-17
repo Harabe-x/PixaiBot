@@ -45,9 +45,9 @@
                     <Grid>
                         <TextBlock Text="Bot Details :" Style="{StaticResource BoldPurpleText2}" />
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Foreground="{StaticResource DarkGreen}" Text="{Binding AccountCount}"
+                            <TextBlock Foreground="{StaticResource DarkGreen}" Text="{Binding AccountsCount}"
                                        Margin="20 10 20 10" FontSize="17" FontWeight="Thin" />
-                            <TextBlock Foreground="{StaticResource Magenta}" Text="{Binding LastCreditClaimDateTime}"
+                            <TextBlock Foreground="{StaticResource Magenta}" Text="{Binding LastCreditClaimDate}"
                                        Margin="20 10 20 10" FontSize="17" FontWeight="Thin" />
                             <TextBlock Foreground="{StaticResource Mint}" Text="{Binding BotVersion }"
                                        Margin="20 10 20 10" FontSize="17" FontWeight="Thin" />

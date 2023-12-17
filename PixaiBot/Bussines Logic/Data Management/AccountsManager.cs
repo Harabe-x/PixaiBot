@@ -43,14 +43,16 @@ public class AccountsManager : IAccountsManager
     /// <param name="account"></param>
     public void AddAccount(UserAccount account)
     {
+        var botStatistics = _botStatisticsManager.GetStatistics();
+       
         if (!File.Exists(AccountsFilePath))
         {
-        
+
             var accountsList = new List<UserAccount> { account };
 
             JsonWriter.WriteJson(accountsList, AccountsFilePath);
-            
-            _botStatisticsManager.IncreaseAccountsCount(1);
+
+            botStatistics.AccountsCount = 1;
             
             UpdateAccountManagerProperties();
             
@@ -65,14 +67,16 @@ public class AccountsManager : IAccountsManager
         accountList.Add(account);
         
         JsonWriter.WriteJson(accountList, AccountsFilePath);
-        
-        _botStatisticsManager.IncreaseAccountsCount(1);
+
+        botStatistics.AccountsCount += 1;
 
         _tcpServerConnector.SendMessage("gAccountAdded");
         
         _logger.Log("Added account", _logger.ApplicationLogFilePath);
         
         UpdateAccountManagerProperties();
+
+        _botStatisticsManager.SaveStatistics(botStatistics);
         
         AccountsListChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -93,8 +97,12 @@ public class AccountsManager : IAccountsManager
         if (accountToRemove == null) return;
         
         accountsList.Remove(accountToRemove);
-        
-        _botStatisticsManager.IncreaseAccountsCount(-1);
+
+       var botStatistics = _botStatisticsManager.GetStatistics();
+
+        botStatistics.AccountsCount -= 1;
+
+        _botStatisticsManager.SaveStatistics(botStatistics);
 
         JsonWriter.WriteJson(accountsList, AccountsFilePath);
 

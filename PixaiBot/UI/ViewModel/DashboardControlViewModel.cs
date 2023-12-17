@@ -32,15 +32,39 @@ public class DashboardControlViewModel : BaseViewModel
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _creditClaimer = creditClaimer;
-        _creditClaimer.CreditClaimed += UpdateBotOperationStatus;
+        _creditClaimer.CreditsClaimed += SendNotification;
+        _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
+        _botStatisticsManager.StatisticsChanged += UpdateControlStatistic;
+        _dashboardControlModel.BotStatistics = _botStatisticsManager.GetStatistics();
+
+        if (_configManager.GetConfig().CreditsAutoClaim)
+        {
+            ClaimCredits();
+            _timer = new DispatcherTimer()
+            {
+                Interval  = TimeSpan.FromHours(AutoCreditsClaimInterval)
+            };
+            _timer.Tick += (sender, args) =>
+            {
+                ClaimCredits();
+            };
+        }
 
         ClaimButtonText = "Start Claiming";
-        BotOperationStatus = "idle.";
+        BotOperationStatus = "Idle.";
     }
 
-    
+    private void UpdateControlStatistic(object? sender, EventArgs e)
+    {
+        _dashboardControlModel.BotStatistics = _botStatisticsManager.GetStatistics();
+        OnPropertyChanged();
+
+    }
+
 
     #region Methods
+
+ 
 
     public void ClaimCredits()
     {
@@ -48,7 +72,7 @@ public class DashboardControlViewModel : BaseViewModel
         {
             IsRunning = false;
             ClaimButtonText = "Start Claiming";
-            BotOperationStatus = "idle.";
+            BotOperationStatus = "Idle.";
             _tokenSource.Cancel();
             _tokenSource.Dispose();
             return;
@@ -62,8 +86,7 @@ public class DashboardControlViewModel : BaseViewModel
 
         Task.Run(() =>
         {
-            if(_configManager.GetConfig().ToastNotifications) _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(),_tokenSource.Token,_notificationSender);
-            else _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(),_tokenSource.Token);
+            _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _tokenSource.Token);
             IsRunning = false;
             ClaimButtonText = "Start Claiming";
             BotOperationStatus = "idle.";
@@ -77,6 +100,16 @@ public class DashboardControlViewModel : BaseViewModel
         {
             BotOperationStatus = $"Claiming credits for {e.Email}";
         });
+    }
+    private void SendNotification(object? sender, UserAccount e)
+    {
+        if (_configManager.GetConfig().ToastNotifications)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _notificationSender.SendNotification("PixaiBot",$"Claimed credits for : {e.Email}",NotificationType.Success);
+            });
+        }
     }
 
     #endregion  
@@ -98,6 +131,10 @@ public class DashboardControlViewModel : BaseViewModel
 
     private readonly IToastNotificationSender _notificationSender;
 
+    private const int AutoCreditsClaimInterval = 24;
+
+    private readonly DispatcherTimer _timer;
+
     public bool IsRunning
     {
         get => _dashboardControlModel.IsRunning;
@@ -110,30 +147,33 @@ public class DashboardControlViewModel : BaseViewModel
 
     public string BotVersion
     {
-        get => _dashboardControlModel.BotVersion;
+        get => $"Bot Version : {_dashboardControlModel.BotStatistics.BotVersion}";
         set
         {
-             _dashboardControlModel.BotVersion = value;
-             OnPropertyChanged();
+            _dashboardControlModel.BotStatistics.BotVersion = value;
+            _botStatisticsManager.SaveStatistics(_dashboardControlModel.BotStatistics);
+            OnPropertyChanged();
         }
     }
 
     public string AccountsCount
     {
-        get => _dashboardControlModel.AccountsCount;
-        set
+        get => $"Accounts Count : {_dashboardControlModel.BotStatistics.AccountsCount.ToString()}";
+        set     
         {
-            _dashboardControlModel.AccountsCount = value;
+            _dashboardControlModel.BotStatistics.AccountsCount = int.Parse(value);
+            _botStatisticsManager.SaveStatistics(_dashboardControlModel.BotStatistics);
             OnPropertyChanged();
         }
     }
 
     public string LastCreditClaimDate
     {
-        get => _dashboardControlModel.LastCreditClaimDateTime;
+        get => $"Last credits claim date: {_dashboardControlModel.BotStatistics.LastCreditClaimDateTime:g}";
         set
         {
-            _dashboardControlModel.LastCreditClaimDateTime = value;
+            _dashboardControlModel.BotStatistics.LastCreditClaimDateTime = DateTime.Parse(value);
+            _botStatisticsManager.SaveStatistics(_dashboardControlModel.BotStatistics);
             OnPropertyChanged();
         }
     }

@@ -82,9 +82,12 @@ public class SettingsControlViewModel : BaseViewModel
                 ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender)
                 : _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
-            _botStatisticsManager.ResetNumberOfAccounts();
+            var botStatistics = _botStatisticsManager.GetStatistics();
 
-            _botStatisticsManager.IncreaseAccountsCount(validAccountsCount);
+
+            botStatistics.AccountsCount = validAccountsCount;
+
+            _botStatisticsManager.SaveStatistics(botStatistics);
         });
 
         accountCheckTask.Start();

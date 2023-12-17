@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PixaiBot.Data.Models;
 
 namespace PixaiBot.UI.Models
 {
@@ -19,5 +20,7 @@ namespace PixaiBot.UI.Models
         public bool IsRunning { get; set; }
 
         public string BotOperationStatus { get; set; }
+
+        public BotStatistics BotStatistics { get; set; }
     }
 }

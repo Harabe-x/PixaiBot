@@ -102,9 +102,9 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         public void NavigateToProfileSettings(ISearchContext driver)
         {
-            _logger.Log("Navigating to account settings", _logger.CreditClaimerLogFilePath);
+            _logger.Log("Navigating to account model", _logger.CreditClaimerLogFilePath);
 
-            _tcpServerConnector.SendMessage("yNavigating to account settings");
+            _tcpServerConnector.SendMessage("yNavigating to account model");
             
             ClickElement(driver,".MuiMenuItem-root:nth-child(3)");
         }
