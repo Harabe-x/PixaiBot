@@ -14,9 +14,10 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         //TODO: write the logic for logging the accounts info
 
-        public void StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList, AccountInfoLoggerModel model,
+        public void StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList, IAccountInfoLoggerSettings settings,
             CancellationToken cancellationToken)
         {
+            
             throw new NotImplementedException();
         }
     }

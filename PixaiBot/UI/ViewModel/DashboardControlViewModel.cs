@@ -32,9 +32,10 @@ public class DashboardControlViewModel : BaseViewModel
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _creditClaimer = creditClaimer;
+        _notificationSender = notificationSender;
         _creditClaimer.CreditsClaimed += SendNotification;
         _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
-        _botStatisticsManager.StatisticsChanged += UpdateControlStatistic;
+        _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _dashboardControlModel.BotStatistics = _botStatisticsManager.GetStatistics();
 
         if (_configManager.GetConfig().CreditsAutoClaim)
@@ -52,13 +53,6 @@ public class DashboardControlViewModel : BaseViewModel
 
         ClaimButtonText = "Start Claiming";
         BotOperationStatus = "Idle.";
-    }
-
-    private void UpdateControlStatistic(object? sender, EventArgs e)
-    {
-        _dashboardControlModel.BotStatistics = _botStatisticsManager.GetStatistics();
-        OnPropertyChanged();
-
     }
 
 
@@ -90,6 +84,7 @@ public class DashboardControlViewModel : BaseViewModel
             IsRunning = false;
             ClaimButtonText = "Start Claiming";
             BotOperationStatus = "idle.";
+            LastCreditClaimDate = DateTime.Now.ToString(CultureInfo.InvariantCulture);
             _tokenSource.Cancel();
             _tokenSource.Dispose();
         });
@@ -110,6 +105,11 @@ public class DashboardControlViewModel : BaseViewModel
                 _notificationSender.SendNotification("PixaiBot",$"Claimed credits for : {e.Email}",NotificationType.Success);
             });
         }
+    }
+    private void GetFreshStatistic(object? sender, EventArgs e)
+    {
+        _dashboardControlModel.BotStatistics = _botStatisticsManager.GetStatistics();
+        OnPropertyChanged();
     }
 
     #endregion  

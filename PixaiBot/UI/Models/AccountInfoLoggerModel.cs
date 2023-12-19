@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.Data.Models
 {
-    internal class AccountInfoLoggerSettings
+    internal class AccountInfoLoggerModel : IAccountInfoLoggerSettings 
     {
         public bool ShouldLogEmailVerificationStatus { get; set; }
 
@@ -18,8 +19,14 @@ namespace PixaiBot.Data.Models
 
         public bool ShouldLogAccountUsername { get; set; }
 
+        public bool IsRunning { get; set; }
 
-        public AccountInfoLoggerSettings()
+        public string Status { get; set; }
+
+        public string LogButtonText { get; set; }
+
+
+        public AccountInfoLoggerModel()
         {
             ShouldLogAccountId = true;
             ShouldLogAccountUsername = true;

@@ -79,7 +79,7 @@ public class SettingsControlViewModel : BaseViewModel
             var validAccountsCount = 0;
 
             validAccountsCount = EnableToastNotifications
-                ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender)
+                ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender) //# TODO : Refactor this 
                 : _accountLoginChecker.CheckAllAccountsLogin(accounts);
 
             var botStatistics = _botStatisticsManager.GetStatistics();

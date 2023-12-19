@@ -30,7 +30,7 @@ namespace PixaiBot.UI.ViewModel
             _toastNotificationSender = toastNotificationSender;
             StartLoggingCommand = new RelayCommand((obj) => StartLogging());
 
-            AccountInfoLoggerModel = new AccountInfoLoggerModel();
+            _accountInfoLoggerModel = new AccountInfoLoggerModel();
         }
         #endregion
         
@@ -38,25 +38,32 @@ namespace PixaiBot.UI.ViewModel
 
         public void StartLogging()
         {
-            if (_configManager.GetConfig().ToastNotifications)
-                _toastNotificationSender.SendNotification("PixaiBot", "Account Info Logging Started", NotificationType.Information);
-
-            if (_isRunning)
+            if (IsRunning)
             {
+                IsRunning = false;
+                Status = "Idle.";
+                LogButtonText = "Start Logging";
                 _cancellationTokenSource.Cancel();
-                _isRunning = false;
+                _cancellationTokenSource.Dispose();
+                return;
             }
             else
             {
+                IsRunning = true;
+                Status = "Running...";
+                LogButtonText = "Stop";
                 _cancellationTokenSource = new CancellationTokenSource();
             }
 
-            var accounts = _accountsManager.GetAllAccounts();
+            Task.Run(() =>
+            {
 
-            _isRunning = true;
-
-            _accountsInfoLogger.StartLoggingAccountsInfo(accounts, AccountInfoLoggerModel,
-                _cancellationTokenSource.Token);
+                IsRunning = false;
+                Status = "Idle.";
+                LogButtonText = "Start Logging";
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+            });
         }
 
         #endregion
@@ -72,63 +79,92 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly IToastNotificationSender _toastNotificationSender;
 
-        public readonly AccountInfoLoggerModel AccountInfoLoggerModel;
+        private readonly AccountInfoLoggerModel _accountInfoLoggerModel;
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        private bool _isRunning;
-
-
-        public bool ShouldLogAccountId
+        public bool IsRunning
         {
-            get => AccountInfoLoggerModel.ShouldLogAccountId;
+            get => _accountInfoLoggerModel.IsRunning;
 
             set
             {
-                AccountInfoLoggerModel.ShouldLogAccountId = value;
+                _accountInfoLoggerModel.IsRunning = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShouldLogAccountId
+        {
+            get => _accountInfoLoggerModel.ShouldLogAccountId;
+
+            set
+            {
+                _accountInfoLoggerModel.ShouldLogAccountId = value;
                 OnPropertyChanged();
             }
         }
 
         public bool ShouldLogAccountUsername
         {
-            get => AccountInfoLoggerModel.ShouldLogAccountUsername;
+            get => _accountInfoLoggerModel.ShouldLogAccountUsername;
 
             set
             {
-                AccountInfoLoggerModel.ShouldLogAccountUsername = value;
+                _accountInfoLoggerModel.ShouldLogAccountUsername = value;
                 OnPropertyChanged();
             }
         }
 
         public bool ShouldLogEmailVerificationStatus
         {
-            get => AccountInfoLoggerModel.ShouldLogEmailVerificationStatus;
+            get => _accountInfoLoggerModel.ShouldLogEmailVerificationStatus;
 
             set
             {
-                AccountInfoLoggerModel.ShouldLogEmailVerificationStatus = value;
+                _accountInfoLoggerModel.ShouldLogEmailVerificationStatus = value;
                 OnPropertyChanged();
             }
         }
 
         public bool ShouldLogFollowersCount
         {
-            get => AccountInfoLoggerModel.ShouldLogFollowersCount;
+            get => _accountInfoLoggerModel.ShouldLogFollowersCount;
 
             set
             {
-                AccountInfoLoggerModel.ShouldLogFollowersCount = value;
+                _accountInfoLoggerModel.ShouldLogFollowersCount = value;
                 OnPropertyChanged();
             }
         }
 
         public bool ShouldLogFollowingCount
         {
-            get => AccountInfoLoggerModel.ShouldLogFollowingCount;
+            get => _accountInfoLoggerModel.ShouldLogFollowingCount;
             set
             {
-                AccountInfoLoggerModel.ShouldLogFollowingCount = value;
+                _accountInfoLoggerModel.ShouldLogFollowingCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Status
+        {
+            get => _accountInfoLoggerModel.Status;
+            set
+            {
+                _accountInfoLoggerModel.Status = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LogButtonText
+        {
+            get => _accountInfoLoggerModel.LogButtonText;
+
+            set
+            {
+                _accountInfoLoggerModel.LogButtonText = value;
                 OnPropertyChanged();
             }
         }

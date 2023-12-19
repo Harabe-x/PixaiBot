@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PixaiBot.UI.View"
+             xmlns:converters="clr-namespace:PixaiBot.UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <converters:BooleanToBrushConverter x:Key="BrushConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -27,10 +32,10 @@
                            HorizontalAlignment="Center" FontSize="18" />
                 <TextBlock Style="{StaticResource SecondaryText}" Text="You will need access to the internet ! "
                            HorizontalAlignment="Center" />
-                <Button Command="{Binding ClaimCreditsCommand}" Style="{StaticResource PurpleButton}" Width="200"
-                        Margin="0 30 0 0" Content="{Binding ClaimCreditButtonText}"  Background="{Binding ClaimCreditButtonBrushColor}" />
+                <Button Command="{Binding StartLoggingCommand}" Style="{StaticResource PurpleButton}"  Width="200"
+                        Margin="0 30 0 0" Content="{Binding LogButtonText}"  Background="{Binding IsRunning,Converter={StaticResource BrushConverter}}" />
                 <TextBlock Style="{StaticResource SecondaryText}" Foreground="#2c3e50"
-                           Text="{Binding CreditClaimerInfo}"
+                           Text="{Binding Status}"
                            FontWeight="Light" HorizontalAlignment="Center" />
             </StackPanel>
         </Grid>

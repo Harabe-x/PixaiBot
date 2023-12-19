@@ -8,5 +8,14 @@ namespace PixaiBot.Data.Interfaces
 {
     internal interface IAccountInfoLoggerSettings
     {
+        public bool ShouldLogEmailVerificationStatus { get; set; }
+
+        public bool ShouldLogFollowingCount { get; set; }
+
+        public bool ShouldLogFollowersCount { get; set; }
+
+        public bool ShouldLogAccountId { get; set; }
+
+        public bool ShouldLogAccountUsername { get; set; }
     }
 }
