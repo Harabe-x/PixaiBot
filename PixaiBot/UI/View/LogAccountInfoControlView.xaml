@@ -36,7 +36,7 @@
                         Margin="0 30 0 0" Content="{Binding LogButtonText}"  Background="{Binding IsRunning,Converter={StaticResource BrushConverter}}" />
                 <TextBlock Style="{StaticResource SecondaryText}" Foreground="#2c3e50"
                            Text="{Binding Status}"
-                           FontWeight="Light" HorizontalAlignment="Center" />
+                           FontWeight="SemiBold" HorizontalAlignment="Center" />
             </StackPanel>
         </Grid>
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
+using PixaiBot.UI.Models;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace PixaiBot.UI.ViewModel
@@ -21,13 +23,16 @@ namespace PixaiBot.UI.ViewModel
         public ICommand StartAccountCreationCommand { get; }
 
 
-        public AccountCreatorControlViewModel(ITcpServerConnector tcpServerConnector,IProxyManager proxyManager,ILogger logger,IDialogService dialogService,IAccountsManager accountsManager,IToastNotificationSender toastNotificationSender,IAccountCreator accountCreator,IConfigManager configManager)
+        #region Constructor
+
+        public AccountCreatorControlViewModel(ITcpServerConnector tcpServerConnector, IProxyManager proxyManager, ILogger logger, IDialogService dialogService, IAccountsManager accountsManager, IToastNotificationSender toastNotificationSender, IAccountCreator accountCreator, IConfigManager configManager)
         {
+            _accountCreatorModel = new AccountCreatorModel();
             _configManager = configManager;
             _accountCreator = accountCreator;
             _toastNotificationSender = toastNotificationSender;
             _logger = logger;
-            _tcpServerConnector = tcpServerConnector; 
+            _tcpServerConnector = tcpServerConnector;
             _dialogService = dialogService;
             _accountsManager = accountsManager;
             _proxyManager = proxyManager;
@@ -38,87 +43,8 @@ namespace PixaiBot.UI.ViewModel
             _accountCreator.ErrorOccurred += OnErrorOccurred;
         }
 
-       
+        #endregion
 
-
-        private readonly IProxyManager _proxyManager;
-
-        private readonly ILogger _logger;
-
-        private readonly IDialogService _dialogService;
-
-        private readonly IAccountsManager _accountsManager;
-
-        private readonly IAccountCreator _accountCreator;
-
-        private readonly IToastNotificationSender _toastNotificationSender;
-
-        private readonly IConfigManager _configManager;
-
-        private readonly ITcpServerConnector _tcpServerConnector;
-
-
-        private string _accountAmount;
-
-        public string AccountAmount
-        {
-            get => _accountAmount;
-            set
-            {
-                _accountAmount = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _tempMailApiKey;
-
-        public string TempMailApiKey
-        {
-            get => _tempMailApiKey;
-
-            set
-            {
-                _tempMailApiKey = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _shouldVerifyEmail;
-
-        public bool ShouldVerifyEmail
-        {
-            get => _shouldVerifyEmail;
-
-            set
-            {
-                _shouldVerifyEmail = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _shouldUseProxy;
-
-        public bool ShouldUseProxy
-        {
-            get => _shouldUseProxy;
-            set
-            {
-                _shouldUseProxy = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _proxyFilePath;
-
-        public string ProxyFilePath
-        {
-            get => _proxyFilePath;
-            set
-            {
-                _proxyFilePath = value;
-                OnPropertyChanged();
-            }
-        }
 
         private void AddProxy()
         {
@@ -158,11 +84,145 @@ namespace PixaiBot.UI.ViewModel
         {
             _tcpServerConnector.SendMessage("mUser Starting account creation");
 
-            if (!int.TryParse(AccountAmount, out var amount) || amount > 125) return;
-
-            var task = new Task( () => { _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail); });
+            if (IsRunning)
+            {
+                IsRunning = false;
+                OperationStatus = "Idle.";
+                AccountsCreatorButtonText = "Start Account Creation";
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+                return;
+            }
+            else
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+                IsRunning = true;
+                OperationStatus = "Running...";
+                AccountsCreatorButtonText = "Stop Account Creation";
+            }
             
-            task.Start();
+            if (!int.TryParse(AccountAmount, out var amount)) return;
+
+            Task.Run(() =>
+            {
+                _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail, _cancellationTokenSource.Token);
+                IsRunning = false;
+                OperationStatus = "Idle.";
+                AccountsCreatorButtonText = "Start Account Creation";
+                _cancellationTokenSource.Dispose();
+            });
         }
+
+
+        #region Fields
+
+
+
+        private readonly IProxyManager _proxyManager;
+
+        private readonly ILogger _logger;
+
+        private readonly IDialogService _dialogService;
+
+        private readonly IAccountsManager _accountsManager;
+
+        private readonly IAccountCreator _accountCreator;
+
+        private readonly IToastNotificationSender _toastNotificationSender;
+
+        private readonly IConfigManager _configManager;
+
+        private readonly ITcpServerConnector _tcpServerConnector;
+
+        private readonly AccountCreatorModel _accountCreatorModel;
+
+        private CancellationTokenSource _cancellationTokenSource;
+
+        public bool IsRunning
+        {
+            get => _accountCreatorModel.IsRunning;
+            set
+            {
+                _accountCreatorModel.IsRunning = value;
+                OnPropertyChanged();
+
+            }
+        }
+
+        public bool ShouldUseProxy
+        {
+            get => _accountCreatorModel.ShouldUseProxy;
+            set
+            {
+                _accountCreatorModel.ShouldUseProxy = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShouldVerifyEmail
+        {
+            get => _accountCreatorModel.ShouldVerifyEmail;
+            set
+            {
+                _accountCreatorModel.ShouldVerifyEmail = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string TempMailApiKey
+        {
+            get => _accountCreatorModel.TempMailApiKey;
+            set
+            {
+                _accountCreatorModel.TempMailApiKey = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ProxyFilePath
+        {
+            get => _accountCreatorModel.ProxyFilePath;
+            set
+            {
+                _accountCreatorModel.ProxyFilePath = value;
+                OnPropertyChanged();
+            }
+        }
+        public string AccountAmount
+        {
+            get => _accountCreatorModel.AccountsAmmount;
+            set
+            {
+                _accountCreatorModel.AccountsAmmount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string OperationStatus
+        {
+            get => _accountCreatorModel.OperationStatus;
+            set
+            {
+                _accountCreatorModel.OperationStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string AccountsCreatorButtonText
+        {
+            get => _accountCreatorModel.AccountsCreatorButtonText;
+            set
+            {
+                _accountCreatorModel.AccountsCreatorButtonText = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+
+
+
+        #endregion
     }
 }

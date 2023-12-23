@@ -6,6 +6,7 @@ using System.Windows.Input;
 using PixaiBot.UI.Base;
 using System.Linq;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -27,7 +28,6 @@ public class DashboardControlViewModel : BaseViewModel
         _dashboardControlModel = new DashboardControlModel();
 
         ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
-
         _accountsManager = accountManager;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
@@ -38,14 +38,16 @@ public class DashboardControlViewModel : BaseViewModel
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _dashboardControlModel.BotStatistics = _botStatisticsManager.GetStatistics();
 
+        
+
         if (_configManager.GetConfig().CreditsAutoClaim)
         {
             ClaimCredits();
-            _timer = new DispatcherTimer()
+            _creditClaimerTimer = new DispatcherTimer()
             {
                 Interval  = TimeSpan.FromHours(AutoCreditsClaimInterval)
             };
-            _timer.Tick += (sender, args) =>
+            _creditClaimerTimer.Tick += (sender, args) =>
             {
                 ClaimCredits();
             };
@@ -54,6 +56,7 @@ public class DashboardControlViewModel : BaseViewModel
         ClaimButtonText = "Start Claiming";
         BotOperationStatus = "Idle.";
     }
+    
 
 
     #region Methods
@@ -93,7 +96,7 @@ public class DashboardControlViewModel : BaseViewModel
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            BotOperationStatus = $"Claiming credits for {e.Email}";
+            //BotOperationStatus = $"Claiming credits for {e.Email}"; 
         });
     }
     private void SendNotification(object? sender, UserAccount e)
@@ -112,6 +115,7 @@ public class DashboardControlViewModel : BaseViewModel
         OnPropertyChanged();
     }
 
+    
     #endregion  
 
 
@@ -133,7 +137,10 @@ public class DashboardControlViewModel : BaseViewModel
 
     private const int AutoCreditsClaimInterval = 24;
 
-    private readonly DispatcherTimer _timer;
+    private readonly DispatcherTimer _creditClaimerTimer;
+
+ 
+
 
     public bool IsRunning
     {

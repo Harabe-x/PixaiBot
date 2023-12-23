@@ -17,8 +17,11 @@ namespace PixaiBot.UI.ViewModel
     {
 
         #region Commands
+
         public ICommand StartLoggingCommand { get; }
+        
         #endregion
+       
         #region Constructor 
         public LogAccountInfoControlViewModel(IAccountsInfoLogger accountsInfoLogger, ITcpServerConnector tcpServerConnector,
             IAccountsManager accountsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
@@ -31,6 +34,10 @@ namespace PixaiBot.UI.ViewModel
             StartLoggingCommand = new RelayCommand((obj) => StartLogging());
 
             _accountInfoLoggerModel = new AccountInfoLoggerModel();
+
+            IsRunning = false;
+            Status = "Idle.";
+            LogButtonText = "Start Logging";
         }
         #endregion
         
@@ -58,11 +65,11 @@ namespace PixaiBot.UI.ViewModel
             Task.Run(() =>
             {
 
-                IsRunning = false;
-                Status = "Idle.";
-                LogButtonText = "Start Logging";
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
+                // IsRunning = false;
+                //Status = "Idle.";
+                //LogButtonText = "Start Logging";
+                //_cancellationTokenSource.Cancel();
+                //_cancellationTokenSource.Dispose();
             });
         }
 

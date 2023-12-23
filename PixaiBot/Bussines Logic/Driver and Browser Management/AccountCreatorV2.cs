@@ -23,7 +23,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             _pixaiNavigation = pixaiNavigation;
         }
 
-        private bool _shouldStop;
 
         public event EventHandler<UserAccount>? AccountCreated;
 
@@ -52,12 +51,15 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
         /// <param name="tempMailApiKey"></param>
         /// <param name="shouldUseProxy"></param>
         /// <param name="shouldVerifyEmail"></param>
-        public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail)
+        public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail,CancellationToken token)
         {
             for (var i = 0; i < amount; i++)
             {
 
-                if (_shouldStop) return;
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
 
                 using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriver();
               
@@ -72,7 +74,8 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                     _tcpServerConnector.SendMessage("rChrome drive threw exception\n" + e.Message);
                     _logger.Log("Chrome drive threw exception\n" + e.Message, _logger.CreditClaimerLogFilePath);
                     ErrorOccurred?.Invoke(this, "Chrome drive Exception occurred");
-                    _shouldStop = true;
+                   continue;
+
                 }
                 finally
                 {
