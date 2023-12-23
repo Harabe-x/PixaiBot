@@ -96,7 +96,7 @@ public class DashboardControlViewModel : BaseViewModel
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            //BotOperationStatus = $"Claiming credits for {e.Email}"; 
+            BotOperationStatus = $"Claiming credits for {e.Email}";
         });
     }
     private void SendNotification(object? sender, UserAccount e)

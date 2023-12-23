@@ -18,14 +18,16 @@ namespace PixaiBot.UI.ViewModel
     internal class AccountCreatorControlViewModel : BaseViewModel
     {
 
+        #region Commands
+        
         public ICommand AddProxyCommand { get; }
 
         public ICommand StartAccountCreationCommand { get; }
 
-
+        #endregion
         #region Constructor
 
-        public AccountCreatorControlViewModel(ITcpServerConnector tcpServerConnector, IProxyManager proxyManager, ILogger logger, IDialogService dialogService, IAccountsManager accountsManager, IToastNotificationSender toastNotificationSender, IAccountCreator accountCreator, IConfigManager configManager)
+        public AccountCreatorControlViewModel(ITcpServerConnector tcpServerConnector, IProxyManager proxyManager, ILogger logger, IAccountsManager accountsManager, IToastNotificationSender toastNotificationSender, IAccountCreator accountCreator, IConfigManager configManager)
         {
             _accountCreatorModel = new AccountCreatorModel();
             _configManager = configManager;
@@ -33,18 +35,22 @@ namespace PixaiBot.UI.ViewModel
             _toastNotificationSender = toastNotificationSender;
             _logger = logger;
             _tcpServerConnector = tcpServerConnector;
-            _dialogService = dialogService;
             _accountsManager = accountsManager;
             _proxyManager = proxyManager;
+           
             AddProxyCommand = new RelayCommand((obj) => AddProxy());
             StartAccountCreationCommand = new RelayCommand((obj) => StartAccountCreation());
+            
             ProxyFilePath = "Select Proxy File";
+            OperationStatus = "Idle.";
+            AccountsCreatorButtonText = "Start Account Creation";
+            
             _accountCreator.AccountCreated += OnAccountCreated;
             _accountCreator.ErrorOccurred += OnErrorOccurred;
         }
 
         #endregion
-
+        #region Methods
 
         private void AddProxy()
         {
@@ -77,12 +83,12 @@ namespace PixaiBot.UI.ViewModel
         private void OnErrorOccurred(object? sender, string e)
         {
             _tcpServerConnector.SendMessage($"rError Occurred: {e}");
-            if(_configManager.GetConfig().ToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot",e,NotificationType.Error); }
+            if (_configManager.GetConfig().ToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot", e, NotificationType.Error); }
         }
 
         private void StartAccountCreation()
         {
-            _tcpServerConnector.SendMessage("mUser Starting account creation");
+            _tcpServerConnector.SendMessage("mUser Starting accounts creation");
 
             if (IsRunning)
             {
@@ -100,7 +106,7 @@ namespace PixaiBot.UI.ViewModel
                 OperationStatus = "Running...";
                 AccountsCreatorButtonText = "Stop Account Creation";
             }
-            
+
             if (!int.TryParse(AccountAmount, out var amount)) return;
 
             Task.Run(() =>
@@ -113,7 +119,7 @@ namespace PixaiBot.UI.ViewModel
             });
         }
 
-
+        #endregion
         #region Fields
 
 
@@ -121,8 +127,6 @@ namespace PixaiBot.UI.ViewModel
         private readonly IProxyManager _proxyManager;
 
         private readonly ILogger _logger;
-
-        private readonly IDialogService _dialogService;
 
         private readonly IAccountsManager _accountsManager;
 
@@ -217,12 +221,6 @@ namespace PixaiBot.UI.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
-
-
-
-
         #endregion
     }
 }

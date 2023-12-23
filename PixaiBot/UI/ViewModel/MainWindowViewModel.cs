@@ -100,7 +100,7 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
     {
 
         if (_configManager.GetConfig().ToastNotifications)
-            _toastNotificationSender.SendNotification("PixaiBot", "Application minimized to system tray", NotificationType.Information);
+            _toastNotificationSender.SendNotification("PixaiBot", "Application minimized to system tray, click this notification to maximize application", NotificationType.Information, () => { ShowWindow?.Invoke(); });
 
         HideToTray?.Invoke();
         _logger.Log("Hided application to tray", _logger.ApplicationLogFilePath);
@@ -124,22 +124,31 @@ public class MainWindowViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
         return true;
     }
 
+    public bool CanShowWindow()
+    {
+        return true;
+    }
+
     #endregion
     #region Fields
+
+
+
+    private readonly IToastNotificationSender _toastNotificationSender;
+
+    private INavigationService _navigation;
+
+    private readonly ITcpServerConnector _tcpServerConnector;
+
+    private readonly IConfigManager _configManager;
+
+    private readonly ILogger _logger;
+
+    public Action ShowWindow { get; set; }
 
     public Action Close { get; set; }
 
     public Action HideToTray { get; set; }
-
-    private readonly ILogger _logger;
-
-    private readonly IToastNotificationSender _toastNotificationSender;
-
-    private readonly IConfigManager _configManager;
-
-    private readonly ITcpServerConnector _tcpServerConnector;
-
-    private INavigationService _navigation;
 
     public INavigationService Navigation
     {

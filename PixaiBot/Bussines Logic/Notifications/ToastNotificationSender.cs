@@ -26,9 +26,9 @@ public class ToastNotificationSender : IToastNotificationSender
     /// <param name="title"></param>
     /// <param name="message"></param>
     /// <param name="notificationType"></param>
-    public void SendNotification(string title, string message, NotificationType notificationType)
+    public void SendNotification(string title, string message, NotificationType notificationType,Action onClick)
     {
         _logger.Log($"Notification Sent, NotificationType{notificationType}", _logger.ApplicationLogFilePath);
-        _notification.Show(title, message, notificationType);
+        _notification.Show(title, message, notificationType,onClick: onClick);
     }
 }
