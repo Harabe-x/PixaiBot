@@ -126,6 +126,8 @@ public class SettingsControlViewModel : BaseViewModel
 
     private readonly UserConfig _userConfig;
 
+    private const int MaxNumberOfThreads = 10;
+
     public bool ShouldStartWithSystem
     {
         get => _userConfig.StartWithSystem;
@@ -158,6 +160,30 @@ public class SettingsControlViewModel : BaseViewModel
             OnPropertyChanged();
         }
     }
+
+    public bool MultiThreading
+    {
+        get => _userConfig.MultiThreading;
+        set
+        {
+            _userConfig.MultiThreading = value;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
+        }
+    }
+
+    public string NumberOfThreads
+    {
+        get => _userConfig.NumberOfThreads.ToString();
+        set
+        {
+            if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads ) return;
+            _userConfig.NumberOfThreads = parsedValue ;
+            _configManager.SaveConfig(_userConfig);
+            OnPropertyChanged();
+        }
+    }
+
 
     #endregion
 }

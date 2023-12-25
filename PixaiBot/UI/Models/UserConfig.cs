@@ -13,4 +13,8 @@ public class UserConfig
     public bool ToastNotifications { get; set; }
 
     public bool CreditsAutoClaim { get; set; }
+
+    public bool MultiThreading { get; set; }
+
+    public int NumberOfThreads { get; set; }
 }

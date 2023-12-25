@@ -5,6 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="400">
+
+<UserControl.Resources>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+</UserControl.Resources>
+
     <Grid>
 
         <Grid.RowDefinitions>
@@ -56,6 +61,11 @@
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
                             <CheckBox IsChecked="{Binding EnableToastNotifications }" Command="{Binding UpdateToastNotificationPreferenceCommand}"  Content="  Toast Notifications "
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
+                            <CheckBox IsChecked="{Binding MultiThreading }" Content="  Multi-Threading "
+                                      Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
+                            <TextBlock Text="Threads :" Foreground="{StaticResource LightPurpleColor}" Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}" FontSize="16" Margin="20 15 0 0"/>
+                            <TextBox Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding NumberOfThreads}" VerticalAlignment="Center" Background="Transparent"  Width="200"   HorizontalAlignment="Left" BorderBrush="{StaticResource DarkPurpleColor}"   BorderThickness="0 0  0 2.5" Margin="20 10 0 0"/>
+
                         </StackPanel>
                     </Grid>
                 </Border>
