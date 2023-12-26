@@ -106,6 +106,7 @@ public class SettingsControlViewModel : BaseViewModel
     }
     #endregion
     #region Fields
+
     private readonly IDialogService _dialogService;
 
     private readonly string? _executablePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
@@ -180,7 +181,7 @@ public class SettingsControlViewModel : BaseViewModel
             if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads ) return;
             _userConfig.NumberOfThreads = parsedValue ;
             _configManager.SaveConfig(_userConfig);
-            OnPropertyChanged();
+            OnPropertyChanged(); 
         }
     }
 

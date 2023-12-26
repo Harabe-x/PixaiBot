@@ -6,8 +6,7 @@ using System.Windows.Input;
 using PixaiBot.UI.Base;
 using System.Linq;
 using System;
-using System.Diagnostics;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
@@ -24,16 +23,17 @@ public class DashboardControlViewModel : BaseViewModel
     public ICommand ClaimCreditsCommand { get; }
 
 
-    public DashboardControlViewModel(ICreditClaimer creditClaimer, IToastNotificationSender notificationSender, IAccountsManager accountManager, IConfigManager configManager, IBotStatisticsManager botStatisticsManager)
+    public DashboardControlViewModel(ICreditClaimer creditClaimer, IToastNotificationSender notificationSender, IAccountsManager accountManager, IConfigManager configManager, IBotStatisticsManager botStatisticsManager,ILogger logger)
     {
         _dashboardControlModel = new DashboardControlModel();
 
-        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
+        ClaimCreditsCommand = new RelayCommand((obj) =>  ClaimCredits());
         _accountsManager = accountManager;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _creditClaimer = creditClaimer;
         _notificationSender = notificationSender;
+        _logger = logger; 
         _creditClaimer.CreditsClaimed += SendNotification;
         _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
@@ -64,44 +64,37 @@ public class DashboardControlViewModel : BaseViewModel
 
 
 
-    public void ClaimCredits()
+    public async void ClaimCredits()
     {
         if (IsRunning)
         {
-            IsRunning = false;
-            ClaimButtonText = "Start Claiming";
-            BotOperationStatus = "Idle.";
-            _tokenSource.Cancel();
-            _tokenSource.Dispose();
+            StopClaiming();
             return;
         }
 
-        IsRunning = true;
+        var config = _configManager.GetConfig();
         _tokenSource = new CancellationTokenSource();
         ClaimButtonText = "Stop";
+        IsRunning = true;
 
-
-        if (_configManager.GetConfig().MultiThreading)
+        if (config.MultiThreading)
         {
+            var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
 
-            var numberOfThreads = _configManager.GetConfig().NumberOfThreads <= 0 ? 1 : _configManager.GetConfig().NumberOfThreads;
-
-            foreach (var accounts in _accountsManager.GetAllAccounts().SplitList(numberOfThreads))
-            {
-                Task.Run(() =>
-                {
-                    _creditClaimer.ClaimCreditsForAllAccounts(accounts, _tokenSource.Token);
-                });
-            }
+            var tasks = accounts.Select(account =>
+                Task.Run(() => { _creditClaimer.ClaimCreditsForAllAccounts(account, _tokenSource.Token); },
+                    _tokenSource.Token));
+            await Task.WhenAll(tasks);
         }
         else
         {
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _tokenSource.Token);
-
-            });
+            }, _tokenSource.Token);
         }
+      
+        StopClaiming();
     }
     private void UpdateBotOperationStatus(object? sender, UserAccount e)
     {
@@ -126,8 +119,17 @@ public class DashboardControlViewModel : BaseViewModel
         OnPropertyChanged();
     }
 
+    private void StopClaiming()
+    {
+        IsRunning = false;
+        ClaimButtonText = "Start Claiming";
+        BotOperationStatus = "Idle.";
+        _tokenSource.Cancel();
+    }
+
 
     #endregion
+
 
 
     #region Fields
@@ -143,6 +145,8 @@ public class DashboardControlViewModel : BaseViewModel
     private readonly IConfigManager _configManager;
 
     private readonly ICreditClaimer _creditClaimer;
+
+    private readonly ILogger _logger; 
 
     private readonly IToastNotificationSender _notificationSender;
 

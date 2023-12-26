@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Notification.Wpf;
+using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
@@ -19,9 +20,9 @@ namespace PixaiBot.UI.ViewModel
         #region Commands
 
         public ICommand StartLoggingCommand { get; }
-        
+
         #endregion
-       
+
         #region Constructor 
         public LogAccountInfoControlViewModel(IAccountsInfoLogger accountsInfoLogger, ITcpServerConnector tcpServerConnector,
             IAccountsManager accountsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
@@ -40,37 +41,46 @@ namespace PixaiBot.UI.ViewModel
             LogButtonText = "Start Logging";
         }
         #endregion
-        
+
         #region Methods
 
-        public void StartLogging()
+        public async void StartLogging()
         {
             if (IsRunning)
             {
-                IsRunning = false;
-                Status = "Idle.";
-                LogButtonText = "Start Logging";
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
+                StopLogging();
                 return;
+            }
+
+            var config = _configManager.GetConfig();
+            _tokenSource = new CancellationTokenSource();
+
+            IsRunning = true;
+            Status = "Running...";
+            LogButtonText = "Stop";
+
+            if (config.MultiThreading)
+            {
+              var accounts =  _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
+
+              var tasks = accounts.Select(account => Task.Run(() => { _accountsInfoLogger.StartLoggingAccountsInfo(account,_accountInfoLoggerModel,_tokenSource.Token);}));
+
+              await Task.WhenAll(tasks);
             }
             else
             {
-                IsRunning = true;
-                Status = "Running...";
-                LogButtonText = "Stop";
-                _cancellationTokenSource = new CancellationTokenSource();
+                await Task.Run(() => _accountsInfoLogger.StartLoggingAccountsInfo(_accountsManager.GetAllAccounts(), _accountInfoLoggerModel, _tokenSource.Token));
             }
 
-            Task.Run(() =>
-            {
+            StopLogging();
+        }
 
-                // IsRunning = false;
-                //Status = "Idle.";
-                //LogButtonText = "Start Logging";
-                //_cancellationTokenSource.Cancel();
-                //_cancellationTokenSource.Dispose();
-            });
+        private void StopLogging()
+        {
+            IsRunning = false;
+            Status = "Idle.";
+            LogButtonText = "Start Logging";
+            _tokenSource.Cancel();
         }
 
         #endregion
@@ -88,7 +98,7 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly AccountInfoLoggerModel _accountInfoLoggerModel;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _tokenSource;
 
         public bool IsRunning
         {

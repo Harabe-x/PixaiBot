@@ -19,7 +19,7 @@ namespace PixaiBot.UI.ViewModel
     {
 
         #region Commands
-        
+
         public ICommand AddProxyCommand { get; }
 
         public ICommand StartAccountCreationCommand { get; }
@@ -37,14 +37,14 @@ namespace PixaiBot.UI.ViewModel
             _tcpServerConnector = tcpServerConnector;
             _accountsManager = accountsManager;
             _proxyManager = proxyManager;
-           
+
             AddProxyCommand = new RelayCommand((obj) => AddProxy());
             StartAccountCreationCommand = new RelayCommand((obj) => StartAccountCreation());
-            
+
             ProxyFilePath = "Select Proxy File";
             OperationStatus = "Idle.";
             AccountsCreatorButtonText = "Start Account Creation";
-            
+
             _accountCreator.AccountCreated += OnAccountCreated;
             _accountCreator.ErrorOccurred += OnErrorOccurred;
         }
@@ -86,37 +86,36 @@ namespace PixaiBot.UI.ViewModel
             if (_configManager.GetConfig().ToastNotifications) { _toastNotificationSender.SendNotification("PixaiBot", e, NotificationType.Error); }
         }
 
-        private void StartAccountCreation()
+        private async void StartAccountCreation()
         {
             _tcpServerConnector.SendMessage("mUser Starting accounts creation");
 
             if (IsRunning)
             {
-                IsRunning = false;
-                OperationStatus = "Idle.";
-                AccountsCreatorButtonText = "Start Account Creation";
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
+                StopCreating();
                 return;
             }
-            else
-            {
-                _cancellationTokenSource = new CancellationTokenSource();
-                IsRunning = true;
-                OperationStatus = "Running...";
-                AccountsCreatorButtonText = "Stop Account Creation";
-            }
+            
+            _tokenSource = new CancellationTokenSource();
+            
+            IsRunning = true;
+            OperationStatus = "Running...";
+            AccountsCreatorButtonText = "Stop Account Creation";
+
 
             if (!int.TryParse(AccountAmount, out var amount)) return;
 
-            Task.Run(() =>
-            {
-                _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail, _cancellationTokenSource.Token);
-                IsRunning = false;
-                OperationStatus = "Idle.";
-                AccountsCreatorButtonText = "Start Account Creation";
-                _cancellationTokenSource.Dispose();
-            });
+            await Task.Run(() => { _accountCreator.CreateAccounts(amount,TempMailApiKey,ShouldUseProxy,ShouldVerifyEmail,_tokenSource.Token); } );
+            
+            StopCreating();
+        }
+
+        private void StopCreating()
+        {
+            IsRunning = false;
+            OperationStatus = "Idle.";
+            AccountsCreatorButtonText = "Start Account Creation";
+            _tokenSource.Cancel();
         }
 
         #endregion
@@ -140,7 +139,7 @@ namespace PixaiBot.UI.ViewModel
 
         private readonly AccountCreatorModel _accountCreatorModel;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _tokenSource;
 
         public bool IsRunning
         {
