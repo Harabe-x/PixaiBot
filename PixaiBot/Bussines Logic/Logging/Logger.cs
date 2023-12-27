@@ -34,12 +34,11 @@ public class Logger : ILogger
         try
         {
             File.AppendAllText(filePath, $"[{DateTime.Now:HH:mm:ss}] {message}\n");
+
+            if (!_previousWasError || filePath != lastFilePath || string.IsNullOrEmpty(lastFilePath)) return;
             
-            if (_previousWasError && filePath == lastFilePath && !(string.IsNullOrEmpty(lastFilePath)))
-            {
-                File.AppendAllText(lastFilePath, $"[{DateTime.Now:HH:mm:ss}] {_builder}\n");
-                _previousWasError = false;
-            }
+            File.AppendAllText(lastFilePath, $"[{DateTime.Now:HH:mm:ss}] {_builder}\n");
+            _previousWasError = false;
         }
         catch (Exception e)
         {

@@ -53,7 +53,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                
 
                 //Ensures that user in on profile page
-                while (!driver.Url.Contains("@"))
+                while (!driver.Url.Contains('@'))
                 {
                     _pixaiNavigation.ClickDropdownMenu(driver);
                     _pixaiNavigation.NavigateToProfile(driver);

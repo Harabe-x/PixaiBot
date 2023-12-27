@@ -82,8 +82,8 @@ public class DashboardControlViewModel : BaseViewModel
             var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
 
             var tasks = accounts.Select(account =>
-                Task.Run(() => { _creditClaimer.ClaimCreditsForAllAccounts(account, _tokenSource.Token); },
-                    _tokenSource.Token));
+                Task.Run(() =>
+                    { _creditClaimer.ClaimCreditsForAllAccounts(account, _tokenSource.Token); }, _tokenSource.Token));
             await Task.WhenAll(tasks);
         }
         else
