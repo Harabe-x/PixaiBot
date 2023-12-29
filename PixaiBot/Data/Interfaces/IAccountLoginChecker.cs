@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using PixaiBot.Data.Models;
 
@@ -9,7 +11,11 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IAccountLoginChecker
 {
-    bool CheckAccountLogin(UserAccount userAccount,IToastNotificationSender toastNotificationSender);
 
-    int CheckAllAccountsLogin(IList<UserAccount> accountsList,IToastNotificationSender toastNotificationSender = null);
+
+    event EventHandler<UserAccount> ValidAccountLogin;
+
+    bool CheckAccountLogin(UserAccount userAccount);
+
+    IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList,CancellationToken token);
 }

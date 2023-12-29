@@ -13,23 +13,24 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 {
     internal class PixaiNavigation : IPixaiNavigation
     {
-        private const string LoginPageUrl = "https://pixai.art/login";
 
-        private const string RegistrationPageUrl = "https://pixai.art/sign-up";
 
-        private const string HomePageUrl = "https://pixai.art/";
-
-        private const int PageLoadWaitTime = 1000;
+        #region Constructor
 
         public PixaiNavigation(ILogger logger,ITcpServerConnector tcpServerConnector)
         {
             _tcpServerConnector = tcpServerConnector;
             _logger = logger;
         }
+        #endregion
 
-        private readonly ILogger _logger;
 
-        private readonly ITcpServerConnector _tcpServerConnector;
+
+        #region Methods
+
+
+        #region IPixaiNavigation
+
 
         public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext)
         {
@@ -54,7 +55,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
         {
             _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
             _tcpServerConnector.SendMessage("yFinding button to navigate to registration form");
-            ClickElementWithSpecifiedText(driver,"button", "Log in with email");
+            ClickElementWithSpecifiedText(driver, "button", "Log in with email");
         }
 
         public void SendLoginCredentialsToTextBoxes(ISearchContext driver, string email, string password)
@@ -66,9 +67,9 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
             _tcpServerConnector.SendMessage("ySending email & password to textboxes");
 
-            SendKeysToElement(driver, "* > * > *:nth-child(2) > * > *:nth-child(1) > * > *",email);
+            SendKeysToElement(driver, "* > * > *:nth-child(2) > * > *:nth-child(1) > * > *", email);
 
-            SendKeysToElement(driver, "*:nth-child(2) > * > *:nth-child(2) > * > *",password);
+            SendKeysToElement(driver, "*:nth-child(2) > * > *:nth-child(2) > * > *", password);
         }
 
         public void ClickOnRegisterButton(ISearchContext driver)
@@ -87,7 +88,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
             _tcpServerConnector.SendMessage("yClicking login button");
 
-            ClickElementWithSpecifiedText(driver,"button","Login");
+            ClickElementWithSpecifiedText(driver, "button", "Login");
 
         }
 
@@ -96,7 +97,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             _logger.Log("Navigating to profile", _logger.CreditClaimerLogFilePath);
 
             _tcpServerConnector.SendMessage("yNavigating to profile");
-         
+
             ClickElement(driver, ".MuiMenuItem-root:nth-child(1)");
         }
 
@@ -105,8 +106,8 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             _logger.Log("Navigating to account model", _logger.CreditClaimerLogFilePath);
 
             _tcpServerConnector.SendMessage("yNavigating to account model");
-            
-            ClickElement(driver,".MuiMenuItem-root:nth-child(3)");
+
+            ClickElement(driver, ".MuiMenuItem-root:nth-child(3)");
         }
 
         public void GoToCreditsTab(IWebDriver driver)
@@ -143,9 +144,17 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             {
                 ClickClaimCreditButton(searchContext);
             }
-          
+
         }
 
+        public void LogIn(IWebDriver driver, string email, string password)
+        {
+            GoToLoginPage(driver);
+            SendLoginCredentialsToTextBoxes(driver, email, password);
+            ClickOnLoginButton(driver);
+        }
+
+        #endregion
 
         private static void ClickElement(ISearchContext driver, string cssSelector)
         {
@@ -164,7 +173,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             try
             {
                 IReadOnlyCollection<IWebElement> buttons = driver.FindElements(By.TagName(tagName));
-                buttons.FirstOrDefault(x => x.Text == text )?.Click();
+                buttons.FirstOrDefault(x => x.Text == text)?.Click();
             }
             catch (Exception e)
             {
@@ -176,15 +185,34 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
         {
             try
             {
-               var element = driver.FindElement(By.CssSelector(cssSelector));
-               element.Click();
-               element.SendKeys(keys);
+                var element = driver.FindElement(By.CssSelector(cssSelector));
+                element.Click();
+                element.SendKeys(keys);
             }
             catch (Exception e)
             {
                 throw new ChromeDriverException("ChromeDriver exception occurred", e);
             }
         }
+
+        #endregion
+
+
+        #region Fields
+
+        private const string LoginPageUrl = "https://pixai.art/login";
+
+        private const string RegistrationPageUrl = "https://pixai.art/sign-up";
+
+        private const string HomePageUrl = "https://pixai.art/";
+
+        private const int PageLoadWaitTime = 1000;
+
+        private readonly ILogger _logger;
+
+        private readonly ITcpServerConnector _tcpServerConnector;
+
+        #endregion
 
     }
 }

@@ -13,7 +13,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 {
     internal class AccountCreatorV2 : IAccountCreator
     {
-        public AccountCreatorV2(IPixaiNavigation pixaiNavigation,ITcpServerConnector tcpServerConnector,ITempMailApiManager tempMailApiManager, ILoginCredentialsMaker loginCredentialsMaker, ILogger logger, IProxyManager proxyManager)
+        public AccountCreatorV2(IPixaiNavigation pixaiNavigation, ITcpServerConnector tcpServerConnector, ITempMailApiManager tempMailApiManager, ILoginCredentialsMaker loginCredentialsMaker, ILogger logger, IProxyManager proxyManager)
         {
             _proxyManager = proxyManager;
             _tempMailApiManager = tempMailApiManager;
@@ -34,7 +34,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private const string StartPageUrl = "https://pixai.art/sign-up";
 
-        private const int WaitTime = 1; 
+        private const int WaitTime = 1;
 
         private readonly IProxyManager _proxyManager;
 
@@ -51,7 +51,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
         /// <param name="tempMailApiKey"></param>
         /// <param name="shouldUseProxy"></param>
         /// <param name="shouldVerifyEmail"></param>
-        public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail,CancellationToken token)
+        public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail, CancellationToken token)
         {
             for (var i = 0; i < amount; i++)
             {
@@ -62,7 +62,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 }
 
                 using var driver = shouldUseProxy ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy()) : ChromeDriverFactory.CreateDriver();
-              
+
                 _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
                 try
@@ -74,15 +74,10 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                     _tcpServerConnector.SendMessage("rChrome drive threw exception\n" + e.Message);
                     _logger.Log("Chrome drive threw exception\n" + e.Message, _logger.CreditClaimerLogFilePath);
                     ErrorOccurred?.Invoke(this, "Chrome drive Exception occurred");
-                   continue;
+                    continue;
 
                 }
-                finally
-                {
-                    driver.Quit();
-                    _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
-
-                }
+                driver.Quit();
             }
         }
 
@@ -101,7 +96,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
             var userAccount = new UserAccount() { Email = email, Password = password };
 
-            AccountCreated?.Invoke(this,userAccount);
+            AccountCreated?.Invoke(this, userAccount);
 
             if (!shouldVerifyEmail)
             {
@@ -116,26 +111,26 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 _pixaiNavigation.NavigateToProfileSettings(driver);
             }
 
-            _pixaiNavigation.NavigateToProfileSettings(driver); 
+            _pixaiNavigation.NavigateToProfileSettings(driver);
             _pixaiNavigation.ClickResendEmailVerificationLinkButton(driver);
 
-          
 
-            VerifyEmail(userAccount,driver,tempMailApiKey);
+
+            VerifyEmail(userAccount, driver, tempMailApiKey);
 
         }
 
         private void VerifyEmail(UserAccount userAccount, ChromeDriver driver, string tempMailApiKey)
         {
             var verificationLink = string.Empty;
-            const int maxAttempts = 10; 
+            const int maxAttempts = 10;
             var attemptCount = 0;
 
             while (string.IsNullOrEmpty(verificationLink) && attemptCount < maxAttempts)
             {
                 verificationLink = _tempMailApiManager.GetVerificationLink(userAccount.Email, tempMailApiKey);
                 if (!string.IsNullOrEmpty(verificationLink)) continue;
-                Thread.Sleep(TimeSpan.FromSeconds(5)); 
+                Thread.Sleep(TimeSpan.FromSeconds(5));
                 attemptCount++;
             }
 
@@ -146,9 +141,9 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 _tcpServerConnector.SendMessage("rEmail verification link not found after maximum attempts.");
                 return;
             }
-           
+
             driver.Navigate().GoToUrl(verificationLink);
-            
+
             Thread.Sleep(TimeSpan.FromSeconds(2.5));
 
             _logger.Log("Email verified", _logger.ApplicationLogFilePath);

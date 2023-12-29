@@ -8,7 +8,7 @@ using OpenQA.Selenium.Chrome;
 
 namespace PixaiBot.Data.Interfaces
 {
-    internal interface IPixaiNavigation
+    public interface IPixaiNavigation
     {
 
         public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext);
@@ -38,5 +38,7 @@ namespace PixaiBot.Data.Interfaces
         public void NavigateToUrl(IWebDriver webDriver, string url);
 
         public void ClickClaimCreditButton(ISearchContext searchContext);
+
+        public void LogIn(IWebDriver webDriver, string email, string password);
     }
 }

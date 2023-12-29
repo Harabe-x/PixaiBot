@@ -1,95 +1,89 @@
-﻿using System;
+﻿using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
+using OpenQA.Selenium.Support.UI;
 using System.Collections.Generic;
-using System.Diagnostics.PerformanceData;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Notification.Wpf;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
+using System.Threading;
+using System;
 
 namespace PixaiBot.Bussines_Logic;
 
 
-//TODO: Refactor      
-
-
 public class AccountLoginChecker : IAccountLoginChecker
 {
-    private ChromeDriver? _driver;
-
-    private const string MainPageUrl = "https://pixai.art/";
-
-    private readonly string _accountsFilePath;
-
-    private readonly ILogger _logger;
-
-    private readonly ITcpServerConnector _tcpServerConnector;
-
-    public AccountLoginChecker(ILogger logger,ITcpServerConnector tcpServerConnector)
+    #region Constructor
+    public AccountLoginChecker(ILogger logger, IPixaiNavigation pixaiNavigation, ITcpServerConnector tcpServerConnector)
     {
-        _accountsFilePath = InitialConfiguration.AccountsFilePath;
+        _pixaiNavigation = pixaiNavigation;
         _logger = logger;
-        _tcpServerConnector = tcpServerConnector;
-
     }
+    #endregion
+
+
     /// <summary>
     /// Checks account login credentials 
     /// </summary>
     /// <param name="userAccount"></param>
-    /// <param name="toastNotificationSender"></param>
     /// <returns>True if the account is valid</returns>
-    public bool CheckAccountLogin(UserAccount userAccount,IToastNotificationSender toastNotificationSender)
+    public bool CheckAccountLogin(UserAccount userAccount)
     {
-        _driver = ChromeDriverFactory.CreateDriver();
+        using var driver = ChromeDriverFactory.CreateDriverForDebug();
 
-        _tcpServerConnector.SendMessage($"cChecking Account {userAccount.Email}");
+        _pixaiNavigation.NavigateToUrl(driver, LoginUrl);
+        _pixaiNavigation.LogIn(driver, userAccount.Email, userAccount.Password);
 
-        LoginModule.Login(_driver, userAccount, _logger);
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10)); 
 
-        Thread.Sleep(1000);
-
-        if (_driver.Url == MainPageUrl)
+        if (wait.Until(drv => drv.Url == MainPageUrl))
         {
-            _tcpServerConnector.SendMessage($"gValid Account {userAccount.Email}");
-            _driver.Close();
-            _driver.Dispose();
-            _logger.Log($"Valid Account {userAccount.Email}", _logger.CreditClaimerLogFilePath);
-            _logger.Log($"=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
-            toastNotificationSender?.SendNotification("PixaiBot", $"Valid Account {userAccount.Email}",NotificationType.Success);
+            driver.Quit();
             return true;
         }
-        _tcpServerConnector.SendMessage($"rInvalid Account {userAccount.Email}");
-
-        _driver.Close();
-        _driver.Dispose();
-        _logger.Log("Invalid Account", _logger.CreditClaimerLogFilePath);
-        _logger.Log("=====Chrome Drive Disposed=====\n", _logger.CreditClaimerLogFilePath);
-        toastNotificationSender?.SendNotification("PixaiBot", $"Invalid Account {userAccount.Email}",NotificationType.Error);
+        driver.Quit();
+      
         return false;
+
     }
+
     /// <summary>
     /// Checks all accounts login credentials
-    /// </summary>
+    /// </summary> 
     /// <param name="accountsList"></param>
-    /// <param name="toastNotificationSender"></param>
     /// <returns>Number of valid accounts</returns>
-    public int CheckAllAccountsLogin(IList<UserAccount> accountsList,IToastNotificationSender toastNotificationSender = null)
+    public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList, CancellationToken token)
     {
-        _tcpServerConnector.SendMessage($"cChecking {accountsList.Count()} accounts");
+        var validAccounts = new List<UserAccount>();
 
+        foreach (var userAccount in accountsList)
+        {
+            if (token.IsCancellationRequested) return accountsList;
 
-        var validAccounts = accountsList.Where((account) => CheckAccountLogin(account,toastNotificationSender)).ToList();
+            try
+            {
+                if (CheckAccountLogin(userAccount))
+                {
+                    validAccounts.Add(userAccount);
+                    continue;
+                }
+            }
+            catch (ChromeDriverException)
+            {
+                continue;
+            }
 
-        JsonWriter.WriteJson(validAccounts, _accountsFilePath);
-
-        _tcpServerConnector.SendMessage($"Check ended, Valid Accounts : {validAccounts.Count},Bad accounts: {accountsList.Count() - validAccounts.Count} accounts");
-
-
-        return validAccounts.Count;
+            ValidAccountLogin?.Invoke(this, userAccount);
+        }
+        return validAccounts;
     }
+    private const int MaxWaitTime = 5;
+
+    private const string MainPageUrl = "https://pixai.art/";
+
+    private const string LoginUrl = "https://pixai.art/login";
+
+    private readonly IPixaiNavigation _pixaiNavigation;
+
+    private readonly ILogger _logger; // TODO: Add logging to this class
+
+    public event EventHandler<UserAccount> ValidAccountLogin;
 }

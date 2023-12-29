@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:PixaiBot.UI.Converters"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="400">
 
 <UserControl.Resources>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BooleanToBrushConverter x:Key="BrushConverter" />
 </UserControl.Resources>
 
     <Grid>
@@ -38,8 +40,8 @@
                             <Button Width="130" Height="40" FontSize="12" Content="Add Account List"
                                     Style="{StaticResource PurpleButton}" Margin="20 20 0 0"
                                     Command="{Binding AddManyAccountsCommand}" />
-                            <Button Width="130" Content="Validate Accounts" FontSize="14" Height="40"
-                                    Style="{StaticResource PurpleButton}" Margin="20 20 0 0 "
+                            <Button Width="130" Content="{Binding AccountCheckerButtonText }" FontSize="14" Height="40"
+                                    Style="{StaticResource PurpleButton}" Background="{Binding IsAccountCheckerRunning,Converter={StaticResource BrushConverter} }"  Margin="20 20 0 0 "
                                     Command="{Binding CheckAllAccountsLoginCommand}" />
                         </StackPanel>
                     </Grid>

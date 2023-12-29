@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Notification.Wpf;
+using PixaiBot.Bussines_Logic;
+using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
@@ -46,6 +49,7 @@ public class SettingsControlViewModel : BaseViewModel
         StartWithSystemCommand = new RelayCommand((obj) => StartWithSystem());
         UpdateToastNotificationPreferenceCommand = new RelayCommand((obj) => UpdateToastNotificationPreference());
         _userConfig = _configManager.GetConfig();
+        AccountCheckerButtonText = "Check Accounts Login";
     }
     #endregion
     #region Methods
@@ -70,29 +74,38 @@ public class SettingsControlViewModel : BaseViewModel
         _accountsManager.AddManyAccounts();
     }
 
-    private void CheckAllAccountsLogin()
+    private async void CheckAllAccountsLogin()
     {
-        var accountCheckTask = new Task(() =>
+        if (IsAccountCheckerRunning)
         {
-            var accounts = _accountsManager.GetAllAccounts().ToList();
+            CancelAccountsChecking();
+            return;
+        }
+        IsAccountCheckerRunning = true;
+        _tokenSource = new CancellationTokenSource();
+        AccountCheckerButtonText = "Stop";
+        var accountsList = _accountsManager.GetAllAccounts();
 
-            var validAccountsCount = 0;
-
-            validAccountsCount = EnableToastNotifications
-                ? _accountLoginChecker.CheckAllAccountsLogin(accounts, _toastNotificationSender) //# TODO : Refactor this 
-                : _accountLoginChecker.CheckAllAccountsLogin(accounts);
-
-            var botStatistics = _botStatisticsManager.GetStatistics();
+        await Task.Run(() =>
+        { _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), _tokenSource.Token); });
 
 
-            botStatistics.AccountsCount = validAccountsCount;
+        var statistics = _botStatisticsManager.GetStatistics();
 
-            _botStatisticsManager.SaveStatistics(botStatistics);
-        });
+        statistics.AccountsCount = accountsList.Count();
 
-        accountCheckTask.Start();
+
+        //JsonWriter.WriteJson(accountsList,InitialConfiguration.AccountsFilePath);
+
+        CancelAccountsChecking();
     }
 
+    private void CancelAccountsChecking()
+    {
+        IsAccountCheckerRunning = false;
+        AccountCheckerButtonText = "Check Accounts Login";
+        _tokenSource.Cancel();
+    }
  
     private void StartWithSystem()
     {
@@ -127,7 +140,34 @@ public class SettingsControlViewModel : BaseViewModel
 
     private readonly UserConfig _userConfig;
 
+    private CancellationTokenSource _tokenSource;
+
     private const int MaxNumberOfThreads = 10;
+
+    private string _accountCheckerButtonText;
+
+    public string AccountCheckerButtonText
+    {
+        get => _accountCheckerButtonText;
+        set
+        {
+            _accountCheckerButtonText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _isAccountChceckerRunning;
+
+    public bool IsAccountCheckerRunning
+    {
+        get => _isAccountChceckerRunning;
+
+        set
+        {
+            _isAccountChceckerRunning = value;
+            OnPropertyChanged();
+        }
+    }
 
     public bool ShouldStartWithSystem
     {

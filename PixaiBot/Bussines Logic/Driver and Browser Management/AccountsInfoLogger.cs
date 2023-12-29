@@ -11,14 +11,39 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 {
     internal class AccountsInfoLogger : IAccountsInfoLogger
     {
+        public AccountsInfoLogger(IPixaiNavigation pixaiNavigation, IPixaiDataReader pixaiDataReader)
+        {
+            _pixaiNavigation = pixaiNavigation;
+            _pixaiDataReader = pixaiDataReader;
+        }
 
-        //TODO: write the logic for logging the accounts info
-
-        public void StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList, IAccountInfoLoggerSettings settings,
+        public void StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList,
+            IAccountInfoLoggerSettings settings,
             CancellationToken cancellationToken)
         {
-            
-            throw new NotImplementedException();
+            foreach (var account in userAccountsList)
+            {
+                if (cancellationToken.IsCancellationRequested) return;
+                ;
+
+            }
         }
+
+        private void LogAccountInfo(UserAccount account, IAccountInfoLoggerSettings settings)
+        {
+          using var driver = ChromeDriverFactory.CreateDriver();
+          _pixaiNavigation.LogIn(driver,account.Email,account.Password);
+        }
+    
+
+
+
+    #region Fields
+        
+        private readonly IPixaiNavigation _pixaiNavigation;
+
+        private readonly IPixaiDataReader _pixaiDataReader;
+        
+        #endregion
     }
 }
