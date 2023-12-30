@@ -15,11 +15,8 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
     public class TempMailApiManager : ITempMailApiManager
     {
-        public event EventHandler<string> RequestFailed;
 
-        private readonly HttpClient _httpClient;
-
-        private List<string> _domainList;
+        #region Constructor
 
         public TempMailApiManager(ILogger logger, ITcpServerConnector tcpServerConnector)
         {
@@ -29,10 +26,8 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         }
 
-        private readonly ITcpServerConnector _tcpServerConnector;
-
-        private readonly ILogger _logger;
-
+        #endregion
+        #region Methods 
         public string GetEmail(string apiKey)
         {
             const string letters = "abcdefghijklmnopqrstuvwxyz";
@@ -146,10 +141,25 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private string GetUrlFromString(string url)
         {
-            var extractUrlRegexPattern = @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])";
+            const string extractUrlRegexPattern = @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])";
             var extractedUrl = Regex.Match(url, extractUrlRegexPattern);
             _logger.Log("Extracted url from email", _logger.CreditClaimerLogFilePath);
             return extractedUrl.Value;
         }
+        #endregion
+        #region Fields
+
+        public event EventHandler<string> RequestFailed;
+
+        private readonly HttpClient _httpClient;
+
+        private List<string> _domainList;
+
+        private readonly ITcpServerConnector _tcpServerConnector;
+
+        private readonly ILogger _logger;
+
+
+        #endregion
     }
 }

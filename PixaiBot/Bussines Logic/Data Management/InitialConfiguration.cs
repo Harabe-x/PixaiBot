@@ -14,40 +14,7 @@ namespace PixaiBot.Bussines_Logic;
 //TODO: Refactor      
 public static class InitialConfiguration
 {
-    /// <summary>
-    /// Current Bot Version
-    /// </summary>
-    public static string BotVersion { get; }
-
-
-    /// <summary>
-    /// Path to the user config file
-    /// </summary>
-    public static string UserConfigPath { get; }
-
-
-    /// <summary>
-    /// Path to the bot logs folder
-    /// </summary>
-    public static string BotLogsPath { get; }
-
-
-    /// <summary>
-    /// Path to the bot statistics file
-    /// </summary>
-    public static string StatisticsFilePath { get; }
-
-    /// <summary>
-    /// Path to the accounts file 
-    /// </summary>
-    public static string AccountsFilePath { get; }
-
-
-    /// <summary>
-    /// Path to the application data folder
-    /// </summary>
-    public static string ApplicationDataPath { get; }
-
+    #region Constructor 
     static InitialConfiguration()
     {
         ApplicationDataPath =
@@ -62,7 +29,9 @@ public static class InitialConfiguration
         BotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         if (!Directory.Exists(ApplicationDataPath)) CreateDirectories();
     }
+    #endregion
 
+    #region Methods
 
     /// <summary>
     /// Creates the directories needed for the bot to work
@@ -106,4 +75,44 @@ public static class InitialConfiguration
         };
         JsonWriter.WriteJson(statistics, StatisticsFilePath);
     }
+    #endregion
+    
+    #region Fields
+
+    /// <summary>
+    /// Current Bot Version
+    /// </summary>
+    public static string BotVersion { get; }
+
+
+    /// <summary>
+    /// Path to the user config file
+    /// </summary>
+    public static string UserConfigPath { get; }
+
+
+    /// <summary>
+    /// Path to the bot logs folder
+    /// </summary>
+    public static string BotLogsPath { get; }
+
+
+    /// <summary>
+    /// Path to the bot statistics file
+    /// </summary>
+    public static string StatisticsFilePath { get; }
+
+    /// <summary>
+    /// Path to the accounts file 
+    /// </summary>
+    public static string AccountsFilePath { get; }
+
+
+    /// <summary>
+    /// Path to the application data folder
+    /// </summary>
+    public static string ApplicationDataPath { get; }
+
+
+    #endregion
 }

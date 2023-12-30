@@ -16,7 +16,7 @@ using PixaiBot.UI.Base;
 using PixaiBot.UI.View;
 
 namespace PixaiBot.UI.ViewModel;
-
+//TODO: Refactor
 public class SettingsControlViewModel : BaseViewModel
 {
     #region Commands
@@ -84,10 +84,13 @@ public class SettingsControlViewModel : BaseViewModel
         IsAccountCheckerRunning = true;
         _tokenSource = new CancellationTokenSource();
         AccountCheckerButtonText = "Stop";
+        
         var accountsList = _accountsManager.GetAllAccounts();
 
+        IEnumerable<UserAccount> validAccounts = null;
+        
         await Task.Run(() =>
-        { _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), _tokenSource.Token); });
+        {  validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), _tokenSource.Token); });
 
 
         var statistics = _botStatisticsManager.GetStatistics();
@@ -95,7 +98,7 @@ public class SettingsControlViewModel : BaseViewModel
         statistics.AccountsCount = accountsList.Count();
 
 
-        //JsonWriter.WriteJson(accountsList,InitialConfiguration.AccountsFilePath);
+        JsonWriter.WriteJson(validAccounts, InitialConfiguration.AccountsFilePath);
 
         CancelAccountsChecking();
     }
@@ -103,7 +106,7 @@ public class SettingsControlViewModel : BaseViewModel
     private void CancelAccountsChecking()
     {
         IsAccountCheckerRunning = false;
-        AccountCheckerButtonText = "Check Accounts Login";
+        AccountCheckerButtonText = "Validate accounts";
         _tokenSource.Cancel();
     }
  

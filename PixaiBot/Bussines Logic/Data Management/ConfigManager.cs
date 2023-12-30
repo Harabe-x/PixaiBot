@@ -13,6 +13,8 @@ namespace PixaiBot.Bussines_Logic;
 
 public class ConfigManager : IConfigManager
 {
+    #region Methods
+
     public void SaveConfig(UserConfig config)
     {
         JsonWriter.WriteJson(config, InitialConfiguration.UserConfigPath);
@@ -27,6 +29,6 @@ public class ConfigManager : IConfigManager
         SaveConfig(readConfig);
         
         return readConfig ;
-
     }
+    #endregion
 }

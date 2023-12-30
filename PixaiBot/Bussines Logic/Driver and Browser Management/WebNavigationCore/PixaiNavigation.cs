@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
 using PixaiBot.Data.Interfaces;
 
@@ -130,8 +131,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
         {
             driver.Navigate().GoToUrl(url);
             _tcpServerConnector.SendMessage($"yNavigating to {url}");
-
-            Thread.Sleep(TimeSpan.FromMilliseconds(PageLoadWaitTime));
         }
 
         public void ClickClaimCreditButton(ISearchContext searchContext)
@@ -140,7 +139,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
             {
                 ClickElement(searchContext, ".MuiLoadingButton-root");
             }
-            catch (ElementClickInterceptedException e)
+            catch (ElementClickInterceptedException)
             {
                 ClickClaimCreditButton(searchContext);
             }
@@ -206,7 +205,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         private const string HomePageUrl = "https://pixai.art/";
 
-        private const int PageLoadWaitTime = 1000;
+        private const int MaxWaitTime = 5;
 
         private readonly ILogger _logger;
 

@@ -10,6 +10,9 @@ namespace PixaiBot.Data.Interfaces
 {
     internal interface IPixaiDataReader  
     {
+
+        public string GetAccountId(ISearchContext searchContext);
+
         public string GetUsername(ISearchContext searchContext);
 
         public string GetCreditsCount(ISearchContext searchContext);

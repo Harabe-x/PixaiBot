@@ -13,29 +13,19 @@ namespace PixaiBot.Bussines_Logic;
 
 public class AccountsManager : IAccountsManager
 {
-    public int AccountsCount => UpdateAccountManagerProperties();
-    
-    private string AccountsFilePath { get; }
-    
-    public event EventHandler? AccountsListChanged;
+    #region Constructor
 
-    private readonly IBotStatisticsManager _botStatisticsManager;
-
-    private readonly ILogger _logger;
-
-    private readonly IDataValidator _dataValidator;
-
-    private readonly ITcpServerConnector _tcpServerConnector; 
-
-    public AccountsManager(IBotStatisticsManager botStatisticsManager,ITcpServerConnector tcpServerConnector, ILogger logger,IDataValidator dataValidator)
+    public AccountsManager(IBotStatisticsManager botStatisticsManager, ITcpServerConnector tcpServerConnector, ILogger logger, IDataValidator dataValidator)
     {
-        _tcpServerConnector = tcpServerConnector; 
+        _tcpServerConnector = tcpServerConnector;
         _dataValidator = dataValidator;
         _logger = logger;
         AccountsFilePath = InitialConfiguration.AccountsFilePath;
         _botStatisticsManager = botStatisticsManager;
     }
+    #endregion
 
+    #region Methods
 
     /// <summary>
     /// Add new account to accounts file
@@ -44,7 +34,7 @@ public class AccountsManager : IAccountsManager
     public void AddAccount(UserAccount account)
     {
         var botStatistics = _botStatisticsManager.GetStatistics();
-       
+
         if (!File.Exists(AccountsFilePath))
         {
 
@@ -53,31 +43,31 @@ public class AccountsManager : IAccountsManager
             JsonWriter.WriteJson(accountsList, AccountsFilePath);
 
             botStatistics.AccountsCount = 1;
-            
+
             UpdateAccountManagerProperties();
-            
+
             _logger.Log("Added account ", _logger.ApplicationLogFilePath);
-            
-            AccountsListChanged?.Invoke(this,EventArgs.Empty);
-            
+
+            AccountsListChanged?.Invoke(this, EventArgs.Empty);
+
             return;
         }
         var accountList = GetAllAccounts().ToList();
-        
+
         accountList.Add(account);
-        
+
         JsonWriter.WriteJson(accountList, AccountsFilePath);
 
         botStatistics.AccountsCount += 1;
 
         _tcpServerConnector.SendMessage("gAccountAdded");
-        
+
         _logger.Log("Added account", _logger.ApplicationLogFilePath);
-        
+
         UpdateAccountManagerProperties();
 
         _botStatisticsManager.SaveStatistics(botStatistics);
-        
+
         AccountsListChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -89,16 +79,16 @@ public class AccountsManager : IAccountsManager
     public void RemoveAccount(UserAccount userAccount)
     {
         if (!File.Exists(AccountsFilePath)) return;
-        
+
         var accountsList = GetAllAccounts().ToList();
 
         var accountToRemove = accountsList.FirstOrDefault(x => x.Email == userAccount.Email && x.Password == userAccount.Password);
 
         if (accountToRemove == null) return;
-        
+
         accountsList.Remove(accountToRemove);
 
-       var botStatistics = _botStatisticsManager.GetStatistics();
+        var botStatistics = _botStatisticsManager.GetStatistics();
 
         botStatistics.AccountsCount -= 1;
 
@@ -133,7 +123,7 @@ public class AccountsManager : IAccountsManager
             : new List<UserAccount>();
     }
 
-    
+
     /// <summary>
     /// Opens File Dialog and extracts user accounts from txt file
     /// </summary>
@@ -161,7 +151,7 @@ public class AccountsManager : IAccountsManager
     {
         if (newEmail == null || newPassword == null) return;
 
-        if(!_dataValidator.IsEmailValid(newEmail) || !_dataValidator.IsPasswordValid(newPassword)) return;
+        if (!_dataValidator.IsEmailValid(newEmail) || !_dataValidator.IsPasswordValid(newPassword)) return;
 
         var newAccount = new UserAccount()
         {
@@ -186,7 +176,7 @@ public class AccountsManager : IAccountsManager
     private IEnumerable<UserAccount> GetUserAccountsFromTxt(string filePath)
     {
         var accountsList = File.ReadAllLines(filePath);
-        
+
         var accountsToWrite = new List<UserAccount>();
         _logger.Log("Reading accounts from txt File", _logger.ApplicationLogFilePath);
 
@@ -209,4 +199,22 @@ public class AccountsManager : IAccountsManager
 
         return accountsToWrite;
     }
+    #endregion
+    #region Fields
+    public int AccountsCount => UpdateAccountManagerProperties();
+
+    private string AccountsFilePath { get; }
+
+    public event EventHandler? AccountsListChanged;
+
+    private readonly IBotStatisticsManager _botStatisticsManager;
+
+    private readonly ITcpServerConnector _tcpServerConnector;
+
+    private readonly ILogger _logger;
+
+    private readonly IDataValidator _dataValidator;
+
+
+    #endregion
 }

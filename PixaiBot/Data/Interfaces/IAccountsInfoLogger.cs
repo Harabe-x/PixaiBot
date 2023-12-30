@@ -10,6 +10,6 @@ namespace PixaiBot.Data.Interfaces
 {
     internal interface IAccountsInfoLogger
     {
-        public void StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList,IAccountInfoLoggerSettings settings,CancellationToken cancellationToken);
+        public string StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList,IAccountInfoLoggerSettings settings,CancellationToken cancellationToken);
     }
 }

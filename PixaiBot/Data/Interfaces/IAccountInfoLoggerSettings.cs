@@ -17,5 +17,7 @@ namespace PixaiBot.Data.Interfaces
         public bool ShouldLogAccountId { get; set; }
 
         public bool ShouldLogAccountUsername { get; set; }
+
+        public bool ShouldLogAccountCredits { get; set; }
     }
 }

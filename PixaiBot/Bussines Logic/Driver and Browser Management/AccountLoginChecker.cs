@@ -32,7 +32,7 @@ public class AccountLoginChecker : IAccountLoginChecker
         _pixaiNavigation.NavigateToUrl(driver, LoginUrl);
         _pixaiNavigation.LogIn(driver, userAccount.Email, userAccount.Password);
 
-        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10)); 
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds)); 
 
         if (wait.Until(drv => drv.Url == MainPageUrl))
         {
@@ -49,7 +49,7 @@ public class AccountLoginChecker : IAccountLoginChecker
     /// Checks all accounts login credentials
     /// </summary> 
     /// <param name="accountsList"></param>
-    /// <returns>Number of valid accounts</returns>
+    /// <returns>IEnumerable with valid accounts</returns>
     public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList, CancellationToken token)
     {
         var validAccounts = new List<UserAccount>();
@@ -75,7 +75,7 @@ public class AccountLoginChecker : IAccountLoginChecker
         }
         return validAccounts;
     }
-    private const int MaxWaitTime = 5;
+    private const int MaxLoginAttemptSeconds = 5;
 
     private const string MainPageUrl = "https://pixai.art/";
 

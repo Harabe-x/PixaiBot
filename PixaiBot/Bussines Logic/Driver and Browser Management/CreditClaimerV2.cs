@@ -13,11 +13,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 {
     internal class CreditClaimerV2 : ICreditClaimer
     {
-        private const string LoginUrl = "https://pixai.art/login";
-
-        public event EventHandler<UserAccount>? CreditsClaimed;
-
-        public event EventHandler<UserAccount>? ProcessStartedForAccount;
+        #region Constructor
 
         public CreditClaimerV2(ILogger logger, IPixaiNavigation pixaiNavigation,ITcpServerConnector tcpServerConnector)
         {
@@ -27,12 +23,12 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
             _pixaiNavigation = pixaiNavigation;
         }
-           
-        private readonly ILogger _logger;
+        
 
-        private readonly ITcpServerConnector _tcpServerConnector;
+        #endregion   
 
-        private readonly IPixaiNavigation _pixaiNavigation;
+        #region Methods
+
 
         public void ClaimCredits(UserAccount account)
         {
@@ -97,5 +93,23 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
             }
         }
+        #endregion
+
+
+        #region Fields
+
+        private readonly ILogger _logger;
+
+        private readonly ITcpServerConnector _tcpServerConnector;
+
+        private readonly IPixaiNavigation _pixaiNavigation;
+
+        private const string LoginUrl = "https://pixai.art/login";
+
+        public event EventHandler<UserAccount>? CreditsClaimed;
+
+        public event EventHandler<UserAccount>? ProcessStartedForAccount;
+        
+        #endregion
     }
 }

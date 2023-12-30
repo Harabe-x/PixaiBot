@@ -12,17 +12,16 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
     class ProxyManager : IProxyManager
     {
 
-        private readonly List<string> _proxyList;
-
-        private const string ProxyPattern = @"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*(\d{1,5})$";
-
-        private readonly Random _random;
-
+        #region Constructor
         public ProxyManager()
         {
             _proxyList = new List<string>();
             _random = new Random();
         }
+
+        #endregion
+
+        #region Methods
 
         public IEnumerable<string> GetProxyList()
         {
@@ -48,5 +47,16 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 _proxyList.Add(proxy);
             }
         }
+        #endregion
+
+        #region Fields
+
+        private readonly List<string> _proxyList;
+
+        private const string ProxyPattern = @"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*(\d{1,5})$";
+
+        private readonly Random _random;
+
+        #endregion
     }
 }

@@ -18,6 +18,8 @@ namespace PixaiBot.Data.Models
         public bool ShouldLogAccountId { get; set; }
 
         public bool ShouldLogAccountUsername { get; set; }
+       
+        public bool ShouldLogAccountCredits { get; set; }
 
         public bool IsRunning { get; set; }
 
@@ -33,6 +35,7 @@ namespace PixaiBot.Data.Models
             ShouldLogEmailVerificationStatus = true;
             ShouldLogFollowersCount = true;
             ShouldLogFollowingCount = true;
+            ShouldLogAccountCredits = true;
         }
     }
 }

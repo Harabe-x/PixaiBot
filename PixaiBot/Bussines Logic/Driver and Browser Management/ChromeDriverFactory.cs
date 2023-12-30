@@ -11,10 +11,7 @@ namespace PixaiBot.Bussines_Logic;
 public static class ChromeDriverFactory
 {
 
-    /// <summary>
-    /// Implicit Wait Time for Chrome Driver
-    /// </summary>
-    private const int MaxWaitTime = 5;
+    
 
     /// <summary>
     /// Creates a ChromeDriver with the needed model to hide the process.
@@ -85,4 +82,9 @@ public static class ChromeDriverFactory
 
         return driver;
     }
+
+    /// <summary>
+    /// Implicit Wait Time for Chrome Driver
+    /// </summary>
+    private const int MaxWaitTime = 5;
 }

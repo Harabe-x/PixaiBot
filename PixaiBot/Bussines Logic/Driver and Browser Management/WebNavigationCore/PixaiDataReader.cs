@@ -17,6 +17,13 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         private readonly ITcpServerConnector _serverConnector;
 
+        public string GetAccountId(ISearchContext searchContext)
+        {
+            _serverConnector.SendMessage("mAccount id");
+
+            return GetWebElementText(searchContext, ".font-bold");
+        }
+
         public string GetUsername(ISearchContext searchContext)
         {
             _serverConnector.SendMessage("mGetting username");
@@ -31,6 +38,8 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         public string GetEmailVerificationStatus(ISearchContext searchContext)
         {
+            _serverConnector.SendMessage("mGetting email verification status");
+
             return GetWebElementText(searchContext, ".leading-6");
         }
 
@@ -57,6 +66,23 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
                 throw new ChromeDriverException("Chrome searchContext error occured while trying to get element text", e);
             }
             if (string.IsNullOrEmpty(element.Text)) { throw new EmptyTextException("There is no text in this element"); }
+
+            return element.Text;
+        }
+
+        private static string GetWebElementAttribute(ISearchContext searchContext, string cssSelector,
+            string attributeName)
+        {
+            IWebElement element;
+            try
+            {
+                element = searchContext.FindElement(By.CssSelector(cssSelector));
+            }
+            catch (Exception e)
+            {
+                throw new ChromeDriverException("Chrome searchContext error occured while trying to get element text", e);
+            }
+            if (string.IsNullOrEmpty(element.GetAttribute(attributeName))) { throw new EmptyTextException("There is no text in this element"); }
 
             return element.Text;
         }

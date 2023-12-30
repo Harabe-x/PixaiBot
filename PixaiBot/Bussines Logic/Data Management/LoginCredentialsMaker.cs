@@ -1,4 +1,4 @@
-﻿using System;
+﻿  using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +11,7 @@ namespace PixaiBot.Bussines_Logic.Data_Management
     internal class LoginCredentialsMaker : ILoginCredentialsMaker
     {
 
-
+        #region Constructor
         public LoginCredentialsMaker(ITempMailApiManager tempMailApiManager,ILogger logger)
         {
             _tempMailApiManager = tempMailApiManager;
@@ -19,17 +19,11 @@ namespace PixaiBot.Bussines_Logic.Data_Management
             _logger = logger;
 
         }
+        #endregion
 
-        private readonly ITempMailApiManager _tempMailApiManager;
 
-        private readonly Random _random;
 
-        private readonly ILogger _logger;
-
-        private const string Letters = "abcdefghijklmnopqrstuvwxyz";
-
-        private const string Characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>?+_)(*&^%$#@!<>?";
-
+        #region Methods
 
         public string GenerateEmail()
         {
@@ -56,5 +50,19 @@ namespace PixaiBot.Bussines_Logic.Data_Management
             return new string(Enumerable.Repeat(characters, length).Select(x => x[_random.Next(characters.Length)])
                 .ToArray());
         }
+        #endregion
+        #region Fields
+
+        private readonly ITempMailApiManager _tempMailApiManager;
+
+        private readonly Random _random;
+
+        private readonly ILogger _logger;
+
+        private const string Letters = "abcdefghijklmnopqrstuvwxyz";
+
+        private const string Characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>?+_)(*&^%$#@!<>?";
+
+        #endregion
     }
 }

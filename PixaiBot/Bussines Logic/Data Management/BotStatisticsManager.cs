@@ -13,6 +13,10 @@ namespace PixaiBot.Bussines_Logic;
 
 public class BotStatisticsManager : IBotStatisticsManager
 {
+    #region Methods
+
+    
+
     public void SaveStatistics(BotStatistics botStatistics)
     {
         JsonWriter.WriteJson(botStatistics,InitialConfiguration.StatisticsFilePath);
@@ -29,6 +33,12 @@ public class BotStatisticsManager : IBotStatisticsManager
         SaveStatistics(botStatistics);
         return botStatistics;
     }
+    
+    #endregion
+
+    #region Fields
 
     public event EventHandler? StatisticsChanged;
+
+    #endregion
 }

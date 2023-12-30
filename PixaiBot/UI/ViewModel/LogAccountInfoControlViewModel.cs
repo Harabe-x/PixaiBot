@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Win32;
 using Notification.Wpf;
 using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Data.Interfaces;
@@ -58,18 +59,33 @@ namespace PixaiBot.UI.ViewModel
             IsRunning = true;
             Status = "Running...";
             LogButtonText = "Stop";
-
+            var result = string.Empty;
             if (config.MultiThreading)
             {
-              var accounts =  _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
+                var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
 
-              var tasks = accounts.Select(account => Task.Run(() => { _accountsInfoLogger.StartLoggingAccountsInfo(account,_accountInfoLoggerModel,_tokenSource.Token);}));
+                var tasks = accounts.Select(account => Task.Run(() => _accountsInfoLogger.StartLoggingAccountsInfo(account, _accountInfoLoggerModel, _tokenSource.Token)));
 
-              await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks);
+
+                var completedTasks = tasks.Where(t => t.IsCompletedSuccessfully);
+
+                result = string.Join(Environment.NewLine, completedTasks.Select(t => t.Result));
             }
             else
+            { 
+                result = await Task .Run(() => _accountsInfoLogger.StartLoggingAccountsInfo(_accountsManager.GetAllAccounts(), _accountInfoLoggerModel, _tokenSource.Token));
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                await Task.Run(() => _accountsInfoLogger.StartLoggingAccountsInfo(_accountsManager.GetAllAccounts(), _accountInfoLoggerModel, _tokenSource.Token));
+                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                FileName = "AccountsInfo.txt"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                System.IO.File.WriteAllTextAsync(saveFileDialog.FileName, result);
             }
 
             StopLogging();
@@ -161,6 +177,16 @@ namespace PixaiBot.UI.ViewModel
             set
             {
                 _accountInfoLoggerModel.ShouldLogFollowingCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShouldLogAccountCredits
+        {
+            get => _accountInfoLoggerModel.ShouldLogAccountCredits;
+            set
+            {
+                _accountInfoLoggerModel.ShouldLogAccountCredits = value;
                 OnPropertyChanged();
             }
         }
