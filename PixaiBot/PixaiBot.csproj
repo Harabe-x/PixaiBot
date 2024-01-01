@@ -23,7 +23,6 @@
     <None Remove="Resources\images\PixaiAutoClaimerIcon.ico" />
     <None Remove="Resources\images\PixaiAutoClaimerLogo.png" />
     <None Remove="Resources\images\PixaiLogo.png" />
-    <None Remove="UI\View\PixaiAutoClaimerLogo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,7 +50,6 @@
     <Resource Include="Resources\images\PixaiLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\View\PixaiAutoClaimerLogo.png" />
   </ItemGroup>
 
 </Project>

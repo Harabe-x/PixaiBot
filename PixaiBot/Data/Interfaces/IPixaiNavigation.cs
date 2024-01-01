@@ -6,39 +6,37 @@ using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace PixaiBot.Data.Interfaces
+namespace PixaiBot.Data.Interfaces;
+
+public interface IPixaiNavigation
 {
-    public interface IPixaiNavigation
-    {
+    public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext);
 
-        public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext);
+    public void GoBack(IWebDriver searchContext);
 
-        public void GoBack(IWebDriver searchContext);
+    public void NavigateRegistrationPage(ISearchContext searchContext);
 
-        public void NavigateRegistrationPage(ISearchContext searchContext);
+    public void GoToLoginPage(ISearchContext searchContext);
 
-        public void GoToLoginPage(ISearchContext searchContext);
+    public void SendLoginCredentialsToTextBoxes(ISearchContext searchContext, string email, string password);
 
-        public void SendLoginCredentialsToTextBoxes(ISearchContext searchContext, string email,string password);
+    public void ClickOnRegisterButton(ISearchContext searchContext);
 
-        public void ClickOnRegisterButton(ISearchContext searchContext);
+    public void ClickOnLoginButton(ISearchContext searchContext);
 
-        public void ClickOnLoginButton(ISearchContext searchContext);
+    public void NavigateToProfile(ISearchContext searchContext);
 
-        public void NavigateToProfile(ISearchContext searchContext);
+    public void NavigateToProfileSettings(ISearchContext searchContext);
 
-        public void NavigateToProfileSettings(ISearchContext searchContext);
+    public void GoToCreditsTab(IWebDriver webDriver);
 
-        public void GoToCreditsTab(IWebDriver webDriver);
-            
-        public void ClickDropdownMenu(IWebDriver webDriver);
+    public void ClickDropdownMenu(IWebDriver webDriver);
 
-        public void NavigateToMyWorkTab(IWebDriver webDriver);
+    public void NavigateToMyWorkTab(IWebDriver webDriver);
 
-        public void NavigateToUrl(IWebDriver webDriver, string url);
+    public void NavigateToUrl(IWebDriver webDriver, string url);
 
-        public void ClickClaimCreditButton(ISearchContext searchContext);
+    public void ClickClaimCreditButton(ISearchContext searchContext);
 
-        public void LogIn(IWebDriver webDriver, string email, string password);
-    }
+    public void LogIn(IWebDriver webDriver, string email, string password);
 }

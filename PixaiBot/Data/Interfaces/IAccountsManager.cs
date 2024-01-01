@@ -21,5 +21,5 @@ public interface IAccountsManager
 
     public void AddManyAccounts();
 
-    public void EditAccount(UserAccount account,string newEmail,string newPassword);
+    public void EditAccount(UserAccount account, string newEmail, string newPassword);
 }

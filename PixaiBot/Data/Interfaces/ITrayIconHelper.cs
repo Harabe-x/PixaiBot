@@ -8,7 +8,6 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ITrayIconHelper
 {
-
     public bool CanShowWindow();
 
     public Action ShowWindow { get; set; }

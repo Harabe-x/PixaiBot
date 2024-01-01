@@ -12,7 +12,7 @@ namespace PixaiBot.Bussines_Logic;
 public class AccountLoginChecker : IAccountLoginChecker
 {
     #region Constructor
-    public AccountLoginChecker(ILogger logger, IPixaiNavigation pixaiNavigation, ITcpServerConnector tcpServerConnector)
+    public AccountLoginChecker(ILogger logger, IPixaiNavigation pixaiNavigation)
     {
         _pixaiNavigation = pixaiNavigation;
         _logger = logger;
@@ -65,8 +65,8 @@ public class AccountLoginChecker : IAccountLoginChecker
                     validAccounts.Add(userAccount);
                     continue;
                 }
-            }
-            catch (ChromeDriverException)
+            } 
+            catch (Exception)
             {
                 continue;
             }
@@ -76,7 +76,7 @@ public class AccountLoginChecker : IAccountLoginChecker
         return validAccounts;
     }
     private const int MaxLoginAttemptSeconds = 5;
-
+     
     private const string MainPageUrl = "https://pixai.art/";
 
     private const string LoginUrl = "https://pixai.art/login";

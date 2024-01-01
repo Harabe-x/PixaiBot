@@ -19,9 +19,12 @@ public class Logger : ILogger
 
     public Logger()
     {
-        CreditClaimerLogFilePath = $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt"; ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt"; if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath); if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath);
+        CreditClaimerLogFilePath =
+            $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt";
+        ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt";
+        if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath);
+        if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath);
         _builder = new StringBuilder();
-
     }
 
     /// <summary>
@@ -36,7 +39,7 @@ public class Logger : ILogger
             File.AppendAllText(filePath, $"[{DateTime.Now:HH:mm:ss}] {message}\n");
 
             if (!_previousWasError || filePath != lastFilePath || string.IsNullOrEmpty(lastFilePath)) return;
-            
+
             File.AppendAllText(lastFilePath, $"[{DateTime.Now:HH:mm:ss}] {_builder}\n");
             _previousWasError = false;
         }

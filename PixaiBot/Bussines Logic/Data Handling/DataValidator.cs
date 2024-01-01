@@ -11,7 +11,8 @@ namespace PixaiBot.Bussines_Logic;
 
 public class DataValidator : IDataValidator
 {
-    #region Methods 
+    #region Methods
+
     public bool IsEmailValid(string email)
     {
         try
@@ -38,5 +39,6 @@ public class DataValidator : IDataValidator
     {
         return !string.IsNullOrEmpty(password);
     }
+
     #endregion
 }

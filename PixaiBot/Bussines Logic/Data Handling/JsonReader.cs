@@ -9,9 +9,8 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-public  static class JsonReader
+public static class JsonReader
 {
-
     /// <summary>
     /// Reads a json file and returns a list of user accounts
     /// </summary>

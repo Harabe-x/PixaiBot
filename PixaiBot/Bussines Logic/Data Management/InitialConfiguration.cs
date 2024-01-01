@@ -10,11 +10,11 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-
 //TODO: Refactor      
 public static class InitialConfiguration
 {
-    #region Constructor 
+    #region Constructor
+
     static InitialConfiguration()
     {
         ApplicationDataPath =
@@ -29,6 +29,7 @@ public static class InitialConfiguration
         BotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         if (!Directory.Exists(ApplicationDataPath)) CreateDirectories();
     }
+
     #endregion
 
     #region Methods
@@ -75,8 +76,9 @@ public static class InitialConfiguration
         };
         JsonWriter.WriteJson(statistics, StatisticsFilePath);
     }
+
     #endregion
-    
+
     #region Fields
 
     /// <summary>
@@ -112,7 +114,6 @@ public static class InitialConfiguration
     /// Path to the application data folder
     /// </summary>
     public static string ApplicationDataPath { get; }
-
 
     #endregion
 }

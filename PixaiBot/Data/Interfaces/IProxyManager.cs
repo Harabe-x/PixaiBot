@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixaiBot.Data.Interfaces
+namespace PixaiBot.Data.Interfaces;
+
+public interface IProxyManager
 {
-  public  interface IProxyManager
-    {
-        IEnumerable<string> GetProxyList();
+    IEnumerable<string> GetProxyList();
 
-        string GetRandomProxy();
+    string GetRandomProxy();
 
-        void ReadProxyFile(string filePath);
-    }
+    void ReadProxyFile(string filePath);
 }

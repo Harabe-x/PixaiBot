@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixaiBot.Data.Interfaces
-{ 
-    public interface ITempMailApiManager
-    {
-        event EventHandler<string> RequestFailed;
+namespace PixaiBot.Data.Interfaces;
 
-        string GetEmail(string apiKey);
+public interface ITempMailApiManager
+{
+    event EventHandler<string> RequestFailed;
 
-        IEnumerable<string> GetDomains(string tempMailApiKey);
+    string GetEmail(string apiKey);
 
-        string GetVerificationLink(string email,string apiKey);
-    }
+    IEnumerable<string> GetDomains(string tempMailApiKey);
+
+    string GetVerificationLink(string email, string apiKey);
 }

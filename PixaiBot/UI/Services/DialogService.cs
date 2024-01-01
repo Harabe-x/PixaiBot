@@ -11,10 +11,9 @@ namespace PixaiBot.UI.Services;
 
 public class DialogService : IDialogService
 {
-  
-
-    public void ShowDialog<TDialogView, TDialogViewModel>(TDialogView dialogWindowView, TDialogViewModel dialogWindowViewModel, bool isModal) 
-        where TDialogView : Window 
+    public void ShowDialog<TDialogView, TDialogViewModel>(TDialogView dialogWindowView,
+        TDialogViewModel dialogWindowViewModel, bool isModal)
+        where TDialogView : Window
         where TDialogViewModel : BaseViewModel
     {
         dialogWindowView.DataContext = dialogWindowViewModel;

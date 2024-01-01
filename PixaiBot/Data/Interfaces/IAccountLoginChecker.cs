@@ -11,11 +11,9 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IAccountLoginChecker
 {
-
-
     event EventHandler<UserAccount> ValidAccountLogin;
 
     bool CheckAccountLogin(UserAccount userAccount);
 
-    IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList,CancellationToken token);
+    IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList, CancellationToken token);
 }

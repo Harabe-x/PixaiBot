@@ -10,48 +10,45 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
     internal class PixaiDataReader : IPixaiDataReader
     {
 
-        public PixaiDataReader(ITcpServerConnector serverConnector)
+        public PixaiDataReader(ILogger logger)
         {
-           _serverConnector = serverConnector;
+            _logger = logger; 
         }
-
-        private readonly ITcpServerConnector _serverConnector;
 
         public string GetAccountId(ISearchContext searchContext)
         {
-            _serverConnector.SendMessage("mAccount id");
+            _logger.Log("Reading Account Id",_logger.CreditClaimerLogFilePath);
 
-            return GetWebElementText(searchContext, ".font-bold");
+            return GetWebElementText(searchContext, ".sc-fbYMXx > .font-bold");
         }
 
         public string GetUsername(ISearchContext searchContext)
         {
-            _serverConnector.SendMessage("mGetting username");
+            _logger.Log("Reading Username", _logger.CreditClaimerLogFilePath);
             return GetWebElementText(searchContext, ".text-\\[32px\\]");
         }
 
         public string GetCreditsCount(ISearchContext searchContext)
         {
-            _serverConnector.SendMessage("mGetting credits count");
+            _logger.Log("Reading Credits count", _logger.CreditClaimerLogFilePath);
             return GetWebElementText(searchContext, ".font-bold > span");
         }
 
         public string GetEmailVerificationStatus(ISearchContext searchContext)
         {
-            _serverConnector.SendMessage("mGetting email verification status");
-
+            _logger.Log("Reading Email Verification Status", _logger.CreditClaimerLogFilePath);
             return GetWebElementText(searchContext, ".leading-6");
         }
 
         public string GetFollowersCount(ISearchContext searchContext)
         {
-            _serverConnector.SendMessage("mGetting followers count");
+            _logger.Log("Reading Followers Count", _logger.CreditClaimerLogFilePath);
             return GetWebElementText(searchContext, ".gap-1:nth-child(2) > .font-bold");
         }
 
         public string GetFollowingCount(ISearchContext searchContext)
         {
-            _serverConnector.SendMessage("mGetting following count");
+            _logger.Log("Reading Following Count", _logger.CreditClaimerLogFilePath);
             return GetWebElementText(searchContext, ".gap-2 > .flex:nth-child(1) > .font-bold");
         }
         private static string GetWebElementText(ISearchContext searchContext, string cssSelector)
@@ -86,5 +83,13 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
             return element.Text;
         }
+
+
+
+        #region Fields
+
+        private readonly ILogger _logger;
+
+        #endregion
     }
 }

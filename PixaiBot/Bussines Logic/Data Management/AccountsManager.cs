@@ -15,9 +15,8 @@ public class AccountsManager : IAccountsManager
 {
     #region Constructor
 
-    public AccountsManager(IBotStatisticsManager botStatisticsManager, ITcpServerConnector tcpServerConnector, ILogger logger, IDataValidator dataValidator)
+    public AccountsManager(IBotStatisticsManager botStatisticsManager, ILogger logger, IDataValidator dataValidator)
     {
-        _tcpServerConnector = tcpServerConnector;
         _dataValidator = dataValidator;
         _logger = logger;
         AccountsFilePath = InitialConfiguration.AccountsFilePath;
@@ -60,8 +59,6 @@ public class AccountsManager : IAccountsManager
 
         botStatistics.AccountsCount += 1;
 
-        _tcpServerConnector.SendMessage("gAccountAdded");
-
         _logger.Log("Added account", _logger.ApplicationLogFilePath);
 
         UpdateAccountManagerProperties();
@@ -100,8 +97,6 @@ public class AccountsManager : IAccountsManager
 
         AccountsListChanged?.Invoke(this, EventArgs.Empty);
 
-        _tcpServerConnector.SendMessage("gAccountRemoved");
-
         _logger.Log("Removed account", _logger.ApplicationLogFilePath);
 
 
@@ -115,8 +110,6 @@ public class AccountsManager : IAccountsManager
     public IEnumerable<UserAccount> GetAllAccounts()
     {
         _logger.Log("Reading account List", _logger.ApplicationLogFilePath);
-
-        _tcpServerConnector.SendMessage("cReading Accounts List");
 
         return File.Exists(AccountsFilePath)
             ? JsonReader.ReadAccountFile(AccountsFilePath)
@@ -142,7 +135,6 @@ public class AccountsManager : IAccountsManager
 
         var importedUserAccounts = GetUserAccountsFromTxt(dialog.FileName);
         _logger.Log("Adding accounts in batch", _logger.ApplicationLogFilePath);
-        _tcpServerConnector.SendMessage("cAdding accounts in batch");
 
         foreach (var account in importedUserAccounts) AddAccount(account);
     }
@@ -164,7 +156,6 @@ public class AccountsManager : IAccountsManager
         RemoveAccount(account);
 
         _logger.Log("Edited account", _logger.ApplicationLogFilePath);
-        _tcpServerConnector.SendMessage("gAccount Edited");
 
     }
 
@@ -209,7 +200,6 @@ public class AccountsManager : IAccountsManager
 
     private readonly IBotStatisticsManager _botStatisticsManager;
 
-    private readonly ITcpServerConnector _tcpServerConnector;
 
     private readonly ILogger _logger;
 

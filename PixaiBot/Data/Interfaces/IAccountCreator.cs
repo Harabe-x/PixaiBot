@@ -6,15 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.Data.Interfaces
+namespace PixaiBot.Data.Interfaces;
+
+internal interface IAccountCreator
 {
-    internal interface IAccountCreator
-    {
-        event EventHandler<UserAccount> AccountCreated;
+    event EventHandler<UserAccount> AccountCreated;
 
-        event EventHandler<string> ErrorOccurred;
+    event EventHandler<string> ErrorOccurred;
 
-        void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy,bool shouldVerifyEmail,CancellationToken token);
-
-    }
+    void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail,
+        CancellationToken token);
 }

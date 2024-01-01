@@ -12,9 +12,6 @@ namespace PixaiBot.UI.Helpers;
 
 public class TrayIconHelper
 {
-
-
-
     public static bool GetCanShowWindow(DependencyObject obj)
     {
         return (bool)obj.GetValue(CanShowWindowProperty);
@@ -27,26 +24,20 @@ public class TrayIconHelper
 
     // Using a DependencyProperty as the backing store for CanShowWindow.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CanShowWindowProperty =
-        DependencyProperty.RegisterAttached("CanShowWindow", typeof(bool), typeof(TrayIconHelper), new PropertyMetadata(false,ShowWindow));
+        DependencyProperty.RegisterAttached("CanShowWindow", typeof(bool), typeof(TrayIconHelper),
+            new PropertyMetadata(false, ShowWindow));
 
     private static void ShowWindow(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is Window window)
-        {
             window.Loaded += (s, e) =>
             {
                 if (window.DataContext is ITrayIconHelper trayIconHelper)
-                {
                     trayIconHelper.ShowWindow += () =>
                     {
-                        if (trayIconHelper.CanHideToTray())
-                        {
-                            window.Show();
-                        }
+                        if (trayIconHelper.CanHideToTray()) window.Show();
                     };
-                }
             };
-        }
     }
 
 
@@ -73,7 +64,7 @@ public class TrayIconHelper
                     trayIconHelper.HideToTray += () =>
                     {
                         if (!trayIconHelper.CanHideToTray()) return;
-                        
+
                         window.Hide();
 
                         var notifyIcon = new NotifyIcon()

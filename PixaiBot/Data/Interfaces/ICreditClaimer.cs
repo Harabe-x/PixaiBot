@@ -17,5 +17,5 @@ public interface ICreditClaimer
 
     public void ClaimCredits(UserAccount account);
 
-    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,CancellationToken cancellationToken);
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken);
 }

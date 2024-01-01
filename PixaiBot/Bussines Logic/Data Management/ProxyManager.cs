@@ -51,7 +51,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         #region Fields
 
-        private readonly List<string> _proxyList;
+        private readonly IList<string> _proxyList;
 
         private const string ProxyPattern = @"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*(\d{1,5})$";
 

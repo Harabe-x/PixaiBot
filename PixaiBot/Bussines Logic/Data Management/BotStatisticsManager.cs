@@ -8,9 +8,6 @@ using PixaiBot.Data.Models;
 
 namespace PixaiBot.Bussines_Logic;
 
-
-//TODO: Refactor    
-
 public class BotStatisticsManager : IBotStatisticsManager
 {
     #region Methods
@@ -27,13 +24,16 @@ public class BotStatisticsManager : IBotStatisticsManager
     {
         var botStatistics = JsonReader.ReadStatisticsFile(InitialConfiguration.StatisticsFilePath);
 
-        if (botStatistics != null) return botStatistics;
-        
-        botStatistics = new BotStatistics();
-        SaveStatistics(botStatistics);
+        if (botStatistics == null)
+        {
+            botStatistics = new BotStatistics();
+            SaveStatistics(botStatistics);
+        }
+
         return botStatistics;
+
     }
-    
+
     #endregion
 
     #region Fields

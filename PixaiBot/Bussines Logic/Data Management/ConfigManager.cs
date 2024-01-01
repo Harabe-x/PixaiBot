@@ -9,8 +9,6 @@ using PixaiBot.Data.Models;
 namespace PixaiBot.Bussines_Logic;
 
 
-//TODO: Possible refactor  
-
 public class ConfigManager : IConfigManager
 {
     #region Methods
@@ -24,11 +22,13 @@ public class ConfigManager : IConfigManager
     {
         var readConfig = JsonReader.ReadConfigFile(InitialConfiguration.UserConfigPath);
 
-        if (readConfig != null) return readConfig;
-        
-        SaveConfig(readConfig);
-        
-        return readConfig ;
+        if (readConfig == null)
+        {
+             readConfig = new UserConfig();
+            SaveConfig(readConfig);
+        }
+
+        return readConfig;
     }
     #endregion
 }

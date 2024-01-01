@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="PixaiBot.UI.View.AccountCreatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PixaiBot.UI.View"
+             xmlns:converters="clr-namespace:PixaiBot.UI.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="400">
+    <UserControl.Resources>
+        <converters:BooleanToBrushConverter x:Key="BrushConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock FontWeight="Regular" Foreground="#2d3436" Style="{StaticResource TitleText}"
+                       HorizontalAlignment="Center" Text="Account Creator" VerticalAlignment="Center" />
+            <TextBlock FontWeight="Regular" Style="{StaticResource SecondaryText}" HorizontalAlignment="Center"
+                       Text="Here you can create accounts" VerticalAlignment="Center" />
+        </StackPanel>
+
+
+        <Grid Grid.Row="1">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2">
+                <TextBlock Style="{StaticResource BoldPurpleText}" Text="Click Button Below To Start The Process"
+                           HorizontalAlignment="Center" FontSize="18" />
+                <TextBlock Style="{StaticResource SecondaryText}" Text="You will need access to the internet ! "
+                           HorizontalAlignment="Center" />
+                <Button Command="{Binding StartAccountCreationCommand}" Style="{StaticResource PurpleButton}" Width="200"
+                        Margin="0 30 0 0" Content="{Binding AccountsCreatorButtonText}"  Background="{Binding IsRunning,Converter={StaticResource BrushConverter}}" />
+                <TextBlock Style="{StaticResource SecondaryText}" Foreground="#2c3e50"
+                           Text="{Binding OperationStatus}"
+                           FontWeight="SemiBold" HorizontalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+
+
+        <Grid Grid.Row="2" Margin="0 -50 0 0">
+            <StackPanel HorizontalAlignment="Center">
+                <Border Style="{StaticResource BorderStyle}">
+                    <Grid>
+                        <TextBlock Text="Creator settings :" Style="{StaticResource BoldPurpleText2}" />
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Quantity :" Foreground="{StaticResource LightPurpleColor}" FontSize="16" Margin="20 15 0 0"/>
+                            <TextBox Text="{Binding AccountAmount}" VerticalAlignment="Center" Grid.Row="1" Background="Transparent"  Width="200"   HorizontalAlignment="Left" BorderBrush="{StaticResource DarkPurpleColor}" BorderThickness="0 0  0 2.5" Margin="20 5 0 0"/>
+                            <CheckBox Style="{StaticResource FormCheckBox}" IsChecked="{Binding ShouldVerifyEmail }" Content=" Verify Email ? "  Margin="20 15 0 0 "/>
+                            <TextBlock Text="Temp mail api key :" Foreground="{StaticResource LightPurpleColor}" Visibility="{Binding ShouldVerifyEmail,Converter={StaticResource BooleanToVisibilityConverter}}" FontSize="16" Margin="20 15 0 0"/>
+                            <TextBox Text="{Binding TempMailApiKey}" VerticalAlignment="Center" Grid.Row="1" Background="Transparent"  Width="200"   HorizontalAlignment="Left" BorderBrush="{StaticResource DarkPurpleColor}"  Visibility="{Binding ShouldVerifyEmail,Converter={StaticResource BooleanToVisibilityConverter}}" BorderThickness="0 0  0 2.5" Margin="20 5 0 0"/>
+                            <CheckBox Content="Use Proxy ? " IsChecked="{Binding ShouldUseProxy}"  Margin="20 15 0 0" Style="{StaticResource FormCheckBox}" />
+                            <Button  Style="{StaticResource PurpleButton}" HorizontalAlignment="Left" Margin="20 10 0 0 " Content="Select" Width="125" Height="37.5" Command="{Binding AddProxyCommand}" Visibility="{Binding ShouldUseProxy,Converter={StaticResource BooleanToVisibilityConverter}}"  />
+
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+
+    </Grid>
+</UserControl>

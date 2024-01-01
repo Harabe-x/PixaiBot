@@ -28,14 +28,14 @@ public partial class App : Application
     {
         _logger = new Logger();
         IServiceCollection services = new ServiceCollection();
-        services.AddSingleton<MainWindowView>(provider => new MainWindowView()
-            { DataContext = provider.GetService<MainWindowViewModel>() });
-        services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<DashboardControlViewModel>();
-        services.AddSingleton<SettingsControlViewModel>();
-        services.AddSingleton<AccountListControlViewModel>();
-        services.AddSingleton<LogAccountInfoControlViewModel>();
-        services.AddSingleton<AccountCreatorControlViewModel>();
+        services.AddSingleton<NavigationPanelView>(provider => new NavigationPanelView()
+        { DataContext = provider.GetService<NavigationPanelViewModel>() });
+        services.AddSingleton<NavigationPanelViewModel>();
+        services.AddSingleton<CreditClaimerViewModel>();
+        services.AddSingleton<SettingsViewModel>();
+        services.AddSingleton<AccountListViewModel>();
+        services.AddSingleton<AccountInfoLoggerViewModel>();
+        services.AddSingleton<AccountCreatorViewModel>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IAccountsManager, AccountsManager>();
@@ -45,7 +45,7 @@ public partial class App : Application
         services.AddSingleton<IBotStatisticsManager, BotStatisticsManager>();
         services.AddSingleton<ICreditClaimer, CreditClaimerV2>();
         services.AddSingleton<ILogger, Logger>();
-        services.AddSingleton<ILoginCredentialsMaker,LoginCredentialsMaker>();
+        services.AddSingleton<ILoginCredentialsMaker, LoginCredentialsMaker>();
         services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();
         services.AddSingleton<IProxyManager, ProxyManager>();
         services.AddSingleton<ITempMailApiManager, TempMailApiManager>();
@@ -53,7 +53,6 @@ public partial class App : Application
         services.AddSingleton<IPixaiDataReader, PixaiDataReader>();
         services.AddSingleton<IPixaiNavigation, PixaiNavigation>();
         services.AddSingleton<IAccountsInfoLogger, AccountsInfoLogger>();
-        services.AddSingleton<ITcpServerConnector, TcpServerConnector>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();
@@ -66,7 +65,7 @@ public partial class App : Application
         InitialConfiguration.CreateStatisticsFile();
         _logger.Log("=====Application Started=====", _logger.ApplicationLogFilePath);
         base.OnStartup(e);
-        var mainWindow = _serviceProvider.GetRequiredService<MainWindowView>();
+        var mainWindow = _serviceProvider.GetRequiredService<NavigationPanelView>();
         mainWindow.Show();
     }
 
@@ -78,7 +77,7 @@ public partial class App : Application
 
     private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        //_logger.Log($"{e.Exception} | {e.Exception.Message}", _logger.ApplicationLogFilePath);
-        //e.Handled = true;
+        _logger.Log($"{e.Exception} | {e.Exception.Message}", _logger.ApplicationLogFilePath);
+        e.Handled = true;
     }
 }

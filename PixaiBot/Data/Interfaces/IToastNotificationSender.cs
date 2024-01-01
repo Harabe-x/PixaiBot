@@ -10,5 +10,6 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IToastNotificationSender
 {
-    public void SendNotification(string title, string message, NotificationType notificationType,Action onClick = null);
+    public void SendNotification(string title, string message, NotificationType notificationType,
+        Action onClick = null);
 }

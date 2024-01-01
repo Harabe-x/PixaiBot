@@ -15,11 +15,10 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
     {
         #region Constructor
 
-        public CreditClaimerV2(ILogger logger, IPixaiNavigation pixaiNavigation,ITcpServerConnector tcpServerConnector)
+        public CreditClaimerV2(ILogger logger, IPixaiNavigation pixaiNavigation)
         {
             _logger = logger;
 
-            _tcpServerConnector = tcpServerConnector;
 
             _pixaiNavigation = pixaiNavigation;
         }
@@ -33,12 +32,9 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
         public void ClaimCredits(UserAccount account)
         {
 
-
             using var driver = ChromeDriverFactory.CreateDriver();
 
             _logger.Log("=====Launched Chrome Driver=====",_logger.CreditClaimerLogFilePath);
-
-            _tcpServerConnector.SendMessage("gLaunched Chrome Driver");
 
             try  
             {
@@ -46,19 +42,16 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
                 _pixaiNavigation.GoToLoginPage(driver);
                 _pixaiNavigation.SendLoginCredentialsToTextBoxes(driver,account.Email,account.Password);
                 _pixaiNavigation.ClickOnLoginButton(driver);
-               
-
+                
                 //Ensures that user in on profile page
                 while (!driver.Url.Contains('@'))
                 {
                     _pixaiNavigation.ClickDropdownMenu(driver);
                     _pixaiNavigation.NavigateToProfile(driver);
                     _pixaiNavigation.GoToCreditsTab(driver);
-
                 }
-                // Clicks the claim button 5 times to ensure that button was clicked 
-                for (var i =  0; i < 5; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
-                _tcpServerConnector.SendMessage("gClaimed credits");
+
+                for (var i =  0; i < MaxTries; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
             }
             catch (ChromeDriverException e)
             {
@@ -68,7 +61,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
             {
                 _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
             }
-            _tcpServerConnector.SendMessage("gClaimed credits");
 
 
             driver.Quit();
@@ -78,8 +70,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken)
         {
-
-            _tcpServerConnector.SendMessage($"cClaiming credits on {accounts.Count()} accounts");
 
             foreach (var account in accounts)
             {
@@ -100,11 +90,12 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management
 
         private readonly ILogger _logger;
 
-        private readonly ITcpServerConnector _tcpServerConnector;
 
         private readonly IPixaiNavigation _pixaiNavigation;
 
         private const string LoginUrl = "https://pixai.art/login";
+
+        private const int MaxTries = 5;
 
         public event EventHandler<UserAccount>? CreditsClaimed;
 

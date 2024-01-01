@@ -6,12 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.UI.Models
-{
-    class AccountListModel
-    {
-        public ObservableCollection<UserAccount> UserAccounts { get; set; }
+namespace PixaiBot.UI.Models;
 
-        public UserAccount SelectedAccount { get; set; }
-    }
+internal class AccountListModel
+{
+    public ObservableCollection<UserAccount> UserAccounts { get; set; }
+
+    public UserAccount SelectedAccount { get; set; }
 }

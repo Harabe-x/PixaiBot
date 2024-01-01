@@ -10,7 +10,8 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IDialogService
 {
-    public void ShowDialog<TDialogView,TDialogViewModel>(TDialogView dialogWindowView,TDialogViewModel dialogWindowViewModel, bool isModal) 
+    public void ShowDialog<TDialogView, TDialogViewModel>(TDialogView dialogWindowView,
+        TDialogViewModel dialogWindowViewModel, bool isModal)
         where TDialogView : Window
         where TDialogViewModel : BaseViewModel;
 }

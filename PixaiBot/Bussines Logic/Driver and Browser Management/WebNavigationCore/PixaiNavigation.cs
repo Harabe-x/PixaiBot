@@ -18,9 +18,8 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         #region Constructor
 
-        public PixaiNavigation(ILogger logger,ITcpServerConnector tcpServerConnector)
+        public PixaiNavigation(ILogger logger)
         {
-            _tcpServerConnector = tcpServerConnector;
             _logger = logger;
         }
         #endregion
@@ -35,8 +34,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext)
         {
-            _tcpServerConnector.SendMessage("yFinding button to resend verification link");
-
             ClickElement(searchContext, "*:nth-child(3) *:nth-child(2) > *:nth-child(4)");
         }
 
@@ -48,14 +45,12 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
         public void NavigateRegistrationPage(ISearchContext driver)
         {
             _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-            _tcpServerConnector.SendMessage("yFinding button to navigate to registration form");
             ClickElementWithSpecifiedText(driver, "button", "Register");
         }
 
         public void GoToLoginPage(ISearchContext driver)
         {
             _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-            _tcpServerConnector.SendMessage("yFinding button to navigate to registration form");
             ClickElementWithSpecifiedText(driver, "button", "Log in with email");
         }
 
@@ -66,8 +61,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
             _logger.Log("Sending email & password to textboxes ", _logger.CreditClaimerLogFilePath);
 
-            _tcpServerConnector.SendMessage("ySending email & password to textboxes");
-
             SendKeysToElement(driver, "* > * > *:nth-child(2) > * > *:nth-child(1) > * > *", email);
 
             SendKeysToElement(driver, "*:nth-child(2) > * > *:nth-child(2) > * > *", password);
@@ -77,8 +70,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
         {
             _logger.Log("Clicking register button", _logger.CreditClaimerLogFilePath);
 
-            _tcpServerConnector.SendMessage("yClicking register button");
-
             ClickElementWithSpecifiedText(driver, "button", "Sign Up");
 
         }
@@ -86,8 +77,6 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
         public void ClickOnLoginButton(ISearchContext driver)
         {
             _logger.Log("Clicking login button ", _logger.CreditClaimerLogFilePath);
-
-            _tcpServerConnector.SendMessage("yClicking login button");
 
             ClickElementWithSpecifiedText(driver, "button", "Login");
 
@@ -97,16 +86,12 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
         {
             _logger.Log("Navigating to profile", _logger.CreditClaimerLogFilePath);
 
-            _tcpServerConnector.SendMessage("yNavigating to profile");
-
             ClickElement(driver, ".MuiMenuItem-root:nth-child(1)");
         }
 
         public void NavigateToProfileSettings(ISearchContext driver)
         {
             _logger.Log("Navigating to account model", _logger.CreditClaimerLogFilePath);
-
-            _tcpServerConnector.SendMessage("yNavigating to account model");
 
             ClickElement(driver, ".MuiMenuItem-root:nth-child(3)");
         }
@@ -118,19 +103,16 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         public void ClickDropdownMenu(IWebDriver driver)
         {
-            _tcpServerConnector.SendMessage("yClicking dropdown menu");
             ClickElement(driver, ".shrink-0");
         }
         public void NavigateToMyWorkTab(IWebDriver driver)
         {
-            _tcpServerConnector.SendMessage("yNavigating to my work tab");
             NavigateToUrl(driver, driver.Url + "/artwork");
         }
 
         public void NavigateToUrl(IWebDriver driver, string url)
         {
             driver.Navigate().GoToUrl(url);
-            _tcpServerConnector.SendMessage($"yNavigating to {url}");
         }
 
         public void ClickClaimCreditButton(ISearchContext searchContext)
@@ -199,17 +181,7 @@ namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCor
 
         #region Fields
 
-        private const string LoginPageUrl = "https://pixai.art/login";
-
-        private const string RegistrationPageUrl = "https://pixai.art/sign-up";
-
-        private const string HomePageUrl = "https://pixai.art/";
-
-        private const int MaxWaitTime = 5;
-
         private readonly ILogger _logger;
-
-        private readonly ITcpServerConnector _tcpServerConnector;
 
         #endregion
 
