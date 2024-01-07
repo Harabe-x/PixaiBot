@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Text.Json;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Data_Handling;
 
 public class JsonWriter
 {

@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
-using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;

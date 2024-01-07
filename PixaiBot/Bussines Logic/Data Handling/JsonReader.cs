@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using PixaiBot.Data.Models;
+using PixaiBot.UI.Models;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Data_Handling;
 
 public static class JsonReader
 {

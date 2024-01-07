@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Notification.Wpf;
-using PixaiBot.Bussines_Logic;
 using PixaiBot.Bussines_Logic.Data_Handling;
+using PixaiBot.Bussines_Logic.Data_Management;
 using PixaiBot.Data.Interfaces;
-using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
+using PixaiBot.UI.Models;
 using PixaiBot.UI.View;
 
 namespace PixaiBot.UI.ViewModel;

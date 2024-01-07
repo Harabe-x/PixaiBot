@@ -1,9 +1,7 @@
 ﻿using System;
+using OpenQA.Selenium;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
 using PixaiBot.Data.Interfaces;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
-
 
 namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore;
 

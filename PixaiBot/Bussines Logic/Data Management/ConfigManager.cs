@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Data.Interfaces;
-using PixaiBot.Data.Models;
+using PixaiBot.UI.Models;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Data_Management;
 
 public class ConfigManager : IConfigManager
 {

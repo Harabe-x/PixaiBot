@@ -1,9 +1,10 @@
-﻿using PixaiBot.Data.Interfaces;
+﻿using System;
 using System.IO;
-using System;
 using System.Text;
+using PixaiBot.Bussines_Logic.Data_Management;
+using PixaiBot.Data.Interfaces;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Logging;
 
 public class Logger : ILogger
 {

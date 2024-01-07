@@ -1,12 +1,11 @@
-﻿using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
-using OpenQA.Selenium.Support.UI;
+﻿using System;
 using System.Collections.Generic;
-using PixaiBot.Data.Interfaces;
-using PixaiBot.Data.Models;
 using System.Threading;
-using System;
+using OpenQA.Selenium.Support.UI;
+using PixaiBot.Data.Interfaces;
+using PixaiBot.UI.Models;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management;
 
 public class AccountLoginChecker : IAccountLoginChecker
 {

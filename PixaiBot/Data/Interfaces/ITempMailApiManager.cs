@@ -13,7 +13,18 @@ public interface ITempMailApiManager
     /// </summary>
     event EventHandler<string> RequestFailed;
 
+    /// <summary>
+    ///  Gets the available domains from API.
+    /// </summary>
+    /// <param name="tempMailApiKey">Temp-mail api key</param>
+    /// <returns>List of available domains </returns>
     IEnumerable<string> GetDomains(string tempMailApiKey);
 
+    /// <summary>
+    /// Gets Verification link from email.
+    /// </summary>
+    /// <param name="email">Email from which messages are to be downloaded</param>
+    /// <param name="apiKey">Temp-mail api key</param>
+    /// <returns>First link from email</returns>
     string GetVerificationLink(string email, string apiKey);
 }

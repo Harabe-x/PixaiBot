@@ -1,7 +1,6 @@
 ﻿using PixaiBot.Data.Interfaces;
 using System.Windows.Threading;
 using System.Threading.Tasks;
-using PixaiBot.Data.Models;
 using System.Windows.Input;
 using PixaiBot.UI.Base;
 using System.Linq;
@@ -11,7 +10,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using Notification.Wpf;
-using PixaiBot.Bussines_Logic;
 using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.UI.Models;
 using Brush = System.Drawing.Brush;

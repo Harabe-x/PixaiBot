@@ -10,8 +10,8 @@ using System.Windows.Input;
 using Notification.Wpf;
 using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Data.Interfaces;
-using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
+using PixaiBot.UI.Models;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace PixaiBot.UI.ViewModel;

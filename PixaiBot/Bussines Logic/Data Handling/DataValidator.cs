@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PixaiBot.Data.Interfaces;
 using System.Net.Mail;
-using Microsoft.IdentityModel.Tokens;
+using PixaiBot.Data.Interfaces;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Data_Handling;
 
 public class DataValidator : IDataValidator
 {

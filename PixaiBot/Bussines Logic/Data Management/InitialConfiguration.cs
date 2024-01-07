@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium.DevTools;
-using PixaiBot.Data.Models;
+using PixaiBot.Bussines_Logic.Data_Handling;
+using PixaiBot.UI.Models;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Data_Management;
 
 //TODO: Refactor      
 public static class InitialConfiguration

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using PixaiBot.Data.Interfaces;
-using PixaiBot.Data.Models;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
 

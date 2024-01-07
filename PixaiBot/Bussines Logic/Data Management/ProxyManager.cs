@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using PixaiBot.Data.Interfaces;
 
-namespace PixaiBot.Bussines_Logic.Driver_and_Browser_Management;
+namespace PixaiBot.Bussines_Logic.Data_Management;
 
 internal class ProxyManager : IProxyManager
 {

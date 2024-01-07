@@ -2,11 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Threading;
-using PixaiBot.Bussines_Logic;
 using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Bussines_Logic.Data_Management;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management;
 using PixaiBot.Bussines_Logic.Driver_and_Browser_Management.WebNavigationCore;
+using PixaiBot.Bussines_Logic.Logging;
+using PixaiBot.Bussines_Logic.Notifications;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Services;

@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
+using PixaiBot.Bussines_Logic.Data_Handling;
 using PixaiBot.Data.Interfaces;
-using PixaiBot.Data.Models;
+using PixaiBot.UI.Models;
 
-namespace PixaiBot.Bussines_Logic;
+namespace PixaiBot.Bussines_Logic.Data_Management;
 
 public class AccountsManager : IAccountsManager
 {
