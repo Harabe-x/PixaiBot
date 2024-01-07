@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="400" Background="Transparent">
     <UserControl.Resources>
-        <converters:BooleanToBrushConverter x:Key="BrushConverter"/>
+        <converters:BooleanToBrushConverter x:Key="BrushConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -30,15 +30,17 @@
                            HorizontalAlignment="Center" FontSize="18" />
                 <TextBlock Style="{StaticResource SecondaryText}" Text="You will need access to the internet ! "
                            HorizontalAlignment="Center" />
-                <Button Command="{Binding ClaimCreditsCommand}" Width="200" Margin="0 30 0 0" Content="{Binding ClaimButtonText}">
+                <Button Command="{Binding ClaimCreditsCommand}" Width="200" Margin="0 30 0 0"
+                        Content="{Binding ClaimButtonText}">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ButtonWithHighLight}">
-                            <Setter Property="Background" Value="{Binding IsRunning, Converter={StaticResource BrushConverter}}" />
+                            <Setter Property="Background"
+                                    Value="{Binding IsRunning, Converter={StaticResource BrushConverter}}" />
                             <Setter Property="Foreground" Value="#ffffff" />
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="#6c5ce7" />
-                                    <Setter Property="Foreground" Value="#ffffff"></Setter>
+                                    <Setter Property="Foreground" Value="#ffffff" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -72,5 +74,5 @@
 
 
     </Grid>
-   
+
 </UserControl>

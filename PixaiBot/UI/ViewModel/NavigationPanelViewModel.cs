@@ -32,11 +32,12 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
 
     public ICommand HideApplicationCommand { get; }
 
-
     #endregion
+
     #region Constructor
 
-    public NavigationPanelViewModel(INavigationService navService, ILogger logger, IToastNotificationSender toastNotificationASender, IConfigManager configManager)
+    public NavigationPanelViewModel(INavigationService navService, ILogger logger,
+        IToastNotificationSender toastNotificationASender, IConfigManager configManager)
     {
         _configManager = configManager;
         _toastNotificationSender = toastNotificationASender;
@@ -53,6 +54,7 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     }
 
     #endregion
+
     #region Methods
 
     private void NavigateToAccountsList()
@@ -88,11 +90,12 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
 
     private void HideApplication()
     {
-
-        if (_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Application minimized to system tray, click this notification to maximize application", NotificationType.Information, () => { ShowWindow?.Invoke(); });
+        if (_configManager.GetConfig().ToastNotifications)
+            _toastNotificationSender.SendNotification("PixaiBot",
+                "Application minimized to system tray, click this notification to maximize application",
+                NotificationType.Information, () => { ShowWindow?.Invoke(); });
         HideToTray?.Invoke();
         _logger.Log("Hided application to tray", _logger.ApplicationLogFilePath);
-
     }
 
     private void ExitApplication()
@@ -116,9 +119,8 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     }
 
     #endregion
+
     #region Fields
-
-
 
     private readonly IToastNotificationSender _toastNotificationSender;
 
@@ -145,6 +147,4 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     }
 
     #endregion
-
-
 }

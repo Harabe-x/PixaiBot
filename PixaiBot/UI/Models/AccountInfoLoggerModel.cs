@@ -23,7 +23,7 @@ internal class AccountInfoLoggerModel : IAccountInfoLoggerSettings
 
     public bool IsRunning { get; set; }
 
-    public string Status { get; set; }
+    public string OperationStatus { get; set; }
 
     public string LogButtonText { get; set; }
 

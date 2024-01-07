@@ -12,7 +12,7 @@ namespace PixaiBot.Bussines_Logic;
 public static class JsonReader
 {
     /// <summary>
-    /// Reads a json file and returns a list of user accounts
+    /// Reads a json file and returns a list of user accounts.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
@@ -25,7 +25,7 @@ public static class JsonReader
 
 
     /// <summary>
-    /// Reads a json file and returns a user config object
+    /// Reads a json file and returns a user config object.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
@@ -39,7 +39,7 @@ public static class JsonReader
 
 
     /// <summary>
-    /// Reads a json file and returns a bot statistics object
+    /// Reads a json file and returns a bot statistics object.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>

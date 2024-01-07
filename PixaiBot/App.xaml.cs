@@ -29,7 +29,7 @@ public partial class App : Application
         _logger = new Logger();
         IServiceCollection services = new ServiceCollection();
         services.AddSingleton<NavigationPanelView>(provider => new NavigationPanelView()
-        { DataContext = provider.GetService<NavigationPanelViewModel>() });
+            { DataContext = provider.GetService<NavigationPanelViewModel>() });
         services.AddSingleton<NavigationPanelViewModel>();
         services.AddSingleton<CreditClaimerViewModel>();
         services.AddSingleton<SettingsViewModel>();

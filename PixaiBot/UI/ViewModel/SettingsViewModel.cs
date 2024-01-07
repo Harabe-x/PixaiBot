@@ -16,10 +16,12 @@ using PixaiBot.UI.Base;
 using PixaiBot.UI.View;
 
 namespace PixaiBot.UI.ViewModel;
+
 //TODO: Refactor
 public class SettingsViewModel : BaseViewModel
 {
     #region Commands
+
     public ICommand ShowAddAccountWindowCommand { get; }
 
     public ICommand AddManyAccountsCommand { get; }
@@ -29,11 +31,16 @@ public class SettingsViewModel : BaseViewModel
     public ICommand StartWithSystemCommand { get; }
 
     public ICommand UpdateToastNotificationPreferenceCommand { get; }
+
     #endregion
+
     #region Constructor
+
     public SettingsViewModel(IDialogService dialogService, IAccountsManager
-        accountsManager, IDataValidator dataValidator, IAccountLoginChecker
-        accountLoginChecker,ILogger logger,IBotStatisticsManager botStatisticsManager, IConfigManager configManager, IToastNotificationSender toastNotificationSender)
+            accountsManager, IDataValidator dataValidator, IAccountLoginChecker
+            accountLoginChecker, ILogger logger, IBotStatisticsManager botStatisticsManager,
+        IConfigManager configManager,
+        IToastNotificationSender toastNotificationSender)
     {
         _toastNotificationSender = toastNotificationSender;
         _configManager = configManager;
@@ -52,9 +59,10 @@ public class SettingsViewModel : BaseViewModel
         _settingsModel.UserConfig = _configManager.GetConfig();
         AccountCheckerButtonText = "Validate accounts";
     }
-    #endregion
-    #region Methods
 
+    #endregion
+
+    #region Methods
 
     private void UpdateToastNotificationPreference()
     {
@@ -62,12 +70,13 @@ public class SettingsViewModel : BaseViewModel
             EnableToastNotifications
                 ? "Toast Notifications enabled,Now you will receive notifications"
                 : "Toast Notifications disabled,Now you won't receive notifications",
-                NotificationType.Information);
+            NotificationType.Information);
     }
 
     private void ShowAddAccountWindow()
     {
-        _dialogService.ShowDialog(new AddAccountView(),new AddAccountViewModel(_accountsManager,_dataValidator,_logger),true);
+        _dialogService.ShowDialog(new AddAccountView(),
+            new AddAccountViewModel(_accountsManager, _dataValidator, _logger), true);
     }
 
     private void AddManyAccounts()
@@ -86,13 +95,15 @@ public class SettingsViewModel : BaseViewModel
         IsAccountCheckerRunning = true;
         _tokenSource = new CancellationTokenSource();
         AccountCheckerButtonText = "Stop";
-        
+
         var accountsList = _accountsManager.GetAllAccounts();
 
         IEnumerable<UserAccount> validAccounts = null;
-        
+
         await Task.Run(() =>
-        {  validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), _tokenSource.Token); });
+        {
+            validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), _tokenSource.Token);
+        });
 
 
         var statistics = _botStatisticsManager.GetStatistics();
@@ -111,7 +122,7 @@ public class SettingsViewModel : BaseViewModel
         AccountCheckerButtonText = "Validate accounts";
         _tokenSource.Cancel();
     }
- 
+
     private void StartWithSystem()
     {
         var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -119,7 +130,9 @@ public class SettingsViewModel : BaseViewModel
         if (ShouldStartWithSystem) registryKey?.SetValue("PixaiBot", _executablePath);
         else registryKey?.DeleteValue("PixaiBot", false);
     }
+
     #endregion
+
     #region Fields
 
     private readonly IDialogService _dialogService;
@@ -217,13 +230,12 @@ public class SettingsViewModel : BaseViewModel
         get => _settingsModel.UserConfig.NumberOfThreads.ToString();
         set
         {
-            if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads ) return;
-            _settingsModel.UserConfig.NumberOfThreads = parsedValue ;
+            if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads) return;
+            _settingsModel.UserConfig.NumberOfThreads = parsedValue;
             _configManager.SaveConfig(_settingsModel.UserConfig);
-            OnPropertyChanged(); 
+            OnPropertyChanged();
         }
     }
-
 
     #endregion
 }

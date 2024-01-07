@@ -17,13 +17,13 @@
             <view:SettingsView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type TypeName=viewModel:AccountListViewModel}">
-            <view:AccountListView/>
+            <view:AccountListView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type TypeName=viewModel:AccountInfoLoggerViewModel}">
-            <view:AccountInfoLoggerView/>
+            <view:AccountInfoLoggerView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type TypeName=viewModel:AccountCreatorViewModel}">
-            <view:AccountCreatorView/>
+            <view:AccountCreatorView />
         </DataTemplate>
 
         <!--#endregion-->
@@ -239,24 +239,23 @@
         </Style>
 
         <Style x:Key="BorderStyle" TargetType="Border">
-            <Setter Property="Width" Value="300"/>
-            <Setter Property="Height" Value="300"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="BorderBrush" Value="{StaticResource DarkPurpleColor}"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Width" Value="300" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="BorderBrush" Value="{StaticResource DarkPurpleColor}" />
+            <Setter Property="BorderThickness" Value="1" />
         </Style>
 
         <Style x:Key="BoldPurpleText2" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource LightPurpleColor}"/>
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="FontSize" Value="23"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource LightPurpleColor}" />
+            <Setter Property="Margin" Value="20" />
+            <Setter Property="FontSize" Value="23" />
+            <Setter Property="FontWeight" Value="SemiBold" />
 
         </Style>
         <!--#endregion-->
-
 
 
     </Application.Resources>

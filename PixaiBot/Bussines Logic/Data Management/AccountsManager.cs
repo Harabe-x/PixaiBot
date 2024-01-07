@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using PixaiBot.Data.Interfaces;
@@ -22,28 +23,26 @@ public class AccountsManager : IAccountsManager
         AccountsFilePath = InitialConfiguration.AccountsFilePath;
         _botStatisticsManager = botStatisticsManager;
     }
+
     #endregion
 
     #region Methods
 
     /// <summary>
-    /// Add new account to accounts file
+    /// Adds new account to the account list.
     /// </summary>
-    /// <param name="account"></param>
+    /// <param name="account">Account to add.</param>
     public void AddAccount(UserAccount account)
     {
         var botStatistics = _botStatisticsManager.GetStatistics();
 
         if (!File.Exists(AccountsFilePath))
         {
-
             var accountsList = new List<UserAccount> { account };
 
             JsonWriter.WriteJson(accountsList, AccountsFilePath);
 
             botStatistics.AccountsCount = 1;
-
-            UpdateAccountManagerProperties();
 
             _logger.Log("Added account ", _logger.ApplicationLogFilePath);
 
@@ -51,6 +50,7 @@ public class AccountsManager : IAccountsManager
 
             return;
         }
+
         var accountList = GetAllAccounts().ToList();
 
         accountList.Add(account);
@@ -61,8 +61,6 @@ public class AccountsManager : IAccountsManager
 
         _logger.Log("Added account", _logger.ApplicationLogFilePath);
 
-        UpdateAccountManagerProperties();
-
         _botStatisticsManager.SaveStatistics(botStatistics);
 
         AccountsListChanged?.Invoke(this, EventArgs.Empty);
@@ -70,16 +68,17 @@ public class AccountsManager : IAccountsManager
 
 
     /// <summary>
-    /// Removes account from accounts file
+    /// Removes account from account file.
     /// </summary>
-    /// <param name="userAccount"></param>
+    /// <param name="userAccount">Account to remove.</param>
     public void RemoveAccount(UserAccount userAccount)
     {
         if (!File.Exists(AccountsFilePath)) return;
 
         var accountsList = GetAllAccounts().ToList();
 
-        var accountToRemove = accountsList.FirstOrDefault(x => x.Email == userAccount.Email && x.Password == userAccount.Password);
+        var accountToRemove =
+            accountsList.FirstOrDefault(x => x.Email == userAccount.Email && x.Password == userAccount.Password);
 
         if (accountToRemove == null) return;
 
@@ -93,18 +92,14 @@ public class AccountsManager : IAccountsManager
 
         JsonWriter.WriteJson(accountsList, AccountsFilePath);
 
-        UpdateAccountManagerProperties();
-
         AccountsListChanged?.Invoke(this, EventArgs.Empty);
 
         _logger.Log("Removed account", _logger.ApplicationLogFilePath);
-
-
     }
 
 
     /// <summary>
-    /// Returns all accounts from accounts file
+    ///  Reads and returns all accounts from accounts file.
     /// </summary>
     /// <returns></returns>
     public IEnumerable<UserAccount> GetAllAccounts()
@@ -118,7 +113,7 @@ public class AccountsManager : IAccountsManager
 
 
     /// <summary>
-    /// Opens File Dialog and extracts user accounts from txt file
+    /// Opens File Dialog and extracts user accounts from txt file.
     /// </summary>
     public void AddManyAccounts()
     {
@@ -139,6 +134,12 @@ public class AccountsManager : IAccountsManager
         foreach (var account in importedUserAccounts) AddAccount(account);
     }
 
+    /// <summary>
+    /// Edits an existing account.
+    /// </summary>
+    /// <param name="account">Old account.</param>
+    /// <param name="newEmail">New account email.</param>
+    /// <param name="newPassword">New Account password.</param>
     public void EditAccount(UserAccount account, string newEmail, string newPassword)
     {
         if (newEmail == null || newPassword == null) return;
@@ -156,14 +157,15 @@ public class AccountsManager : IAccountsManager
         RemoveAccount(account);
 
         _logger.Log("Edited account", _logger.ApplicationLogFilePath);
-
     }
 
-    private int UpdateAccountManagerProperties()
-    {
-        return GetAllAccounts().Count();
-    }
 
+
+    /// <summary>
+    /// Extracts accounts from a text file.
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
     private IEnumerable<UserAccount> GetUserAccountsFromTxt(string filePath)
     {
         var accountsList = File.ReadAllLines(filePath);
@@ -190,9 +192,10 @@ public class AccountsManager : IAccountsManager
 
         return accountsToWrite;
     }
+
     #endregion
+
     #region Fields
-    public int AccountsCount => UpdateAccountManagerProperties();
 
     private string AccountsFilePath { get; }
 
@@ -200,11 +203,9 @@ public class AccountsManager : IAccountsManager
 
     private readonly IBotStatisticsManager _botStatisticsManager;
 
-
     private readonly ILogger _logger;
 
     private readonly IDataValidator _dataValidator;
-
 
     #endregion
 }

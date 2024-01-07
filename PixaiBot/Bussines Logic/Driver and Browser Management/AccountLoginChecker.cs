@@ -8,15 +8,16 @@ using System;
 
 namespace PixaiBot.Bussines_Logic;
 
-
 public class AccountLoginChecker : IAccountLoginChecker
 {
     #region Constructor
+
     public AccountLoginChecker(ILogger logger, IPixaiNavigation pixaiNavigation)
     {
         _pixaiNavigation = pixaiNavigation;
         _logger = logger;
     }
+
     #endregion
 
 
@@ -32,17 +33,17 @@ public class AccountLoginChecker : IAccountLoginChecker
         _pixaiNavigation.NavigateToUrl(driver, LoginUrl);
         _pixaiNavigation.LogIn(driver, userAccount.Email, userAccount.Password);
 
-        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds)); 
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds));
 
         if (wait.Until(drv => drv.Url == MainPageUrl))
         {
             driver.Quit();
             return true;
         }
-        driver.Quit();
-      
-        return false;
 
+        driver.Quit();
+
+        return false;
     }
 
     /// <summary>
@@ -50,7 +51,8 @@ public class AccountLoginChecker : IAccountLoginChecker
     /// </summary> 
     /// <param name="accountsList"></param>
     /// <returns>IEnumerable with valid accounts</returns>
-    public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList, CancellationToken token)
+    public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList,
+        CancellationToken token)
     {
         var validAccounts = new List<UserAccount>();
 
@@ -65,7 +67,7 @@ public class AccountLoginChecker : IAccountLoginChecker
                     validAccounts.Add(userAccount);
                     continue;
                 }
-            } 
+            }
             catch (Exception)
             {
                 continue;
@@ -73,17 +75,19 @@ public class AccountLoginChecker : IAccountLoginChecker
 
             ValidAccountLogin?.Invoke(this, userAccount);
         }
+
         return validAccounts;
     }
+
     private const int MaxLoginAttemptSeconds = 5;
-     
+
     private const string MainPageUrl = "https://pixai.art/";
 
     private const string LoginUrl = "https://pixai.art/login";
 
     private readonly IPixaiNavigation _pixaiNavigation;
 
-    private readonly ILogger _logger; // TODO: Add logging to this class
+    private readonly ILogger _logger; 
 
     public event EventHandler<UserAccount> ValidAccountLogin;
 }

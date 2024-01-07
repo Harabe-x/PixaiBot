@@ -12,7 +12,11 @@ namespace PixaiBot.Bussines_Logic;
 public class DataValidator : IDataValidator
 {
     #region Methods
-
+    /// <summary>
+    /// Validates if <paramref name="email"/> is valid,
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
     public bool IsEmailValid(string email)
     {
         try

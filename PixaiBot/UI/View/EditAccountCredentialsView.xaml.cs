@@ -12,24 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PixaiBot.UI.View
-{
-    /// <summary>
-    /// Logika interakcji dla klasy EditAccountCredentialsView.xaml
-    /// </summary>
-    public partial class EditAccountCredentialsView : Window
-    {
-        public EditAccountCredentialsView()
-        {
-            InitializeComponent();
-        }
+namespace PixaiBot.UI.View;
 
-        private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                this.DragMove();
-            }
-        }
+/// <summary>
+/// Logika interakcji dla klasy EditAccountCredentialsView.xaml
+/// </summary>
+public partial class EditAccountCredentialsView : Window
+{
+    public EditAccountCredentialsView()
+    {
+        InitializeComponent();
+    }
+
+    private void Border_OnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.LeftButton == MouseButtonState.Pressed) DragMove();
     }
 }

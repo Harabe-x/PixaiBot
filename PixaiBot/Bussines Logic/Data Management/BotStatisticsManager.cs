@@ -12,12 +12,10 @@ public class BotStatisticsManager : IBotStatisticsManager
 {
     #region Methods
 
-    
-
     public void SaveStatistics(BotStatistics botStatistics)
     {
-        JsonWriter.WriteJson(botStatistics,InitialConfiguration.StatisticsFilePath);
-        StatisticsChanged?.Invoke(this,EventArgs.Empty);
+        JsonWriter.WriteJson(botStatistics, InitialConfiguration.StatisticsFilePath);
+        StatisticsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public BotStatistics GetStatistics()
@@ -31,7 +29,6 @@ public class BotStatisticsManager : IBotStatisticsManager
         }
 
         return botStatistics;
-
     }
 
     #endregion

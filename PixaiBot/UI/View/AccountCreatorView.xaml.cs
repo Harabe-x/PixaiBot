@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PixaiBot.UI.View
+namespace PixaiBot.UI.View;
+
+/// <summary>
+/// Logika interakcji dla klasy AccountsCreatorControlView.xaml
+/// </summary>
+public partial class AccountCreatorView : UserControl
 {
-    /// <summary>
-    /// Logika interakcji dla klasy AccountsCreatorControlView.xaml
-    /// </summary>
-    public partial class AccountCreatorView : UserControl
+    public AccountCreatorView()
     {
-        public AccountCreatorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

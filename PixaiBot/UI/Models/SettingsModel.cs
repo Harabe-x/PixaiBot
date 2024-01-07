@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using PixaiBot.Data.Models;
 
-namespace PixaiBot.UI.View
+namespace PixaiBot.UI.View;
+
+internal class SettingsModel
 {
-    class SettingsModel
-    {
-        public UserConfig UserConfig { get; set; }
+    public UserConfig UserConfig { get; set; }
 
-        public bool IsAccountCheckerRunning { get; set; }
+    public bool IsAccountCheckerRunning { get; set; }
 
-        public string AccountCheckerButtonText;
-    }
+    public string AccountCheckerButtonText;
 }

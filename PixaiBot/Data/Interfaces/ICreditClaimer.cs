@@ -11,11 +11,26 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ICreditClaimer
 {
+    /// <summary>
+    /// Occurs when credits are claimed for an account.
+    /// </summary>
     public event EventHandler<UserAccount> CreditsClaimed;
 
+    /// <summary>
+    /// Occurs when the process is started for an account.
+    /// </summary>
     public event EventHandler<UserAccount> ProcessStartedForAccount;
 
+    /// <summary>
+    /// Claim credits for an account.
+    /// </summary>
+    /// <param name="account">The account where the credits are to be claimed</param>
     public void ClaimCredits(UserAccount account);
-
+    
+    /// <summary>
+    ///  Claim credits for all accounts in <paramref name="accounts"/>.
+    /// </summary>
+    /// <param name="accounts">List of the accounts.</param>
+    /// <param name="cancellationToken">token to cancel operation.</param>
     public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken);
 }

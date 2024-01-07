@@ -15,11 +15,15 @@ namespace PixaiBot.UI.ViewModel;
 public class AddAccountViewModel : BaseViewModel, IWindowHelper
 {
     #region Commands
+
     public ICommand AddAccountCommand { get; }
 
     public ICommand CloseWindowCommand { get; }
+
     #endregion
+
     #region Constructor
+
     public AddAccountViewModel(IAccountsManager accountsManager, IDataValidator dataValidator, ILogger logger)
     {
         _logger = logger;
@@ -29,8 +33,11 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
         AddAccountCommand = new RelayCommand((obj) => AddAccount());
         CloseWindowCommand = new RelayCommand((obj) => CloseWindow());
     }
+
     #endregion
-    #region Methods 
+
+    #region Methods
+
     private void CloseWindow()
     {
         _logger.Log("Closing Add Account Window", _logger.ApplicationLogFilePath);
@@ -57,12 +64,15 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
         CloseWindow();
         _logger.Log("Added Account", _logger.ApplicationLogFilePath);
     }
+
     public bool CanCloseWindow()
     {
         return true;
     }
+
     #endregion
-    #region Fields  
+
+    #region Fields
 
     public Action Close { get; set; }
 
@@ -96,5 +106,4 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
     }
 
     #endregion
-
 }

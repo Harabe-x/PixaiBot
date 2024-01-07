@@ -8,9 +8,10 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ITempMailApiManager
 {
+    /// <summary>
+    /// Occurs when the request to the API failed.
+    /// </summary>
     event EventHandler<string> RequestFailed;
-
-    string GetEmail(string apiKey);
 
     IEnumerable<string> GetDomains(string tempMailApiKey);
 

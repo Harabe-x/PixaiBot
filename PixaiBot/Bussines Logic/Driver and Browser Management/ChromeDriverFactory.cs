@@ -10,9 +10,6 @@ namespace PixaiBot.Bussines_Logic;
 
 public static class ChromeDriverFactory
 {
-
-    
-
     /// <summary>
     /// Creates a ChromeDriver with the needed model to hide the process.
     /// </summary>
@@ -51,7 +48,7 @@ public static class ChromeDriverFactory
         var proxyObject = new Proxy()
         {
             HttpProxy = proxy,
-            Kind = ProxyKind.Manual,
+            Kind = ProxyKind.Manual
         };
 
         options.Proxy = proxyObject;

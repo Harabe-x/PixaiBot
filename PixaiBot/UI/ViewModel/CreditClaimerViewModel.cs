@@ -23,22 +23,23 @@ public class CreditClaimerViewModel : BaseViewModel
     public ICommand ClaimCreditsCommand { get; }
 
 
-    public CreditClaimerViewModel(ICreditClaimer creditClaimer, IToastNotificationSender notificationSender, IAccountsManager accountManager, IConfigManager configManager, IBotStatisticsManager botStatisticsManager,ILogger logger)
+    public CreditClaimerViewModel(ICreditClaimer creditClaimer, IToastNotificationSender notificationSender,
+        IAccountsManager accountManager, IConfigManager configManager, IBotStatisticsManager botStatisticsManager,
+        ILogger logger)
     {
         _creditClaimerModel = new CreditClaimerModel();
 
-        ClaimCreditsCommand = new RelayCommand((obj) =>  ClaimCredits());
+        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
         _accountsManager = accountManager;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _creditClaimer = creditClaimer;
         _notificationSender = notificationSender;
-        _logger = logger; 
+        _logger = logger;
         _creditClaimer.CreditsClaimed += SendNotification;
         _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
-
 
 
         if (_configManager.GetConfig().CreditsAutoClaim)
@@ -48,21 +49,15 @@ public class CreditClaimerViewModel : BaseViewModel
             {
                 Interval = TimeSpan.FromHours(AutoCreditsClaimInterval)
             };
-            _creditClaimerTimer.Tick += (sender, args) =>
-            {
-                ClaimCredits();
-            };
+            _creditClaimerTimer.Tick += (sender, args) => { ClaimCredits(); };
         }
 
         ClaimButtonText = "Start Claiming";
-        BotOperationStatus = "Idle.";
+        OperationStatus = "Idle.";
     }
 
 
-
     #region Methods
-
-
 
     public async void ClaimCredits()
     {
@@ -82,36 +77,37 @@ public class CreditClaimerViewModel : BaseViewModel
             var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
 
             var tasks = accounts.Select(account =>
-                Task.Run(() => { _creditClaimer.ClaimCreditsForAllAccounts(account, _tokenSource.Token); }, _tokenSource.Token));
+                Task.Run(() => { _creditClaimer.ClaimCreditsForAllAccounts(account, _tokenSource.Token); },
+                    _tokenSource.Token));
             await Task.WhenAll(tasks);
         }
         else
         {
-            await Task.Run(() =>
-            {
-                _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _tokenSource.Token);
-            }, _tokenSource.Token);
+            await Task.Run(
+                () =>
+                {
+                    _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _tokenSource.Token);
+                }, _tokenSource.Token);
         }
-      
+
         StopClaiming();
     }
+
     private void UpdateBotOperationStatus(object? sender, UserAccount e)
     {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            BotOperationStatus = $"Claiming credits for {e.Email}";
-        });
+        Application.Current.Dispatcher.Invoke(() => { OperationStatus = $"Claiming credits for {e.Email}"; });
     }
+
     private void SendNotification(object? sender, UserAccount e)
     {
         if (_configManager.GetConfig().ToastNotifications)
-        {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                _notificationSender.SendNotification("PixaiBot", $"Claimed credits for : {e.Email}", NotificationType.Success);
+                _notificationSender.SendNotification("PixaiBot", $"Claimed credits for : {e.Email}",
+                    NotificationType.Success);
             });
-        }
     }
+
     private void GetFreshStatistic(object? sender, EventArgs e)
     {
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
@@ -122,13 +118,11 @@ public class CreditClaimerViewModel : BaseViewModel
     {
         IsRunning = false;
         ClaimButtonText = "Start Claiming";
-        BotOperationStatus = "Idle.";
+        OperationStatus = "Idle.";
         _tokenSource.Cancel();
     }
 
-
     #endregion
-
 
 
     #region Fields
@@ -145,15 +139,13 @@ public class CreditClaimerViewModel : BaseViewModel
 
     private readonly ICreditClaimer _creditClaimer;
 
-    private readonly ILogger _logger; 
+    private readonly ILogger _logger;
 
     private readonly IToastNotificationSender _notificationSender;
 
     private const int AutoCreditsClaimInterval = 24;
 
     private readonly DispatcherTimer _creditClaimerTimer;
-
-
 
 
     public bool IsRunning
@@ -209,16 +201,15 @@ public class CreditClaimerViewModel : BaseViewModel
         }
     }
 
-    public string BotOperationStatus
+    public string OperationStatus
     {
-        get => _creditClaimerModel.BotOperationStatus;
+        get => _creditClaimerModel.OperationStatus;
         set
         {
-            _creditClaimerModel.BotOperationStatus = value;
+            _creditClaimerModel.OperationStatus = value;
             OnPropertyChanged();
         }
     }
 
-    #endregion  
-
+    #endregion
 }
