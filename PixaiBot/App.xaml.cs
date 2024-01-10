@@ -78,7 +78,7 @@ public partial class App : Application
 
     private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        _logger.Log($"{e.Exception} | {e.Exception.Message}", _logger.ApplicationLogFilePath);
-        e.Handled = true;
+        //_logger.Log($"{e.Exception} | {e.Exception.Message}", _logger.ApplicationLogFilePath);
+        //e.Handled = true;
     }
 }

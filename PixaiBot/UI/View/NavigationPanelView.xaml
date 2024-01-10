@@ -26,60 +26,60 @@
             <Grid>
 
                 <StackPanel>
-                    <Image Source="../../Resources/images/PixaiLogo.png" Height="238" Width="184" />
-                    <Button Name="DashboardBtn" Command="{Binding NavigateToDashboardCommand}"
-                            Style="{StaticResource MenuButton}">
+                    <Image Source="/Resources/images/Pixai_AutoClaimer2.png" Height="250" Width="200" RenderTransformOrigin="0.299,0.867" StretchDirection="DownOnly" />
+                    <RadioButton IsChecked="True" Name="DashboardBtn"  Command="{Binding NavigateToDashboardCommand}"
+                                 Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Home" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="SettingsButton" Text="Dashnoard"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
-                    </Button>
-                    <Button Name="AccountManager" Command="{Binding NavigateToAccountsListCommand}"
+                    </RadioButton>
+                    <RadioButton Name="AccountListBtn" Command="{Binding NavigateToAccountsListCommand}"
                             Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="User" Style="{StaticResource SidePanelButtonIcon}" />
+                            <fa:ImageAwesome Icon="List" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="AccountList" Text="Account List"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
-                    </Button>
-                    <Button Name="AccountCreatorBtn"
-                            Command="{Binding NavigateToAccountCreatorCommand}" Style="{StaticResource MenuButton}">
+                    </RadioButton>
+                    <RadioButton Name="AccountCreatorBtn" 
+                                 Command="{Binding NavigateToAccountCreatorCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="UniversalAccess" Style="{StaticResource SidePanelButtonIcon}" />
+                            <fa:ImageAwesome Icon="UserCircleOutline" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="AccountsCreator" Text="Accounts Creator"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
-                    </Button>
-                    <Button Name="AccountInfoLoggerBtn"
-                            Command="{Binding NavigateToLogAccountInfoCommand}" Style="{StaticResource MenuButton}">
+                    </RadioButton>
+                    <RadioButton Name="AccountInfoLoggerBtn"
+                                 Command="{Binding NavigateToLogAccountInfoCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="DriversLicense" Style="{StaticResource SidePanelButtonIcon}" />
-                            <TextBlock x:Name="AccountInfoLogger" Text="Accounts Info Logger" FontSize="12"
+                            <fa:ImageAwesome Icon="File" Style="{StaticResource SidePanelButtonIcon}" />
+                            <TextBlock x:Name="AccountInfoLogger" Text="Account Info Logger" FontSize="12"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
-                    </Button>
-                    <Button Name="SettingsBtn"
-                            Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
+                    </RadioButton>
+                    <RadioButton Name="SettingsBtn" 
+                                 Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Cog" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="Settings" Text="Settings"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
-                    </Button>
-                    <Button Name="HideButton"
-                            Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton}">
+                    </RadioButton>
+                    <Button Name="HideBtn" 
+                                 Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton1}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="EyeSlash" Style="{StaticResource SidePanelButtonIcon}" />
+                            <fa:ImageAwesome Icon="EyeSlash" Style="{StaticResource SidePanelButtonIcon1}" />
                             <TextBlock x:Name="Hide" Text="Hide Application"
-                                       Style="{StaticResource SidePanelButton}" />
+                                       Style="{StaticResource SidePanelButton1}" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding ExitApplicationCommand}" Style="{StaticResource MenuButton}">
+                    <Button Command="{Binding ExitApplicationCommand}" Style="{StaticResource MenuButton1}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="PowerOff" Style="{StaticResource SidePanelButtonIcon}" />
+                            <fa:ImageAwesome Icon="PowerOff" Style="{StaticResource SidePanelButtonIcon1}" />
                             <TextBlock x:Name="Exit" Text="Exit"
-                                       Style="{StaticResource SidePanelButton}" />
+                                       Style="{StaticResource SidePanelButton1}" />
                         </StackPanel>
                     </Button>
 

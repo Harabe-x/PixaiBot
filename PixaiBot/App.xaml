@@ -44,8 +44,7 @@
 
         <!--#region Control Styles -->
 
-
-        <Style x:Key="MenuButton" TargetType="Button">
+        <Style x:Key="MenuButton1" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="#a4b0be" />
             <Setter Property="Margin" Value="0 0 0 5" />
@@ -57,7 +56,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                BorderBrush="Transparent">
+                         BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
@@ -71,7 +70,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                        BorderBrush="#a29bfe">
+                                 BorderBrush="#a29bfe">
                                     <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
@@ -84,6 +83,74 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
+                                 BorderBrush="#a29bfe">
+                                    <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SidePanelButtonIcon1" TargetType="fa:ImageAwesome">
+            <Setter Property="Width" Value="23" />
+            <Setter Property="Height" Value="23" />
+            <Setter Property="Margin" Value="35 0 20 0" />
+            <Setter Property="Foreground"
+             Value="{Binding Path=Tag,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+
+
+        </Style>
+        <Style x:Key="SidePanelButton1" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground"
+             Value="{Binding Path=Foreground,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+        </Style>
+
+
+
+        <Style x:Key="MenuButton" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#a4b0be" />
+            <Setter Property="Margin" Value="0 0 0 5" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Height" Value="45" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Tag" Value="#a4b0be" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
+                                BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#ffffff" />
+                    <Setter Property="Tag" Value="#ffffff" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
+                                        BorderBrush="#a29bfe">
+                                    <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Foreground" Value="#ffffff" />
+                    <Setter Property="Tag" Value="#ffffff" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
                                 <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
                                         BorderBrush="#a29bfe">
                                     <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
@@ -100,13 +167,15 @@
             <Setter Property="Height" Value="23" />
             <Setter Property="Margin" Value="35 0 20 0" />
             <Setter Property="Foreground"
-                    Value="{Binding Path=Tag,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+                    Value="{Binding Path=Tag,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type RadioButton}}}" />
+         
+
         </Style>
         <Style x:Key="SidePanelButton" TargetType="TextBlock">
             <Setter Property="FontSize" Value="13" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Foreground"
-                    Value="{Binding Path=Foreground,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+                    Value="{Binding Path=Foreground,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type RadioButton}}}" />
         </Style>
         <Style x:Key="TitleText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource BlackColor}" />

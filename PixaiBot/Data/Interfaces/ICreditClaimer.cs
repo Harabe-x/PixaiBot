@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using PixaiBot.Bussines_Logic;
-using PixaiBot.Data.Models;
+using PixaiBot.UI.Models;
 
 namespace PixaiBot.Data.Interfaces;
 
