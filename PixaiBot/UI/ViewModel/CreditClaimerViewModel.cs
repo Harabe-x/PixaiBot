@@ -10,7 +10,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using Notification.Wpf;
-using PixaiBot.Bussines_Logic.Data_Handling;
+using PixaiBot.Business_Logic.Extension;
 using PixaiBot.UI.Models;
 using Brush = System.Drawing.Brush;
 
@@ -36,6 +36,7 @@ public class CreditClaimerViewModel : BaseViewModel
         _logger = logger;
         _creditClaimer.CreditsClaimed += SendNotification;
         _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
+        _creditClaimer.ErrorOccurred += SendNotification;
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
 
@@ -57,7 +58,7 @@ public class CreditClaimerViewModel : BaseViewModel
 
     #region Methods
 
-    public async void ClaimCredits()
+    private async void ClaimCredits()
     {
         if (IsRunning)
         {
@@ -103,6 +104,16 @@ public class CreditClaimerViewModel : BaseViewModel
             {
                 _notificationSender.SendNotification("PixaiBot", $"Claimed credits for : {e.Email}",
                     NotificationType.Success);
+            });
+    }
+
+    private void SendNotification(object? sender, string e)
+    {
+        if (_configManager.GetConfig().ToastNotifications)
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _notificationSender.SendNotification("PixaiBot", $"Claimed credits for : {e}",
+                    NotificationType.Error);
             });
     }
 

@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
+using PixaiBot.Data.Interfaces;
+using PixaiBot.UI.Models;
+
+namespace PixaiBot.Business_Logic.Driver_and_Browser_Management;
+
+internal class CreditClaimerV2 : ICreditClaimer
+{
+    #region Constructor
+
+    public CreditClaimerV2(ILogger logger, IPixaiNavigation pixaiNavigation)
+    {
+        _logger = logger;
+        _pixaiNavigation = pixaiNavigation;
+    }
+
+    #endregion
+
+    #region Methods
+
+    public void ClaimCredits(UserAccount account)
+    {
+        using var driver = ChromeDriverFactory.CreateDriverForDebug();
+
+        _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
+
+        try
+        {
+            _pixaiNavigation.NavigateToUrl(driver, LoginUrl);
+            _pixaiNavigation.LogIn(driver, account.Email, account.Password);
+
+
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds));
+
+            try
+            {
+                wait.Until(drv => drv.Url != LoginUrl);
+            }
+            catch (WebDriverTimeoutException)
+            {
+                ErrorOccurred?.Invoke(this, "Invalid Login Credentials");
+                _logger.Log("=====Chrome Drive Closed=====\n", _logger.ApplicationLogFilePath);
+                driver.Quit();
+                return;
+            }
+            //Ensures that user in on profile page
+            while (!driver.Url.Contains('@'))
+            {
+                _pixaiNavigation.ClickDropdownMenu(driver);
+                _pixaiNavigation.NavigateToProfile(driver);
+            }
+
+            for (var i = 0; i < MaxTries; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
+        }
+        catch (ChromeDriverException e)
+        {
+            _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
+        }
+        catch (InvalidPageContentException e)
+        {
+            _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
+        }
+
+
+        driver.Quit();
+
+        CreditsClaimed?.Invoke(this, account);
+
+        _logger.Log("=====Chrome Drive Closed=====\n", _logger.ApplicationLogFilePath);
+    }
+
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken)
+    {
+        foreach (var account in accounts)
+        {
+            if (cancellationToken.IsCancellationRequested) return;
+
+            ProcessStartedForAccount?.Invoke(this, account);
+
+            ClaimCredits(account);
+        }
+    }
+
+    #endregion
+
+
+    #region Fields
+
+    private readonly ILogger _logger;
+
+
+    private readonly IPixaiNavigation _pixaiNavigation;
+
+    private const string LoginUrl = "https://pixai.art/login";
+
+    private const int MaxTries = 5;
+
+    private const int MaxLoginAttemptSeconds = 5;
+
+    public event EventHandler<string> ErrorOccurred;
+
+    public event EventHandler<UserAccount>? CreditsClaimed;
+
+    public event EventHandler<UserAccount>? ProcessStartedForAccount;
+
+    #endregion
+}

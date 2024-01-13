@@ -10,6 +10,12 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ICreditClaimer
 {
+
+    /// <summary>
+    /// Occurs when an error occurs.
+    /// </summary>
+    public event EventHandler<string> ErrorOccurred;
+
     /// <summary>
     /// Occurs when credits are claimed for an account.
     /// </summary>

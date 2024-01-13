@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
-            <TextBlock Style="{StaticResource TitleText}" Text="Accounts List" HorizontalAlignment="Center"
+            <TextBlock Style="{StaticResource TitleText}" FontWeight="Regular" Foreground="#2d3436" Text="Account List" HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             <TextBlock Style="{StaticResource SecondaryText}"
                        Text="Here you can see your accounts list and edit accounts" HorizontalAlignment="Center" />
