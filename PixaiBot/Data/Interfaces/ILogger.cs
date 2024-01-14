@@ -8,11 +8,11 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ILogger
 {
-
     /// <summary>
     ///  The path to the log file for the credit claimer.
     /// </summary>
     public string CreditClaimerLogFilePath { get; }
+
     /// <summary>
     ///   The path to the log file for the application.
     /// </summary>

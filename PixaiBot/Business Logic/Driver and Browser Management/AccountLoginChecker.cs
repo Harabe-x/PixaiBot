@@ -27,20 +27,28 @@ public class AccountLoginChecker : IAccountLoginChecker
     /// <returns>True if the account is valid</returns>
     public bool CheckAccountLogin(UserAccount userAccount)
     {
-        using var driver = ChromeDriverFactory.CreateDriverForDebug();
+        using var driver = ChromeDriverFactory.CreateDriver();
+
+        _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
         _pixaiNavigation.NavigateToUrl(driver, LoginPageUrl);
         _pixaiNavigation.LogIn(driver, userAccount.Email, userAccount.Password);
 
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds));
 
+        _logger.Log($"Logging in to {userAccount.Email}", _logger.CreditClaimerLogFilePath);
+
         if (wait.Until(drv => drv.Url == MainPageUrl))
         {
+            _logger.Log($"The {userAccount.Email} login details are correct\n=====Chrome Drive Closed=====\n",
+                _logger.CreditClaimerLogFilePath);
             driver.Quit();
             return true;
         }
 
         driver.Quit();
+        _logger.Log($"The {userAccount.Email} login details are incorrect\n=====Chrome Drive Closed=====\n",
+            _logger.CreditClaimerLogFilePath);
 
         return false;
     }
@@ -86,7 +94,7 @@ public class AccountLoginChecker : IAccountLoginChecker
 
     private readonly IPixaiNavigation _pixaiNavigation;
 
-    private readonly ILogger _logger; 
+    private readonly ILogger _logger;
 
     public event EventHandler<UserAccount> ValidAccountLogin;
 }

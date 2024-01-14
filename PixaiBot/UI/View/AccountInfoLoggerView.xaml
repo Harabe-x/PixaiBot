@@ -48,7 +48,7 @@
                         <TextBlock Text="Bot Details :" Style="{StaticResource BoldPurpleText2}" Margin="10" />
                         <StackPanel VerticalAlignment="Center">
                             <CheckBox IsChecked="{Binding ShouldLogEmailVerificationStatus}"
-                                      Content="  Log Email Verification OperationStatus" Style="{StaticResource FormCheckBox}"
+                                      Content="  Log Email Verification Status" Style="{StaticResource FormCheckBox}"
                                       Margin="10" />
                             <CheckBox IsChecked="{Binding ShouldLogFollowingCount}" Content="  Log Following Count"
                                       Style="{StaticResource FormCheckBox}" Margin="7.5" />
@@ -58,7 +58,7 @@
                                       Style="{StaticResource FormCheckBox}" Margin="7.5" />
                             <CheckBox IsChecked="{Binding ShouldLogAccountId}" Content="  Log Account Id"
                                       Style="{StaticResource FormCheckBox}" Margin="7.5" />
-                            <CheckBox IsChecked="{Binding ShouldLogAccountId}" Content="  Log Account Credits"
+                            <CheckBox IsChecked="{Binding ShouldLogAccountCredits}" Content="  Log Account Credits"
                                       Style="{StaticResource FormCheckBox}" Margin="7.5" />
 
                         </StackPanel>

@@ -28,13 +28,13 @@ internal class AccountListViewModel : BaseViewModel
     public AccountListViewModel(IAccountsManager accountsManager, ILogger logger, IDialogService dialogService,
         IDataValidator DataValidator)
     {
+        RemoveAccountCommand = new RelayCommand(_ => RemoveAccount());
+        EditAccountCommand = new RelayCommand(_ => EditAccount());
         _dataValidator = DataValidator;
         _accountsManager = accountsManager;
         _dialogService = dialogService;
         _logger = logger;
         _accountListModel = new AccountListModel();
-        RemoveAccountCommand = new RelayCommand((obj) => RemoveAccount());
-        EditAccountCommand = new RelayCommand((obj) => EditAccount());
         UserAccounts = new ObservableCollection<UserAccount>(_accountsManager.GetAllAccounts());
         _accountsManager.AccountsListChanged += AccountsManagerOnAccountsListChanged;
     }
@@ -57,8 +57,6 @@ internal class AccountListViewModel : BaseViewModel
         _logger.Log("Edit account command called", _logger.ApplicationLogFilePath);
 
         if (SelectedAccount == null) return;
-
-        if (string.IsNullOrEmpty(SelectedAccount.Email) || string.IsNullOrEmpty(SelectedAccount.Password)) return;
 
         _dialogService.ShowDialog(new EditAccountCredentialsView(),
             new EditAccountCredentialsViewModel(_accountsManager, _logger, SelectedAccount, _dataValidator), true);

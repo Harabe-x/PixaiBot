@@ -12,20 +12,14 @@ public class Logger : ILogger
 
     public string ApplicationLogFilePath { get; }
 
-    private StringBuilder _builder;
-
-    private string lastFilePath;
-
-    private bool _previousWasError;
-
     public Logger()
     {
         CreditClaimerLogFilePath =
             $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt";
         ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt";
-        if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath);
-        if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath);
-        _builder = new StringBuilder();
+
+        if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath).Close();
+        if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath).Close();
     }
 
     /// <summary>
@@ -38,17 +32,9 @@ public class Logger : ILogger
         try
         {
             File.AppendAllText(filePath, $"[{DateTime.Now:HH:mm:ss}] {message}\n");
-
-            if (!_previousWasError || filePath != lastFilePath || string.IsNullOrEmpty(lastFilePath)) return;
-
-            File.AppendAllText(lastFilePath, $"[{DateTime.Now:HH:mm:ss}] {_builder}\n");
-            _previousWasError = false;
         }
-        catch (Exception e)
+        catch (IOException)
         {
-            lastFilePath = filePath;
-            _builder.AppendLine(message);
-            _previousWasError = true;
         }
     }
 }

@@ -27,12 +27,12 @@ internal interface IAccountInfoLoggerSettings
     /// Gets or sets a value indicating whether the account info logger should log the account id.
     /// </summary>
     public bool ShouldLogAccountId { get; set; }
-    
+
     /// <summary>
     ///  Gets or sets a value indicating whether the account info logger should log the account username.
     /// </summary>
     public bool ShouldLogAccountUsername { get; set; }
-    
+
     /// <summary>
     /// Gets or sets a value indicating whether the account info logger should log the account credits.
     /// </summary>

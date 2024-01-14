@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Forms;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
@@ -23,55 +24,45 @@ internal class CreditClaimerV2 : ICreditClaimer
 
     #region Methods
 
-    public void ClaimCredits(UserAccount account)
+    public void ClaimCredits(UserAccount userAccount)
     {
-        using var driver = ChromeDriverFactory.CreateDriverForDebug();
+        using var driver = ChromeDriverFactory.CreateDriver();
 
         _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
+        _pixaiNavigation.NavigateToUrl(driver, LoginUrl);
+        _pixaiNavigation.LogIn(driver, userAccount.Email, userAccount.Password);
+
+
+        _logger.Log($"Logging in to {userAccount.Email}", _logger.CreditClaimerLogFilePath);
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds));
+
         try
         {
-            _pixaiNavigation.NavigateToUrl(driver, LoginUrl);
-            _pixaiNavigation.LogIn(driver, account.Email, account.Password);
-
-
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds));
-
-            try
-            {
-                wait.Until(drv => drv.Url != LoginUrl);
-            }
-            catch (WebDriverTimeoutException)
-            {
-                ErrorOccurred?.Invoke(this, "Invalid Login Credentials");
-                _logger.Log("=====Chrome Drive Closed=====\n", _logger.ApplicationLogFilePath);
-                driver.Quit();
-                return;
-            }
-            //Ensures that user in on profile page
-            while (!driver.Url.Contains('@'))
-            {
-                _pixaiNavigation.ClickDropdownMenu(driver);
-                _pixaiNavigation.NavigateToProfile(driver);
-            }
-
-            for (var i = 0; i < MaxTries; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
+            wait.Until(drv => drv.Url != LoginUrl);
         }
-        catch (ChromeDriverException e)
+        catch (WebDriverTimeoutException)
         {
-            _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
-        }
-        catch (InvalidPageContentException e)
-        {
-            _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
+            ErrorOccurred?.Invoke(this, "Invalid Login Credentials");
+            _logger.Log("=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
+            driver.Quit();
+            return;
         }
 
+        //Ensures that user in on profile page
+        while (!driver.Url.Contains('@'))
+        {
+            _pixaiNavigation.ClickDropdownMenu(driver);
+            _pixaiNavigation.NavigateToProfile(driver);
+        }
+
+        for (var i = 0; i < MaxTries; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
 
         driver.Quit();
+        _logger.Log($"Credits claimed for {userAccount.Email}", _logger.CreditClaimerLogFilePath);
+        CreditsClaimed?.Invoke(this, userAccount);
 
-        CreditsClaimed?.Invoke(this, account);
-
-        _logger.Log("=====Chrome Drive Closed=====\n", _logger.ApplicationLogFilePath);
+        _logger.Log("=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
     }
 
     public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken)
@@ -82,7 +73,20 @@ internal class CreditClaimerV2 : ICreditClaimer
 
             ProcessStartedForAccount?.Invoke(this, account);
 
-            ClaimCredits(account);
+            try
+            {
+                ClaimCredits(account);
+            }
+            catch (ChromeDriverException e)
+            {
+                _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
+                ErrorOccurred?.Invoke(this, e.InnerException?.GetType().ToString() ?? "Error occurred");
+            }
+            catch (InvalidPageContentException e)
+            {
+                _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
+                ErrorOccurred?.Invoke(this, e.InnerException?.GetType().ToString() ?? "Error occurred");
+            }
         }
     }
 
@@ -92,7 +96,6 @@ internal class CreditClaimerV2 : ICreditClaimer
     #region Fields
 
     private readonly ILogger _logger;
-
 
     private readonly IPixaiNavigation _pixaiNavigation;
 
@@ -107,6 +110,8 @@ internal class CreditClaimerV2 : ICreditClaimer
     public event EventHandler<UserAccount>? CreditsClaimed;
 
     public event EventHandler<UserAccount>? ProcessStartedForAccount;
+
+    public event EventHandler CreditsAlreadyClaimed;
 
     #endregion
 }

@@ -12,7 +12,7 @@ public interface IWindowHelper
     /// Closes the window
     /// </summary>
     public Action Close { get; set; }
-   
+
     /// <summary>
     /// Determines whether the window can be closed.
     /// </summary>

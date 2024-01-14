@@ -17,8 +17,9 @@ public class AccountsManager : IAccountsManager
     {
         _dataValidator = dataValidator;
         _logger = logger;
-        AccountsFilePath = InitialConfiguration.AccountsFilePath;
         _botStatisticsManager = botStatisticsManager;
+
+        AccountsFilePath = InitialConfiguration.AccountsFilePath;
     }
 
     #endregion
@@ -39,7 +40,9 @@ public class AccountsManager : IAccountsManager
 
             JsonWriter.WriteJson(accountsList, AccountsFilePath);
 
-            botStatistics.AccountsCount = 1;
+            botStatistics.AccountsCount += 1;
+
+            _botStatisticsManager.SaveStatistics(botStatistics);
 
             _logger.Log("Added account ", _logger.ApplicationLogFilePath);
 
@@ -155,7 +158,6 @@ public class AccountsManager : IAccountsManager
 
         _logger.Log("Edited account", _logger.ApplicationLogFilePath);
     }
-
 
 
     /// <summary>

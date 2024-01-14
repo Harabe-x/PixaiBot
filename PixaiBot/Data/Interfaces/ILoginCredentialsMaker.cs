@@ -8,7 +8,6 @@ namespace PixaiBot.Data.Interfaces;
 
 internal interface ILoginCredentialsMaker
 {
-
     /// <summary>
     ///  Generates a random email address.
     /// </summary>

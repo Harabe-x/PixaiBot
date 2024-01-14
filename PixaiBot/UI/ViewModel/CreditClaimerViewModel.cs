@@ -27,16 +27,19 @@ public class CreditClaimerViewModel : BaseViewModel
     {
         _creditClaimerModel = new CreditClaimerModel();
 
-        ClaimCreditsCommand = new RelayCommand((obj) => ClaimCredits());
+        ClaimCreditsCommand = new RelayCommand(_ => ClaimCredits());
+
         _accountsManager = accountManager;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _creditClaimer = creditClaimer;
         _notificationSender = notificationSender;
         _logger = logger;
+
         _creditClaimer.CreditsClaimed += SendNotification;
         _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
         _creditClaimer.ErrorOccurred += SendNotification;
+        _creditClaimer.CreditsAlreadyClaimed += SendNotification;
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
 
@@ -60,6 +63,7 @@ public class CreditClaimerViewModel : BaseViewModel
 
     private async void ClaimCredits()
     {
+        _logger.Log("Credits claiming process started", _logger.ApplicationLogFilePath);
         if (IsRunning)
         {
             StopClaiming();
@@ -73,6 +77,7 @@ public class CreditClaimerViewModel : BaseViewModel
 
         if (config.MultiThreading)
         {
+            _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
             var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
 
             var tasks = accounts.Select(account =>
@@ -92,36 +97,6 @@ public class CreditClaimerViewModel : BaseViewModel
         StopClaiming();
     }
 
-    private void UpdateBotOperationStatus(object? sender, UserAccount e)
-    {
-        Application.Current.Dispatcher.Invoke(() => { OperationStatus = $"Claiming credits for {e.Email}"; });
-    }
-
-    private void SendNotification(object? sender, UserAccount e)
-    {
-        if (_configManager.GetConfig().ToastNotifications)
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _notificationSender.SendNotification("PixaiBot", $"Claimed credits for : {e.Email}",
-                    NotificationType.Success);
-            });
-    }
-
-    private void SendNotification(object? sender, string e)
-    {
-        if (_configManager.GetConfig().ToastNotifications)
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _notificationSender.SendNotification("PixaiBot", $"Claimed credits for : {e}",
-                    NotificationType.Error);
-            });
-    }
-
-    private void GetFreshStatistic(object? sender, EventArgs e)
-    {
-        _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
-        OnPropertyChanged();
-    }
 
     private void StopClaiming()
     {
@@ -129,6 +104,39 @@ public class CreditClaimerViewModel : BaseViewModel
         ClaimButtonText = "Start Claiming";
         OperationStatus = "Idle.";
         _tokenSource.Cancel();
+        _logger.Log("Credits claiming process ended", _logger.ApplicationLogFilePath);
+    }
+
+    private void UpdateBotOperationStatus(object? sender, UserAccount e)
+    {
+        OperationStatus = $"Claiming credits for {e.Email}";
+    }
+
+
+    private void SendNotification(object? sender, EventArgs e)
+    {
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Credits already claimed on this account",
+                NotificationType.Warning);
+    }
+
+    private void SendNotification(object? sender, UserAccount e)
+    {
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", $"Claimed credits for : {e.Email}",
+                NotificationType.Success);
+    }
+
+    private void SendNotification(object? sender, string e)
+    {
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", e, NotificationType.Error);
+    }
+
+    private void GetFreshStatistic(object? sender, EventArgs e)
+    {
+        _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
+        OnPropertyChanged();
     }
 
     #endregion

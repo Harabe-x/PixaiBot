@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
@@ -9,15 +10,16 @@ using PixaiBot.UI.Models;
 
 namespace PixaiBot.Business_Logic.Driver_and_Browser_Management;
 
-internal class AccountsInfoLogger : IAccountsInfoLogger
+internal class AccountInfoLogger : IAccountInfoLogger
 {
     #region Constructor
 
-    public AccountsInfoLogger(IPixaiNavigation pixaiNavigation, IPixaiDataReader pixaiDataReader, ILogger logger)
+    public AccountInfoLogger(IPixaiNavigation pixaiNavigation, IPixaiDataReader pixaiDataReader, ILogger logger)
     {
         _pixaiNavigation = pixaiNavigation;
         _pixaiDataReader = pixaiDataReader;
         _logger = logger;
+
         _stringBuilder = new StringBuilder();
     }
 
@@ -34,18 +36,17 @@ internal class AccountsInfoLogger : IAccountsInfoLogger
         IAccountInfoLoggerSettings settings,
         CancellationToken cancellationToken)
     {
+        _logger.Log($"Logging information about {userAccountsList.Count()} accounts", _logger.CreditClaimerLogFilePath);
         foreach (var account in userAccountsList)
         {
             if (cancellationToken.IsCancellationRequested) return _stringBuilder.ToString();
-
-
             try
             {
                 LogAccountInfo(account, settings);
             }
             catch (Exception e)
             {
-                _logger.Log($"Error occurred, Error message : {e.Message}", _logger.ApplicationLogFilePath);
+                _logger.Log($"Error occurred, Error message : {e.Message}", _logger.CreditClaimerLogFilePath);
                 continue;
             }
         }
@@ -55,9 +56,13 @@ internal class AccountsInfoLogger : IAccountsInfoLogger
 
     private void LogAccountInfo(UserAccount account, IAccountInfoLoggerSettings settings)
     {
+        _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
+
         using var driver = ChromeDriverFactory.CreateDriver();
         var internalStringBuilder = new StringBuilder();
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds));
+
+        _logger.Log($"Logging in to {account.Email}", _logger.CreditClaimerLogFilePath);
 
         _pixaiNavigation.NavigateToUrl(driver, LoginPageUrl);
         _pixaiNavigation.LogIn(driver, account.Email, account.Password);
@@ -66,9 +71,12 @@ internal class AccountsInfoLogger : IAccountsInfoLogger
 
         if (!wait.Until(drv => drv.Url == MainPageUrl))
         {
-            internalStringBuilder.AppendLine($"Login OperationStatus : Failed\n==============================");
+            _logger.Log("Login Failed\n=====Chrome Driver Closed=====\n", _logger.CreditClaimerLogFilePath);
+            internalStringBuilder.AppendLine($"Login Operation Status : Failed\n==============================");
             return;
         }
+
+        _logger.Log($"Reading account data", _logger.CreditClaimerLogFilePath);
 
         while (!driver.Url.Contains('@'))
         {
@@ -78,21 +86,28 @@ internal class AccountsInfoLogger : IAccountsInfoLogger
 
         Thread.Sleep(TimeSpan.FromSeconds(DynamicDataLoadDelay));
 
-        internalStringBuilder.AppendLineIf(settings.ShouldLogAccountUsername, $"Username : {_pixaiDataReader.GetUsername(driver)}");
-        internalStringBuilder.AppendLineIf(settings.ShouldLogAccountCredits, $"Credits : {_pixaiDataReader.GetCreditsCount(driver)}");
-        internalStringBuilder.AppendLineIf(settings.ShouldLogFollowersCount, $"Followers Count : {_pixaiDataReader.GetFollowersCount(driver)}");
-        internalStringBuilder.AppendLineIf(settings.ShouldLogFollowingCount, $"Following Count : {_pixaiDataReader.GetFollowingCount(driver)}");
+        internalStringBuilder.AppendLineIf(settings.ShouldLogAccountUsername,
+            $"Username : {_pixaiDataReader.GetUsername(driver)}");
+        internalStringBuilder.AppendLineIf(settings.ShouldLogAccountCredits,
+            $"Credits : {_pixaiDataReader.GetCreditsCount(driver)}");
+        internalStringBuilder.AppendLineIf(settings.ShouldLogFollowersCount,
+            $"Followers Count : {_pixaiDataReader.GetFollowersCount(driver)}");
+        internalStringBuilder.AppendLineIf(settings.ShouldLogFollowingCount,
+            $"Following Count : {_pixaiDataReader.GetFollowingCount(driver)}");
 
         _pixaiNavigation.NavigateToUrl(driver, UserProfileUrl);
 
         Thread.Sleep(TimeSpan.FromSeconds(DynamicDataLoadDelay));
 
-        internalStringBuilder.AppendLineIf(settings.ShouldLogEmailVerificationStatus, $"Email Verification OperationStatus : {_pixaiDataReader.GetEmailVerificationStatus(driver)}");
-        internalStringBuilder.AppendLineIf(settings.ShouldLogAccountId, $"Account Id : {_pixaiDataReader.GetAccountId(driver)}");
+        internalStringBuilder.AppendLineIf(settings.ShouldLogEmailVerificationStatus,
+            $"Email Verification Status : {_pixaiDataReader.GetEmailVerificationStatus(driver)}");
+        internalStringBuilder.AppendLineIf(settings.ShouldLogAccountId,
+            $"Account Id : {_pixaiDataReader.GetAccountId(driver)}");
 
         internalStringBuilder.AppendLine("===============");
         _stringBuilder.AppendLine(internalStringBuilder.ToString());
         driver.Quit();
+        _logger.Log("=====Chrome Driver Closed=====\n", _logger.CreditClaimerLogFilePath);
     }
 
     #endregion

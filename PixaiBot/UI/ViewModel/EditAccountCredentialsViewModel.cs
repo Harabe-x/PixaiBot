@@ -25,15 +25,17 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
     public EditAccountCredentialsViewModel(IAccountsManager accountsManager, ILogger logger,
         UserAccount editedAccount, IDataValidator dataValidator)
     {
-        SaveAccountCommand = new RelayCommand((obj) => SaveAccount());
-        CloseWindowCommand = new RelayCommand((obj) => CLoseWindow());
+        SaveAccountCommand = new RelayCommand(_ => SaveAccount());
+        CloseWindowCommand = new RelayCommand(_ => CLoseWindow());
+
         _editAccountCredentialsModel = new EditAccountCredentialsModel();
-        Account = editedAccount;
-        Email = Account.Email;
-        Password = Account.Password;
         _dataValidator = dataValidator;
         _accountsManager = accountsManager;
         _logger = logger;
+
+        Account = editedAccount;
+        Email = Account.Email;
+        Password = Account.Password;
     }
 
     #endregion
@@ -42,10 +44,12 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
 
     private void SaveAccount()
     {
+        _logger.Log("Editing account", _logger.CreditClaimerLogFilePath);
+
         if (!_dataValidator.IsEmailValid(Email) || !_dataValidator.IsPasswordValid(Password)) return;
 
         _accountsManager.EditAccount(Account, Email, Password);
-
+        _logger.Log("Account edited", _logger.CreditClaimerLogFilePath);
         Close?.Invoke();
     }
 

@@ -7,16 +7,27 @@ namespace PixaiBot.Business_Logic.Data_Management;
 
 public class BotStatisticsManager : IBotStatisticsManager
 {
+    #region Constructor
+
+    public BotStatisticsManager(ILogger logger)
+    {
+        _logger = logger;
+    }
+
+    #endregion
+
     #region Methods
 
     public void SaveStatistics(BotStatistics botStatistics)
     {
+        _logger.Log("Saving statistics file", _logger.ApplicationLogFilePath);
         JsonWriter.WriteJson(botStatistics, InitialConfiguration.StatisticsFilePath);
         StatisticsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public BotStatistics GetStatistics()
     {
+        _logger.Log("Reading statistics file", _logger.ApplicationLogFilePath);
         var botStatistics = JsonReader.ReadStatisticsFile(InitialConfiguration.StatisticsFilePath);
 
         if (botStatistics == null)
@@ -33,6 +44,8 @@ public class BotStatisticsManager : IBotStatisticsManager
     #region Fields
 
     public event EventHandler? StatisticsChanged;
+
+    private readonly ILogger _logger;
 
     #endregion
 }

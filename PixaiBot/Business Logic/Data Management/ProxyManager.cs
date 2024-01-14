@@ -10,8 +10,10 @@ internal class ProxyManager : IProxyManager
 {
     #region Constructor
 
-    public ProxyManager()
+    public ProxyManager(ILogger logger)
     {
+        _logger = logger;
+
         _proxyList = new List<string>();
         _random = new Random();
     }
@@ -24,12 +26,14 @@ internal class ProxyManager : IProxyManager
     {
         return _proxyList;
     }
+
     /// <summary>
     ///  Returns random proxy from proxy list.
     /// </summary>
     /// <returns></returns>
     public string GetRandomProxy()
     {
+        _logger.Log("Returning one random proxy", _logger.ApplicationLogFilePath);
         return _proxyList.Count == 0 ? "Proxy list is empty" : _proxyList[_random.Next(0, _proxyList.Count)];
     }
 
@@ -40,6 +44,8 @@ internal class ProxyManager : IProxyManager
     /// <param name="filePath"></param>
     public void ReadProxyFile(string filePath)
     {
+        _logger.Log("Reading proxy list", _logger.ApplicationLogFilePath);
+
         if (!File.Exists(filePath)) return;
 
         var proxyFile = File.ReadAllLines(filePath);
@@ -62,6 +68,8 @@ internal class ProxyManager : IProxyManager
     private const string ProxyPattern = @"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*(\d{1,5})$";
 
     private readonly Random _random;
+
+    private readonly ILogger _logger;
 
     #endregion
 }

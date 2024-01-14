@@ -53,7 +53,7 @@ public partial class App : Application
         services.AddSingleton<IAccountCreator, AccountCreatorV2>();
         services.AddSingleton<IPixaiDataReader, PixaiDataReader>();
         services.AddSingleton<IPixaiNavigation, PixaiNavigation>();
-        services.AddSingleton<IAccountsInfoLogger, AccountsInfoLogger>();
+        services.AddSingleton<IAccountInfoLogger, AccountInfoLogger>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();
@@ -72,7 +72,7 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        _logger.Log("=====Application Closed=====", _logger.ApplicationLogFilePath);
+        _logger.Log("=====Application Closed=====\n", _logger.ApplicationLogFilePath);
         base.OnExit(e);
     }
 

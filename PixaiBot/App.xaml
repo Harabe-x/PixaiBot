@@ -56,7 +56,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                         BorderBrush="Transparent">
+                                BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
@@ -70,7 +70,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                 BorderBrush="#a29bfe">
+                                        BorderBrush="#a29bfe">
                                     <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
@@ -84,7 +84,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0"
-                                 BorderBrush="#a29bfe">
+                                        BorderBrush="#a29bfe">
                                     <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
@@ -99,7 +99,7 @@
             <Setter Property="Height" Value="23" />
             <Setter Property="Margin" Value="35 0 20 0" />
             <Setter Property="Foreground"
-             Value="{Binding Path=Tag,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+                    Value="{Binding Path=Tag,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
 
 
         </Style>
@@ -107,9 +107,8 @@
             <Setter Property="FontSize" Value="13" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Foreground"
-             Value="{Binding Path=Foreground,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
+                    Value="{Binding Path=Foreground,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" />
         </Style>
-
 
 
         <Style x:Key="MenuButton" TargetType="RadioButton">
@@ -168,7 +167,7 @@
             <Setter Property="Margin" Value="35 0 20 0" />
             <Setter Property="Foreground"
                     Value="{Binding Path=Tag,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type RadioButton}}}" />
-         
+
 
         </Style>
         <Style x:Key="SidePanelButton" TargetType="TextBlock">
@@ -324,7 +323,6 @@
             <Setter Property="FontWeight" Value="SemiBold" />
 
         </Style>
-        <!--#endregion-->
 
 
     </Application.Resources>

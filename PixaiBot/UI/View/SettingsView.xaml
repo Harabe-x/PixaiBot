@@ -7,10 +7,10 @@
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="400">
 
-<UserControl.Resources>
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:BooleanToBrushConverter x:Key="BrushConverter" />
-</UserControl.Resources>
+    </UserControl.Resources>
 
     <Grid>
 
@@ -41,7 +41,9 @@
                                     Style="{StaticResource PurpleButton}" Margin="20 20 0 0"
                                     Command="{Binding AddManyAccountsCommand}" />
                             <Button Width="130" Content="{Binding AccountCheckerButtonText }" FontSize="14" Height="40"
-                                    Style="{StaticResource PurpleButton}" Background="{Binding IsAccountCheckerRunning,Converter={StaticResource BrushConverter} }"  Margin="20 20 0 0 "
+                                    Style="{StaticResource PurpleButton}"
+                                    Background="{Binding IsAccountCheckerRunning,Converter={StaticResource BrushConverter} }"
+                                    Margin="20 20 0 0 "
                                     Command="{Binding CheckAllAccountsLoginCommand}" />
                         </StackPanel>
                     </Grid>
@@ -54,19 +56,27 @@
             <StackPanel HorizontalAlignment="Center">
                 <Border Style="{StaticResource BorderStyle}">
                     <Grid>
-                        <TextBlock Text="Bot Settings :" Style="{StaticResource BoldPurpleText2}"  />
+                        <TextBlock Text="Bot Settings :" Style="{StaticResource BoldPurpleText2}" />
                         <StackPanel VerticalAlignment="Center">
                             <CheckBox Command="{Binding StartWithSystemCommand}"
                                       IsChecked="{Binding ShouldStartWithSystem }" Content="  Start With System"
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
                             <CheckBox IsChecked="{Binding AutoClaimCredits }" Content="  Credits Auto Claim"
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
-                            <CheckBox IsChecked="{Binding EnableToastNotifications }" Command="{Binding UpdateToastNotificationPreferenceCommand}"  Content="  Toast Notifications "
+                            <CheckBox IsChecked="{Binding EnableToastNotifications }"
+                                      Command="{Binding UpdateToastNotificationPreferenceCommand}"
+                                      Content="  Toast Notifications "
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
                             <CheckBox IsChecked="{Binding MultiThreading }" Content="  Multi-Threading "
                                       Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
-                            <TextBlock Text="Threads :" Foreground="{StaticResource LightPurpleColor}" Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}" FontSize="16" Margin="20 15 0 0"/>
-                            <TextBox Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding NumberOfThreads}" VerticalAlignment="Center" Background="Transparent"  Width="200"   HorizontalAlignment="Left" BorderBrush="{StaticResource DarkPurpleColor}"   BorderThickness="0 0  0 2.5" Margin="20 10 0 0"/>
+                            <TextBlock Text="Threads :" Foreground="{StaticResource LightPurpleColor}"
+                                       Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       FontSize="16" Margin="20 15 0 0" />
+                            <TextBox
+                                Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Text="{Binding NumberOfThreads}" VerticalAlignment="Center" Background="Transparent"
+                                Width="200" HorizontalAlignment="Left" BorderBrush="{StaticResource DarkPurpleColor}"
+                                BorderThickness="0 0  0 2.5" Margin="20 10 0 0" />
 
                         </StackPanel>
                     </Grid>

@@ -10,28 +10,33 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ICreditClaimer
 {
-
     /// <summary>
     /// Occurs when an error occurs.
     /// </summary>
     public event EventHandler<string> ErrorOccurred;
 
     /// <summary>
-    /// Occurs when credits are claimed for an account.
+    /// Occurs when credits are claimed for an userAccount.
     /// </summary>
     public event EventHandler<UserAccount> CreditsClaimed;
 
     /// <summary>
-    /// Occurs when the process is started for an account.
+    /// Occurs when the process is started for an userAccount.
     /// </summary>
     public event EventHandler<UserAccount> ProcessStartedForAccount;
 
+
     /// <summary>
-    /// Claims credits for an account.
+    ///  Occurred when credits are already claimed for an userAccount.
     /// </summary>
-    /// <param name="account">The account where the credits are to be claimed</param>
-    public void ClaimCredits(UserAccount account);
-    
+    public event EventHandler CreditsAlreadyClaimed;
+
+    /// <summary>
+    /// Claims credits for an userAccount.
+    /// </summary>
+    /// <param name="userAccount">The userAccount where the credits are to be claimed</param>
+    public void ClaimCredits(UserAccount userAccount);
+
     /// <summary>
     ///  Claims credits for all accounts in <paramref name="accounts"/>.
     /// </summary>

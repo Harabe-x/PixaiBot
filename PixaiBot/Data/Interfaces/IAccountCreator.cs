@@ -28,7 +28,8 @@ internal interface IAccountCreator
     /// <param name="tempMailApiKey">TempMail api key.</param>
     /// <param name="shouldUseProxy">Determines whether the bot should use a proxy when creating an accounts.</param>
     /// <param name="shouldVerifyEmail">Determines whether the bot should verify email address.</param>
+    /// <param name="interval">interval between the creation of accounts </param>
     /// <param name="token">cancellation token to cancel account creation process.</param>
     void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail,
-        CancellationToken token);
+        CancellationToken token, TimeSpan interval);
 }

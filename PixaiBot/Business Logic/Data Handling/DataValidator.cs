@@ -7,11 +7,12 @@ namespace PixaiBot.Business_Logic.Data_Handling;
 public class DataValidator : IDataValidator
 {
     #region Methods
+
     /// <summary>
-    /// Validates if <paramref name="email"/> is valid,
+    /// Checks if <paramref name="email"/> is valid,
     /// </summary>
     /// <param name="email"></param>
-    /// <returns></returns>
+    /// <returns>If <paramref name="email"/> is valid returns True; otherwise returns False</returns>
     public bool IsEmailValid(string email)
     {
         try
@@ -34,6 +35,12 @@ public class DataValidator : IDataValidator
         return true;
     }
 
+
+    /// <summary>
+    /// Checks if <paramref name="password"/> is valid,
+    /// </summary>
+    /// <param name="password"></param>
+    /// <returns>If <paramref name="password"/> is valid returns True; otherwise returns False</returns>
     public bool IsPasswordValid(string password)
     {
         return !string.IsNullOrEmpty(password);

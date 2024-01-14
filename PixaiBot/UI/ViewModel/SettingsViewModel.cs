@@ -42,6 +42,12 @@ public class SettingsViewModel : BaseViewModel
         IConfigManager configManager,
         IToastNotificationSender toastNotificationSender)
     {
+        ShowAddAccountWindowCommand = new RelayCommand(_ => ShowAddAccountWindow());
+        AddManyAccountsCommand = new RelayCommand(_ => AddManyAccounts());
+        CheckAllAccountsLoginCommand = new RelayCommand(_ => CheckAllAccountsLogin());
+        StartWithSystemCommand = new RelayCommand(_ => StartWithSystem());
+        UpdateToastNotificationPreferenceCommand = new RelayCommand(_ => UpdateToastNotificationPreference());
+
         _toastNotificationSender = toastNotificationSender;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
@@ -50,13 +56,11 @@ public class SettingsViewModel : BaseViewModel
         _accountsManager = accountsManager;
         _dataValidator = dataValidator;
         _accountLoginChecker = accountLoginChecker;
-        _settingsModel = new SettingsModel();
-        ShowAddAccountWindowCommand = new RelayCommand((obj) => ShowAddAccountWindow());
-        AddManyAccountsCommand = new RelayCommand((obj) => AddManyAccounts());
-        CheckAllAccountsLoginCommand = new RelayCommand((obj) => CheckAllAccountsLogin());
-        StartWithSystemCommand = new RelayCommand((obj) => StartWithSystem());
-        UpdateToastNotificationPreferenceCommand = new RelayCommand((obj) => UpdateToastNotificationPreference());
-        _settingsModel.UserConfig = _configManager.GetConfig();
+        _settingsModel = new SettingsModel
+        {
+            UserConfig = _configManager.GetConfig()
+        };
+
         AccountCheckerButtonText = "Validate accounts";
     }
 
@@ -86,6 +90,8 @@ public class SettingsViewModel : BaseViewModel
 
     private async void CheckAllAccountsLogin()
     {
+        _logger.Log("Account checking started", _logger.ApplicationLogFilePath);
+
         if (IsAccountCheckerRunning)
         {
             CancelAccountsChecking();
@@ -105,11 +111,9 @@ public class SettingsViewModel : BaseViewModel
             validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), _tokenSource.Token);
         });
 
-
         var statistics = _botStatisticsManager.GetStatistics();
 
         statistics.AccountsCount = accountsList.Count();
-
 
         JsonWriter.WriteJson(validAccounts, InitialConfiguration.AccountsFilePath);
 
@@ -118,6 +122,7 @@ public class SettingsViewModel : BaseViewModel
 
     private void CancelAccountsChecking()
     {
+        _logger.Log("Account checking ended", _logger.ApplicationLogFilePath);
         IsAccountCheckerRunning = false;
         AccountCheckerButtonText = "Validate accounts";
         _tokenSource.Cancel();
@@ -126,7 +131,7 @@ public class SettingsViewModel : BaseViewModel
     private void StartWithSystem()
     {
         var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
+        _logger.Log("Start with system option changed", _logger.ApplicationLogFilePath);
         if (ShouldStartWithSystem) registryKey?.SetValue("PixaiBot", _executablePath);
         else registryKey?.DeleteValue("PixaiBot", false);
     }
@@ -186,6 +191,7 @@ public class SettingsViewModel : BaseViewModel
         get => _settingsModel.UserConfig.StartWithSystem;
         set
         {
+            _logger.Log("Start with system option changed", _logger.ApplicationLogFilePath);
             _settingsModel.UserConfig.StartWithSystem = value;
             _configManager.SaveConfig(_settingsModel.UserConfig);
             OnPropertyChanged();
@@ -208,6 +214,7 @@ public class SettingsViewModel : BaseViewModel
         get => _settingsModel.UserConfig.CreditsAutoClaim;
         set
         {
+            _logger.Log("Auto claim credits option changed", _logger.ApplicationLogFilePath);
             _settingsModel.UserConfig.CreditsAutoClaim = value;
             _configManager.SaveConfig(_settingsModel.UserConfig);
             OnPropertyChanged();
@@ -219,6 +226,7 @@ public class SettingsViewModel : BaseViewModel
         get => _settingsModel.UserConfig.MultiThreading;
         set
         {
+            _logger.Log("Multi threading option changed", _logger.ApplicationLogFilePath);
             _settingsModel.UserConfig.MultiThreading = value;
             _configManager.SaveConfig(_settingsModel.UserConfig);
             OnPropertyChanged();
@@ -234,6 +242,7 @@ public class SettingsViewModel : BaseViewModel
             _settingsModel.UserConfig.NumberOfThreads = parsedValue;
             _configManager.SaveConfig(_settingsModel.UserConfig);
             OnPropertyChanged();
+            _logger.Log("Number of threads changed", _logger.ApplicationLogFilePath);
         }
     }
 

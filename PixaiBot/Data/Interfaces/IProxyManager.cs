@@ -8,7 +8,6 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IProxyManager
 {
-
     /// <summary>
     /// Gets the proxy list.
     /// </summary>

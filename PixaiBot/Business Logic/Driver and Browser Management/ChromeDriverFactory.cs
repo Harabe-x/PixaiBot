@@ -7,7 +7,7 @@ namespace PixaiBot.Business_Logic.Driver_and_Browser_Management;
 public static class ChromeDriverFactory
 {
     /// <summary>
-    /// Creates a ChromeDriver with the needed model to hide the process.
+    /// Creates a ChromeDriver with the needed settings to hide the process.
     /// </summary>
     /// <returns>Chrome Driver Instance</returns>
     public static ChromeDriver CreateDriver()

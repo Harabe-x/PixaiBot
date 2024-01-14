@@ -26,8 +26,9 @@
             <Grid>
 
                 <StackPanel>
-                    <Image  Source="/Resources/images/Pixai_AutoClaimer2.png" Height="250" Width="200" RenderTransformOrigin="0.299,0.867" StretchDirection="DownOnly" />
-                    <RadioButton IsChecked="True" Name="DashboardBtn"  Command="{Binding NavigateToDashboardCommand}"
+                    <Image Source="/Resources/images/Pixai_AutoClaimer2.png" Height="250" Width="200"
+                           RenderTransformOrigin="0.299,0.867" StretchDirection="DownOnly" />
+                    <RadioButton IsChecked="True" Name="DashboardBtn" Command="{Binding NavigateToDashboardCommand}"
                                  Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Home" Style="{StaticResource SidePanelButtonIcon}" />
@@ -36,15 +37,16 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Name="AccountListBtn" Command="{Binding NavigateToAccountsListCommand}"
-                            Style="{StaticResource MenuButton}">
+                                 Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="List" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="AccountList" Text="Account List"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Name="AccountCreatorBtn" 
-                                 Command="{Binding NavigateToAccountCreatorCommand}" Style="{StaticResource MenuButton}">
+                    <RadioButton Name="AccountCreatorBtn"
+                                 Command="{Binding NavigateToAccountCreatorCommand}"
+                                 Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="UserCircleOutline" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="AccountsCreator" Text="Accounts Creator"
@@ -52,14 +54,15 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Name="AccountInfoLoggerBtn"
-                                 Command="{Binding NavigateToLogAccountInfoCommand}" Style="{StaticResource MenuButton}">
+                                 Command="{Binding NavigateToLogAccountInfoCommand}"
+                                 Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="File" Style="{StaticResource SidePanelButtonIcon}" />
                             <TextBlock x:Name="AccountInfoLogger" Text="Account Info Logger" FontSize="12"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Name="SettingsBtn" 
+                    <RadioButton Name="SettingsBtn"
                                  Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Cog" Style="{StaticResource SidePanelButtonIcon}" />
@@ -67,8 +70,8 @@
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </RadioButton>
-                    <Button Name="HideBtn" 
-                                 Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton1}">
+                    <Button Name="HideBtn"
+                            Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton1}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="EyeSlash" Style="{StaticResource SidePanelButtonIcon1}" />
                             <TextBlock x:Name="Hide" Text="Hide Application"

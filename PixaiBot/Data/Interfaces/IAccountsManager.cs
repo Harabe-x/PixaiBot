@@ -9,7 +9,6 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IAccountsManager
 {
-
     /// <summary>
     ///  Occurs when the accounts list is changed.
     /// </summary>

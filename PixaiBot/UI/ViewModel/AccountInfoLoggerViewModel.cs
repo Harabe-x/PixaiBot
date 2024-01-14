@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Notification.Wpf;
 using PixaiBot.Business_Logic.Extension;
+using PixaiBot.Business_Logic.Logging;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
@@ -26,16 +27,17 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
 
     #region Constructor
 
-    public AccountInfoLoggerViewModel(IAccountsInfoLogger accountsInfoLogger,
+    public AccountInfoLoggerViewModel(IAccountInfoLogger accountInfoLogger,
         IAccountsManager accountsManager, IConfigManager configManager,
-        IToastNotificationSender toastNotificationSender)
+        IToastNotificationSender toastNotificationSender, ILogger logger)
     {
-        _accountsInfoLogger = accountsInfoLogger;
+        StartLoggingCommand = new RelayCommand(_ => StartLogging());
+
+        _accountInfoLogger = accountInfoLogger;
         _accountsManager = accountsManager;
         _configManager = configManager;
+        _logger = logger;
         _toastNotificationSender = toastNotificationSender;
-        StartLoggingCommand = new RelayCommand((obj) => StartLogging());
-
         _accountInfoLoggerModel = new AccountInfoLoggerModel();
 
         IsRunning = false;
@@ -47,8 +49,10 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
 
     #region Methods
 
-    public async void StartLogging()
+    private async void StartLogging()
     {
+        _logger.Log("Account info logging process started", _logger.ApplicationLogFilePath);
+
         if (IsRunning)
         {
             StopLogging();
@@ -62,14 +66,15 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         OperationStatus = "Running...";
         LogButtonText = "Stop";
 
-        _accountsInfoLogger.ClearStringBuilderContent();
+        _accountInfoLogger.ClearStringBuilderContent();
         var result = string.Empty;
         if (config.MultiThreading)
         {
             var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
+            _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
 
             var tasks = accounts.Select(account => Task.Run(() =>
-                _accountsInfoLogger.StartLoggingAccountsInfo(account, _accountInfoLoggerModel,
+                _accountInfoLogger.StartLoggingAccountsInfo(account, _accountInfoLoggerModel,
                     _tokenSource.Token)));
 
             await Task.WhenAll(tasks);
@@ -80,8 +85,10 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         }
         else
         {
+            _logger.Log("Creating a task to do", _logger.ApplicationLogFilePath);
+
             result = await Task.Run(() =>
-                _accountsInfoLogger.StartLoggingAccountsInfo(_accountsManager.GetAllAccounts(),
+                _accountInfoLogger.StartLoggingAccountsInfo(_accountsManager.GetAllAccounts(),
                     _accountInfoLoggerModel, _tokenSource.Token));
         }
 
@@ -98,6 +105,7 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
 
     private void StopLogging()
     {
+        _logger.Log("Account info logging process Ended", _logger.ApplicationLogFilePath);
         IsRunning = false;
         OperationStatus = "Idle.";
         LogButtonText = "Start Logging";
@@ -108,7 +116,7 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
 
     #region Fields
 
-    private readonly IAccountsInfoLogger _accountsInfoLogger;
+    private readonly IAccountInfoLogger _accountInfoLogger;
 
 
     private readonly IAccountsManager _accountsManager;
@@ -116,6 +124,8 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
     private readonly IConfigManager _configManager;
 
     private readonly IToastNotificationSender _toastNotificationSender;
+
+    private readonly ILogger _logger;
 
     private readonly AccountInfoLoggerModel _accountInfoLoggerModel;
 

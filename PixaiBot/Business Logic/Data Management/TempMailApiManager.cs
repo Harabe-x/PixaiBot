@@ -14,7 +14,7 @@ public class TempMailApiManager : ITempMailApiManager
     #region Constructor
 
     public TempMailApiManager(ILogger logger)
-    { 
+    {
         _httpClient = new HttpClient();
         _logger = logger;
     }
@@ -22,7 +22,6 @@ public class TempMailApiManager : ITempMailApiManager
     #endregion
 
     #region Methods
-    
 
     public IEnumerable<string> GetDomains(string tempMailApiKey)
     {

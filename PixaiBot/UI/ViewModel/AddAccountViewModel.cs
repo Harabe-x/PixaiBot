@@ -25,12 +25,12 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
 
     public AddAccountViewModel(IAccountsManager accountsManager, IDataValidator dataValidator, ILogger logger)
     {
-        _logger = logger;
+        AddAccountCommand = new RelayCommand(_ => AddAccount());
+        CloseWindowCommand = new RelayCommand(_ => CloseWindow());
+        _addAccountModel = new AddAccountModel();
         _accountsManger = accountsManager;
         _dataValidator = dataValidator;
-        _addAccountModel = new AddAccountModel();
-        AddAccountCommand = new RelayCommand((obj) => AddAccount());
-        CloseWindowCommand = new RelayCommand((obj) => CloseWindow());
+        _logger = logger;
     }
 
     #endregion
@@ -61,7 +61,7 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
         };
         _accountsManger.AddAccount(userAccount);
         CloseWindow();
-        _logger.Log("Added Account", _logger.ApplicationLogFilePath);
+        _logger.Log("Account Added", _logger.ApplicationLogFilePath);
     }
 
     public bool CanCloseWindow()

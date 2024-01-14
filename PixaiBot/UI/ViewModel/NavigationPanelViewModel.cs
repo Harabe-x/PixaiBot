@@ -39,17 +39,19 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     public NavigationPanelViewModel(INavigationService navService, ILogger logger,
         IToastNotificationSender toastNotificationASender, IConfigManager configManager)
     {
+        NavigateToAccountCreatorCommand = new RelayCommand(_ => NavigateToAccountCreator());
+        NavigateToLogAccountInfoCommand = new RelayCommand((obj) => NavigateToLogAccountInfo());
+        NavigateToDashboardCommand = new RelayCommand(_ => NavigateToDashboard());
+        NavigateToSettingsCommand = new RelayCommand(_ => NavigateToSettings());
+        ExitApplicationCommand = new RelayCommand(_ => ExitApplication());
+        HideApplicationCommand = new RelayCommand(_ => HideApplication());
+        NavigateToAccountsListCommand = new RelayCommand(_ => NavigateToAccountsList());
+
+        Navigation = navService;
         _configManager = configManager;
         _toastNotificationSender = toastNotificationASender;
         _logger = logger;
-        Navigation = navService;
-        NavigateToAccountCreatorCommand = new RelayCommand((obj) => NavigateToAccountCreator());
-        NavigateToLogAccountInfoCommand = new RelayCommand((obj) => NavigateToLogAccountInfo());
-        NavigateToDashboardCommand = new RelayCommand((obj) => NavigateToDashboard());
-        NavigateToSettingsCommand = new RelayCommand((obj) => NavigateToSettings());
-        ExitApplicationCommand = new RelayCommand((obj) => ExitApplication());
-        HideApplicationCommand = new RelayCommand((obj) => HideApplication());
-        NavigateToAccountsListCommand = new RelayCommand((obj) => NavigateToAccountsList());
+
         NavigateToDashboardCommand.Execute(null);
     }
 
@@ -136,10 +138,11 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
 
     public Action HideToTray { get; set; }
 
+    // ReSharper disable once MemberCanBePrivate.Global
     public INavigationService Navigation
     {
         get => _navigation;
-        set
+        init
         {
             _navigation = value;
             OnPropertyChanged();

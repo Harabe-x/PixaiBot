@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Models;
 
@@ -27,8 +29,10 @@ internal class AccountCreatorV2 : IAccountCreator
     /// <param name="shouldUseProxy"></param>
     /// <param name="shouldVerifyEmail"></param>
     public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail,
-        CancellationToken token)
+        CancellationToken token, TimeSpan interval)
     {
+        _logger.Log("The account creation process has started", _logger.ApplicationLogFilePath);
+
         for (var i = 0; i < amount; i++)
         {
             if (token.IsCancellationRequested) return;
@@ -46,26 +50,55 @@ internal class AccountCreatorV2 : IAccountCreator
             catch (Exception e)
             {
                 _logger.Log("Chrome drive threw exception\n" + e.Message, _logger.CreditClaimerLogFilePath);
-                ErrorOccurred?.Invoke(this, "Chrome drive Exception occurred");
+                ErrorOccurred?.Invoke(this, $"{e.InnerException.GetType()}");
                 continue;
             }
+            finally
+            {
+                driver.Quit();
+            }
 
-            driver.Quit();
+            if (amount < 2) return;
+
+            Thread.Sleep(interval);
         }
+
+        _logger.Log("The account creation process has ended", _logger.CreditClaimerLogFilePath);
     }
 
     private void CreateAccount(ChromeDriver driver, bool shouldVerifyEmail, string tempMailApiKey)
     {
+        _logger.Log("Creating account login details", _logger.CreditClaimerLogFilePath);
+
         var email = shouldVerifyEmail
             ? _loginCredentialsMaker.GenerateEmail(tempMailApiKey)
             : _loginCredentialsMaker.GenerateEmail();
         var password = _loginCredentialsMaker.GeneratePassword();
 
+
+        _logger.Log("Creating account login details", _logger.CreditClaimerLogFilePath);
+
         _pixaiNavigation.NavigateToUrl(driver, RegistrationPageUrl);
-        _pixaiNavigation.LogIn(driver, email, password);
+        _pixaiNavigation.NavigateToRegistrationPage(driver);
+        _pixaiNavigation.SendLoginCredentialsToTextBoxes(driver, email, password);
+        _pixaiNavigation.ClickOnRegisterButton(driver);
+        _logger.Log("Registering an account", _logger.CreditClaimerLogFilePath);
 
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxRegisterAttemptSeconds));
 
-        Thread.Sleep(TimeSpan.FromSeconds(WaitTime));
+        try
+        {
+            wait.Until(drv => drv.Url != RegistrationPageUrl);
+        }
+        catch (WebDriverTimeoutException)
+        {
+            ErrorOccurred?.Invoke(this, "An error occurred while creating your account");
+            _logger.Log("Account registration failed\n=====Chrome Drive Closed=====\n",
+                _logger.CreditClaimerLogFilePath);
+            driver.Quit();
+            return;
+        }
+
 
         var userAccount = new UserAccount() { Email = email, Password = password };
 
@@ -73,17 +106,10 @@ internal class AccountCreatorV2 : IAccountCreator
 
         if (!shouldVerifyEmail) return;
 
-
-        //In some cases, after pressing the button to go to account settings , the user remains on the home page, so the code is executed until the url is correct.
-        while (driver.Url != "https://pixai.art/profile/edit")
-        {
-            _pixaiNavigation.ClickDropdownMenu(driver);
-            _pixaiNavigation.NavigateToProfileSettings(driver);
-        }
+        _logger.Log("Trying to confirm email", _logger.CreditClaimerLogFilePath);
 
         _pixaiNavigation.NavigateToProfileSettings(driver);
         _pixaiNavigation.ClickResendEmailVerificationLinkButton(driver);
-
 
         VerifyEmail(userAccount, driver, tempMailApiKey);
     }
@@ -104,7 +130,8 @@ internal class AccountCreatorV2 : IAccountCreator
 
         if (string.IsNullOrEmpty(verificationLink))
         {
-            _logger.Log("Email verification link not found", _logger.ApplicationLogFilePath);
+            _logger.Log("Email verification link not found, invalid Api Key\n=====Chrome Drive Closed=====\n",
+                _logger.CreditClaimerLogFilePath);
             ErrorOccurred?.Invoke(this, "Invalid Api Key");
             return;
         }
@@ -113,7 +140,7 @@ internal class AccountCreatorV2 : IAccountCreator
 
         Thread.Sleep(TimeSpan.FromSeconds(2.5));
 
-        _logger.Log("Email verified", _logger.ApplicationLogFilePath);
+        _logger.Log("Email verified\n=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
     }
 
 
@@ -127,7 +154,7 @@ internal class AccountCreatorV2 : IAccountCreator
 
     private const string RegistrationPageUrl = "https://pixai.art/sign-up";
 
-    private const int WaitTime = 1;
+    private const int MaxRegisterAttemptSeconds = 5;
 
     private const int EmailVerificationLinkWaitTime = 5;
 

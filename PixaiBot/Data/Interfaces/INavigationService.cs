@@ -9,7 +9,6 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface INavigationService
 {
-    
     /// <summary>
     ///  Holds the current view.
     /// </summary>

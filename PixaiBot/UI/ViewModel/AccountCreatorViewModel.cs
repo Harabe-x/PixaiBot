@@ -30,6 +30,9 @@ internal class AccountCreatorViewModel : BaseViewModel
         IToastNotificationSender toastNotificationSender, IAccountCreator accountCreator,
         IConfigManager configManager)
     {
+        AddProxyCommand = new RelayCommand(_ => AddProxy());
+        StartAccountCreationCommand = new RelayCommand(_ => StartAccountCreation());
+
         _accountCreatorModel = new AccountCreatorModel();
         _configManager = configManager;
         _accountCreator = accountCreator;
@@ -37,9 +40,6 @@ internal class AccountCreatorViewModel : BaseViewModel
         _logger = logger;
         _accountsManager = accountsManager;
         _proxyManager = proxyManager;
-
-        AddProxyCommand = new RelayCommand((obj) => AddProxy());
-        StartAccountCreationCommand = new RelayCommand((obj) => StartAccountCreation());
 
         ProxyFilePath = "Select Proxy File";
         OperationStatus = "Idle.";
@@ -55,6 +55,7 @@ internal class AccountCreatorViewModel : BaseViewModel
 
     private void AddProxy()
     {
+        _logger.Log("Adding proxy", _logger.ApplicationLogFilePath);
         var dialog = new OpenFileDialog()
         {
             Title = "Select File:",
@@ -74,6 +75,8 @@ internal class AccountCreatorViewModel : BaseViewModel
     private void OnAccountCreated(object? sender, UserAccount e)
     {
         _accountsManager.AddAccount(e);
+        _logger.Log("Account created, adding account to account list", _logger.ApplicationLogFilePath);
+
         if (_configManager.GetConfig().ToastNotifications)
             _toastNotificationSender.SendNotification("PixaiBot", $"Account Created", NotificationType.Success);
     }
@@ -86,6 +89,8 @@ internal class AccountCreatorViewModel : BaseViewModel
 
     private async void StartAccountCreation()
     {
+        _logger.Log("Account creation process started", _logger.ApplicationLogFilePath);
+
         if (IsRunning)
         {
             StopCreating();
@@ -98,13 +103,16 @@ internal class AccountCreatorViewModel : BaseViewModel
         OperationStatus = "Running...";
         AccountsCreatorButtonText = "Stop Account Creation";
 
+        _logger.Log("Creating a task to do", _logger.ApplicationLogFilePath);
 
         if (!int.TryParse(AccountAmount, out var amount)) return;
 
+
         await Task.Run(() =>
         {
+            // Pixai limits the amount of accounts that can be created from the same IP address.
             _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail,
-                _tokenSource.Token);
+                _tokenSource.Token, ShouldUseProxy ? TimeSpan.Zero : TimeSpan.FromMinutes(5));
         });
 
         StopCreating();
@@ -116,6 +124,7 @@ internal class AccountCreatorViewModel : BaseViewModel
         OperationStatus = "Idle.";
         AccountsCreatorButtonText = "Start Account Creation";
         _tokenSource.Cancel();
+        _logger.Log("Account creation process ended", _logger.ApplicationLogFilePath);
     }
 
     #endregion

@@ -8,7 +8,7 @@ using PixaiBot.UI.Models;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface IAccountsInfoLogger
+internal interface IAccountInfoLogger
 {
     /// <summary>
     ///  Clears the of the <see cref="StringBuilder"/> content.

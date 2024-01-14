@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using OpenQA.Selenium;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
 using PixaiBot.Data.Interfaces;
@@ -25,73 +26,77 @@ internal class PixaiNavigation : IPixaiNavigation
 
     public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext)
     {
+        _logger.Log("Clicking resend email verification link button", _logger.CreditClaimerLogFilePath);
         ClickElement(searchContext, "*:nth-child(3) *:nth-child(2) > *:nth-child(4)");
     }
 
     public void GoBack(IWebDriver driver)
     {
+        _logger.Log("Going back", _logger.CreditClaimerLogFilePath);
         driver.Navigate().Back();
     }
 
-    public void NavigateRegistrationPage(ISearchContext driver)
+    public void NavigateToRegistrationPage(ISearchContext searchContext)
     {
         _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-        ClickElementWithSpecifiedText(driver, "button", "Register");
+        ClickElement(searchContext, ".MuiButton-text");
     }
 
-    public void GoToLoginPage(ISearchContext driver)
+    public void GoToLoginPage(ISearchContext searchContext)
     {
         _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-        ClickElementWithSpecifiedText(driver, "button", "Log in with email");
+        ClickElement(searchContext, "button", "Log in with email");
     }
 
-    public void SendLoginCredentialsToTextBoxes(ISearchContext driver, string email, string password)
+    public void SendLoginCredentialsToTextBoxes(ISearchContext searchContext, string email, string password)
     {
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             throw new ArgumentException("Login credentials can't be null or empty");
 
         _logger.Log("Sending email & password to textboxes ", _logger.CreditClaimerLogFilePath);
 
-        SendKeysToElement(driver, "* > * > *:nth-child(2) > * > *:nth-child(1) > * > *", email);
+        SendKeysToElement(searchContext, "* > * > *:nth-child(2) > * > *:nth-child(1) > * > *", email);
 
-        SendKeysToElement(driver, "*:nth-child(2) > * > *:nth-child(2) > * > *", password);
+        SendKeysToElement(searchContext, "*:nth-child(2) > * > *:nth-child(2) > * > *", password);
     }
 
-    public void ClickOnRegisterButton(ISearchContext driver)
+    public void ClickOnRegisterButton(ISearchContext searchContext)
     {
         _logger.Log("Clicking register button", _logger.CreditClaimerLogFilePath);
 
-        ClickElementWithSpecifiedText(driver, "button", "Sign Up");
+        ClickElement(searchContext, "#\\:r2\\:");
     }
 
-    public void ClickOnLoginButton(ISearchContext driver)
+    public void ClickOnLoginButton(ISearchContext searchContext)
     {
         _logger.Log("Clicking login button ", _logger.CreditClaimerLogFilePath);
 
-        ClickElementWithSpecifiedText(driver, "button", "Login");
+        ClickElement(searchContext, "button", "Login");
     }
 
-    public void NavigateToProfile(ISearchContext driver)
+    public void NavigateToProfile(ISearchContext searchContext)
     {
         _logger.Log("Navigating to profile", _logger.CreditClaimerLogFilePath);
 
-        ClickElement(driver, ".MuiMenuItem-root:nth-child(1)");
+        ClickElement(searchContext, ".MuiMenuItem-root:nth-child(1)");
     }
 
-    public void NavigateToProfileSettings(ISearchContext driver)
+    public void NavigateToProfileSettings(IWebDriver driver)
     {
         _logger.Log("Navigating to account model", _logger.CreditClaimerLogFilePath);
-
-        ClickElement(driver, ".MuiMenuItem-root:nth-child(3)");
+        NavigateToUrl(driver, "https://pixai.art/profile/edit");
     }
 
-    public void GoToCreditsTab(IWebDriver driver)
+    public void NavigateToCreditsTab(IWebDriver driver)
     {
+        _logger.Log("Clicking dropdown menu", _logger.CreditClaimerLogFilePath);
+
         NavigateToUrl(driver, driver.Url + "/credits");
     }
 
     public void ClickDropdownMenu(IWebDriver driver)
     {
+        _logger.Log("Clicking dropdown menu", _logger.CreditClaimerLogFilePath);
         ClickElement(driver, ".shrink-0");
     }
 
@@ -102,6 +107,7 @@ internal class PixaiNavigation : IPixaiNavigation
 
     public void NavigateToUrl(IWebDriver driver, string url)
     {
+        _logger.Log($"Navigating to {url}", _logger.CreditClaimerLogFilePath);
         driver.Navigate().GoToUrl(url);
     }
 
@@ -126,7 +132,7 @@ internal class PixaiNavigation : IPixaiNavigation
 
     #endregion
 
-    private static void ClickElement(ISearchContext driver, string cssSelector)
+    public void ClickElement(ISearchContext driver, string cssSelector)
     {
         try
         {
@@ -138,7 +144,7 @@ internal class PixaiNavigation : IPixaiNavigation
         }
     }
 
-    private static void ClickElementWithSpecifiedText(ISearchContext driver, string tagName, string text)
+    public void ClickElement(ISearchContext driver, string tagName, string text)
     {
         try
         {
@@ -151,7 +157,32 @@ internal class PixaiNavigation : IPixaiNavigation
         }
     }
 
-    private static void SendKeysToElement(ISearchContext driver, string cssSelector, string keys)
+    public IWebElement GetElement(ISearchContext searchContext, string cssSelector)
+    {
+        try
+        {
+            return searchContext.FindElement(By.CssSelector(cssSelector));
+        }
+        catch (Exception e)
+        {
+            throw new ChromeDriverException("ChromeDriver exception occurred", e);
+        }
+    }
+
+    public IWebElement GetElement(ISearchContext searchContext, string tagName, string text)
+    {
+        try
+        {
+            return searchContext.FindElements(By.TagName(tagName)).FirstOrDefault(x => x.Text == text) ??
+                   throw new InvalidOperationException();
+        }
+        catch (Exception e)
+        {
+            throw new ChromeDriverException("ChromeDriver exception occurred", e);
+        }
+    }
+
+    public void SendKeysToElement(ISearchContext driver, string cssSelector, string keys)
     {
         try
         {

@@ -8,7 +8,6 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface ITrayIconHelper
 {
-
     /// <summary>
     ///  Determines whether the window can be shown.
     /// </summary>
