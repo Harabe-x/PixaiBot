@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,7 +65,7 @@ internal class AccountCreatorViewModel : BaseViewModel
 
         var result = dialog.ShowDialog();
 
-        if (result == false) return;
+        if (!result) return;
 
         ProxyFilePath = dialog.FileName;
 
