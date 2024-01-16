@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Notification.Wpf;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
@@ -65,7 +67,7 @@ internal class AccountCreatorViewModel : BaseViewModel
 
         var result = dialog.ShowDialog();
 
-        if (!result) return;
+        if (result == false) return;
 
         ProxyFilePath = dialog.FileName;
 
@@ -107,12 +109,21 @@ internal class AccountCreatorViewModel : BaseViewModel
 
         if (!int.TryParse(AccountAmount, out var amount)) return;
 
+        IDriverCreationStrategy driverCreationStrategy = ShouldUseProxy
+            ? new ProxyDriverCreationStrategy(_proxyManager)
+            : new HiddenDriverCreationStrategy();
 
         await Task.Run(() =>
         {
+
+            // Determine the interval based on proxy usage
+            var interval = ShouldUseProxy ? TimeSpan.Zero : TimeSpan.FromMinutes(5);
+            
             // Pixai limits the amount of accounts that can be created from the same IP address.
-            _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldUseProxy, ShouldVerifyEmail,
-                _tokenSource.Token, ShouldUseProxy ? TimeSpan.Zero : TimeSpan.FromMinutes(5));
+            // if the user uses a proxy, the interval may be zero because a different proxy will be selected for each account
+            // if the user does not use a proxy, the interval will be 5 minutes to avoid being blocked by Pixai.
+            _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldVerifyEmail,driverCreationStrategy,
+                interval,_tokenSource.Token);
         });
 
         StopCreating();

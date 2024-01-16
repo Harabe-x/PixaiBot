@@ -8,7 +8,10 @@ public class UserConfig
 
     public bool CreditsAutoClaim { get; set; }
 
+    public bool HeadlessBrowser { get; set; }
+
     public bool MultiThreading { get; set; }
 
     public int NumberOfThreads { get; set; }
+
 }

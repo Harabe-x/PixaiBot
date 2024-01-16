@@ -16,7 +16,28 @@ public static class ChromeDriverFactory
 
         options.AddArgument("--window-position=-32000,-32000");
 
-        options.Proxy = new Proxy();
+        var service = ChromeDriverService.CreateDefaultService();
+
+        service.HideCommandPromptWindow = true;
+
+        var driver = new ChromeDriver(service, options);
+
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(MaxWaitTime);
+
+        return driver;
+    }
+
+    /// <summary>
+    ///  Creates a ChromeDriver with the needed settings to hide the process and run it headless.
+    /// </summary>
+    /// <returns>Chrome Driver Instance</returns>
+    public static ChromeDriver CreateHeadlessDriver()
+    {
+        var options = new ChromeOptions();
+
+        options.AddArgument("--window-position=-32000,-32000");
+
+        options.AddArgument("--headless");
 
         var service = ChromeDriverService.CreateDefaultService();
 
@@ -28,6 +49,7 @@ public static class ChromeDriverFactory
 
         return driver;
     }
+
 
 
     /// <summary>
@@ -44,12 +66,13 @@ public static class ChromeDriverFactory
         var proxyObject = new Proxy()
         {
             HttpProxy = proxy,
-            Kind = ProxyKind.Manual
+            FtpProxy = proxy,
+            SocksProxy = proxy,
+            SslProxy = proxy,
+            Kind = ProxyKind.AutoDetect
         };
 
         options.Proxy = proxyObject;
-
-        options.AddArgument("--ignore-certificate-errors");
 
         var service = ChromeDriverService.CreateDefaultService();
 

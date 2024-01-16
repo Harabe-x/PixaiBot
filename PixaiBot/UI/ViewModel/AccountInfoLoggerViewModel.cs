@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Notification.Wpf;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
 using PixaiBot.Business_Logic.Logging;
 using PixaiBot.Data.Interfaces;
@@ -66,6 +67,10 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         OperationStatus = "Running...";
         LogButtonText = "Stop";
 
+        IDriverCreationStrategy driverCreationStrategy = config.HeadlessBrowser
+            ? new HeadlessDriverCreationStrategy()
+            : new HiddenDriverCreationStrategy();
+
         _accountInfoLogger.ClearStringBuilderContent();
         var result = string.Empty;
         if (config.MultiThreading)
@@ -74,8 +79,7 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
             _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
 
             var tasks = accounts.Select(account => Task.Run(() =>
-                _accountInfoLogger.StartLoggingAccountsInfo(account, _accountInfoLoggerModel,
-                    _tokenSource.Token)));
+                _accountInfoLogger.StartLoggingAccountsInfo(account, driverCreationStrategy, _accountInfoLoggerModel, _tokenSource.Token)));
 
             await Task.WhenAll(tasks);
 
@@ -89,7 +93,7 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
 
             result = await Task.Run(() =>
                 _accountInfoLogger.StartLoggingAccountsInfo(_accountsManager.GetAllAccounts(),
-                    _accountInfoLoggerModel, _tokenSource.Token));
+                    driverCreationStrategy, _accountInfoLoggerModel, _tokenSource.Token));
         }
 
         var saveFileDialog = new SaveFileDialog

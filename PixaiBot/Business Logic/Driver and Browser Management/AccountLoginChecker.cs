@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Models;
 
@@ -20,14 +21,9 @@ public class AccountLoginChecker : IAccountLoginChecker
     #endregion
 
 
-    /// <summary>
-    /// Checks account login credentials 
-    /// </summary>
-    /// <param name="userAccount"></param>
-    /// <returns>True if the account is valid</returns>
-    public bool CheckAccountLogin(UserAccount userAccount)
+    public bool CheckAccountLogin(UserAccount userAccount,IDriverCreationStrategy driverCreationStrategy)
     {
-        using var driver = ChromeDriverFactory.CreateDriver();
+        using var driver = driverCreationStrategy.CreateDriver();
 
         _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
@@ -53,13 +49,9 @@ public class AccountLoginChecker : IAccountLoginChecker
         return false;
     }
 
-    /// <summary>
-    /// Checks all accounts login credentials
-    /// </summary> 
-    /// <param name="accountsList"></param>
-    /// <returns>IEnumerable with valid accounts</returns>
-    public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList,
-        CancellationToken token)
+
+    public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList, IDriverCreationStrategy driverCreationStrategy
+        ,CancellationToken token)
     {
         var validAccounts = new List<UserAccount>();
 
@@ -69,7 +61,7 @@ public class AccountLoginChecker : IAccountLoginChecker
 
             try
             {
-                if (CheckAccountLogin(userAccount))
+                if (CheckAccountLogin(userAccount,driverCreationStrategy))
                 {
                     validAccounts.Add(userAccount);
                     continue;

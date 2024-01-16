@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using Notification.Wpf;
 using PixaiBot.Business_Logic.Data_Handling;
 using PixaiBot.Business_Logic.Data_Management;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
@@ -101,14 +102,17 @@ public class SettingsViewModel : BaseViewModel
         IsAccountCheckerRunning = true;
         _tokenSource = new CancellationTokenSource();
         AccountCheckerButtonText = "Stop";
-
+        var config = _configManager.GetConfig();
         var accountsList = _accountsManager.GetAllAccounts();
+        IDriverCreationStrategy driverCreationStrategy = config.HeadlessBrowser
+            ? new HeadlessDriverCreationStrategy()
+            : new HiddenDriverCreationStrategy();
 
         IEnumerable<UserAccount> validAccounts = null;
 
         await Task.Run(() =>
         {
-            validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), _tokenSource.Token);
+            validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), driverCreationStrategy, _tokenSource.Token);
         });
 
         var statistics = _botStatisticsManager.GetStatistics();
@@ -228,6 +232,18 @@ public class SettingsViewModel : BaseViewModel
         {
             _logger.Log("Multi threading option changed", _logger.ApplicationLogFilePath);
             _settingsModel.UserConfig.MultiThreading = value;
+            _configManager.SaveConfig(_settingsModel.UserConfig);
+            OnPropertyChanged();
+        }
+    }
+
+    public bool HeadlessBrowser
+    {
+        get => _settingsModel.UserConfig.HeadlessBrowser;
+        set
+        {
+            _logger.Log("Headless browser option changed", _logger.ApplicationLogFilePath);
+            _settingsModel.UserConfig.HeadlessBrowser = value;
             _configManager.SaveConfig(_settingsModel.UserConfig);
             OnPropertyChanged();
         }

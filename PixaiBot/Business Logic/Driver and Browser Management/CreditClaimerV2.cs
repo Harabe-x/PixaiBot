@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Models;
@@ -24,9 +25,9 @@ internal class CreditClaimerV2 : ICreditClaimer
 
     #region Methods
 
-    public void ClaimCredits(UserAccount userAccount)
+    public void ClaimCredits(UserAccount userAccount,IDriverCreationStrategy driverCreationStrategy)
     {
-        using var driver = ChromeDriverFactory.CreateDriver();
+        using var driver = driverCreationStrategy.CreateDriver();
 
         _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
@@ -65,7 +66,9 @@ internal class CreditClaimerV2 : ICreditClaimer
         _logger.Log("=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
     }
 
-    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken)
+
+
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,IDriverCreationStrategy driverCreationStrategy, CancellationToken cancellationToken)
     {
         foreach (var account in accounts)
         {
@@ -75,7 +78,15 @@ internal class CreditClaimerV2 : ICreditClaimer
 
             try
             {
-                ClaimCredits(account);
+                ClaimCredits(account, driverCreationStrategy);
+            }
+            catch (ElementClickInterceptedException e)
+            {
+                // This exception may occur in headless mode when the claim button is clicked many times.
+                // It seems to be related to the headless environment, possibly due to rapid claim button clicks.
+                // I think it can be safely ignored because the credits are successfully claimed regardless.
+                _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
+
             }
             catch (ChromeDriverException e)
             {
@@ -114,4 +125,4 @@ internal class CreditClaimerV2 : ICreditClaimer
     public event EventHandler CreditsAlreadyClaimed;
 
     #endregion
-}
+}   

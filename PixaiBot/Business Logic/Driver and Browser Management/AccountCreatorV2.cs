@@ -3,6 +3,7 @@ using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Models;
 
@@ -21,15 +22,9 @@ internal class AccountCreatorV2 : IAccountCreator
     }
 
 
-    /// <summary>
-    /// Starts the account creation process
-    /// </summary>
-    /// <param name="amount"></param>
-    /// <param name="tempMailApiKey"></param>
-    /// <param name="shouldUseProxy"></param>
-    /// <param name="shouldVerifyEmail"></param>
-    public void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail,
-        CancellationToken token, TimeSpan interval)
+   
+    public void CreateAccounts(int amount, string tempMailApiKey, bool shouldVerifyEmail,
+     IDriverCreationStrategy driverCreationStrategy, TimeSpan interval, CancellationToken token)
     {
         _logger.Log("The account creation process has started", _logger.ApplicationLogFilePath);
 
@@ -37,10 +32,8 @@ internal class AccountCreatorV2 : IAccountCreator
         {
             if (token.IsCancellationRequested) return;
 
-            using var driver = shouldUseProxy
-                ? ChromeDriverFactory.CreateDriver(_proxyManager.GetRandomProxy())
-                : ChromeDriverFactory.CreateDriver();
-
+            var driver = driverCreationStrategy.CreateDriver();
+           
             _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
             try
@@ -66,15 +59,16 @@ internal class AccountCreatorV2 : IAccountCreator
         _logger.Log("The account creation process has ended", _logger.CreditClaimerLogFilePath);
     }
 
-    private void CreateAccount(ChromeDriver driver, bool shouldVerifyEmail, string tempMailApiKey)
+    private void CreateAccount(IWebDriver driver,bool shouldVerifyEmail, string tempMailApiKey)
     {
         _logger.Log("Creating account login details", _logger.CreditClaimerLogFilePath);
+
 
         var email = shouldVerifyEmail
             ? _loginCredentialsMaker.GenerateEmail(tempMailApiKey)
             : _loginCredentialsMaker.GenerateEmail();
+        
         var password = _loginCredentialsMaker.GeneratePassword();
-
 
         _logger.Log("Creating account login details", _logger.CreditClaimerLogFilePath);
 
@@ -114,7 +108,7 @@ internal class AccountCreatorV2 : IAccountCreator
         VerifyEmail(userAccount, driver, tempMailApiKey);
     }
 
-    private void VerifyEmail(UserAccount userAccount, ChromeDriver driver, string tempMailApiKey)
+    private void VerifyEmail(UserAccount userAccount, IWebDriver driver, string tempMailApiKey)
     {
         var verificationLink = string.Empty;
         const int maxAttempts = 10;

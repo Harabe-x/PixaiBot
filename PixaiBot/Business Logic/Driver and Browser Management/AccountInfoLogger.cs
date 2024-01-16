@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Models;
@@ -32,8 +33,10 @@ internal class AccountInfoLogger : IAccountInfoLogger
         _stringBuilder.Clear();
     }
 
+   
+
     public string StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList,
-        IAccountInfoLoggerSettings settings,
+        IDriverCreationStrategy driverCreationStrategy, IAccountInfoLoggerSettings settings,
         CancellationToken cancellationToken)
     {
         _logger.Log($"Logging information about {userAccountsList.Count()} accounts", _logger.CreditClaimerLogFilePath);
@@ -42,7 +45,7 @@ internal class AccountInfoLogger : IAccountInfoLogger
             if (cancellationToken.IsCancellationRequested) return _stringBuilder.ToString();
             try
             {
-                LogAccountInfo(account, settings);
+                LogAccountInfo(account,settings,driverCreationStrategy);
             }
             catch (Exception e)
             {
@@ -54,11 +57,11 @@ internal class AccountInfoLogger : IAccountInfoLogger
         return _stringBuilder.ToString();
     }
 
-    private void LogAccountInfo(UserAccount account, IAccountInfoLoggerSettings settings)
+    private void LogAccountInfo(UserAccount account, IAccountInfoLoggerSettings settings, IDriverCreationStrategy driverCreationStrategy)
     {
         _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
-        using var driver = ChromeDriverFactory.CreateDriver();
+        using var driver = driverCreationStrategy.CreateDriver();
         var internalStringBuilder = new StringBuilder();
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(MaxLoginAttemptSeconds));
 

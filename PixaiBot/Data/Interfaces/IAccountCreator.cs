@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.UI.Models;
 
 namespace PixaiBot.Data.Interfaces;
@@ -26,10 +27,10 @@ internal interface IAccountCreator
     /// </summary>
     /// <param name="amount">Number of accounts to create.</param>
     /// <param name="tempMailApiKey">TempMail api key.</param>
-    /// <param name="shouldUseProxy">Determines whether the bot should use a proxy when creating an accounts.</param>
     /// <param name="shouldVerifyEmail">Determines whether the bot should verify email address.</param>
     /// <param name="interval">interval between the creation of accounts </param>
     /// <param name="token">cancellation token to cancel account creation process.</param>
-    void CreateAccounts(int amount, string tempMailApiKey, bool shouldUseProxy, bool shouldVerifyEmail,
-        CancellationToken token, TimeSpan interval);
+    /// <param name="driverCreationStrategy">Driver creation strategy.</param>
+    void CreateAccounts(int amount, string tempMailApiKey, bool shouldVerifyEmail,IDriverCreationStrategy driverCreationStrategy
+        , TimeSpan interval,CancellationToken token);
 }

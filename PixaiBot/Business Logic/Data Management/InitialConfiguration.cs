@@ -51,7 +51,10 @@ public static class InitialConfiguration
         {
             StartWithSystem = false,
             ToastNotifications = false,
-            CreditsAutoClaim = false
+            CreditsAutoClaim = false,
+            MultiThreading = false,
+            HeadlessBrowser = false,
+            NumberOfThreads = 1,
         };
         JsonWriter.WriteJson(userConfig, UserConfigPath);
     }

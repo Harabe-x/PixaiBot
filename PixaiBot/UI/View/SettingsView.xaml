@@ -60,18 +60,20 @@
                         <StackPanel VerticalAlignment="Center">
                             <CheckBox Command="{Binding StartWithSystemCommand}"
                                       IsChecked="{Binding ShouldStartWithSystem }" Content="  Start With System"
-                                      Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
+                                      Style="{StaticResource FormCheckBox}" Margin="20 35 0 0" />
                             <CheckBox IsChecked="{Binding AutoClaimCredits }" Content="  Credits Auto Claim"
-                                      Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
+                                      Style="{StaticResource FormCheckBox}" Margin="20 12.5 0 0" />
                             <CheckBox IsChecked="{Binding EnableToastNotifications }"
                                       Command="{Binding UpdateToastNotificationPreferenceCommand}"
                                       Content="  Toast Notifications "
-                                      Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
+                                      Style="{StaticResource FormCheckBox}" Margin="20 12.5 0 0" />
+                            <CheckBox IsChecked="{Binding HeadlessBrowser }" Content="  Headless Browser"
+                                      Style="{StaticResource FormCheckBox}" Margin="20 12.5 0 0" />
                             <CheckBox IsChecked="{Binding MultiThreading }" Content="  Multi-Threading "
-                                      Style="{StaticResource FormCheckBox}" Margin="20 20 0 0" />
+                                      Style="{StaticResource FormCheckBox}" Margin="20 12.5 0 0" />
                             <TextBlock Text="Threads :" Foreground="{StaticResource LightPurpleColor}"
                                        Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}"
-                                       FontSize="16" Margin="20 15 0 0" />
+                                       FontSize="16" Margin="20 10 0 0" />
                             <TextBox
                                 Visibility="{Binding MultiThreading,Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Text="{Binding NumberOfThreads}" VerticalAlignment="Center" Background="Transparent"

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.UI.Models;
 
 namespace PixaiBot.Data.Interfaces;
@@ -25,22 +26,18 @@ public interface ICreditClaimer
     /// </summary>
     public event EventHandler<UserAccount> ProcessStartedForAccount;
 
-
-    /// <summary>
-    ///  Occurred when credits are already claimed for an userAccount.
-    /// </summary>
-    public event EventHandler CreditsAlreadyClaimed;
-
     /// <summary>
     /// Claims credits for an userAccount.
     /// </summary>
     /// <param name="userAccount">The userAccount where the credits are to be claimed</param>
-    public void ClaimCredits(UserAccount userAccount);
+    /// <param name="driverCreationStrategy">Driver creation strategy.</param>
+    public void ClaimCredits(UserAccount userAccount, IDriverCreationStrategy driverCreationStrategy);
 
     /// <summary>
     ///  Claims credits for all accounts in <paramref name="accounts"/>.
     /// </summary>
     /// <param name="accounts">List of the accounts.</param>
+    /// <param name="driverCreationStrategy">Driver creation strategy.</param>
     /// <param name="cancellationToken">token to cancel operation.</param>
-    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, CancellationToken cancellationToken);
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts, IDriverCreationStrategy driverCreationStrategy, CancellationToken cancellationToken);
 }

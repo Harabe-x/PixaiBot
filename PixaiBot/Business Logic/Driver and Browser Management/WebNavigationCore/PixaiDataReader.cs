@@ -58,7 +58,7 @@ internal class PixaiDataReader : IPixaiDataReader
         }
         catch (Exception e)
         {
-            throw new ChromeDriverException("Chrome searchContext error occured while trying to get element text",
+            throw new ChromeDriverException("SearchContext error occurred while trying to get element text",
                 e);
         }
 
@@ -77,7 +77,7 @@ internal class PixaiDataReader : IPixaiDataReader
         }
         catch (Exception e)
         {
-            throw new ChromeDriverException("Chrome searchContext error occured while trying to get element text",
+            throw new ChromeDriverException("SearchContext error occurred while trying to get element text",
                 e);
         }
 

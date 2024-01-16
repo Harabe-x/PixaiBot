@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using Notification.Wpf;
+using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
 using PixaiBot.UI.Models;
 using Brush = System.Drawing.Brush;
@@ -39,7 +40,6 @@ public class CreditClaimerViewModel : BaseViewModel
         _creditClaimer.CreditsClaimed += SendNotification;
         _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
         _creditClaimer.ErrorOccurred += SendNotification;
-        _creditClaimer.CreditsAlreadyClaimed += SendNotification;
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
 
@@ -75,13 +75,17 @@ public class CreditClaimerViewModel : BaseViewModel
         ClaimButtonText = "Stop";
         IsRunning = true;
 
+        IDriverCreationStrategy driverCreationStrategy = config.HeadlessBrowser
+            ? new HeadlessDriverCreationStrategy()
+            : new HiddenDriverCreationStrategy();
+
         if (config.MultiThreading)
         {
             _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
             var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
 
             var tasks = accounts.Select(account =>
-                Task.Run(() => { _creditClaimer.ClaimCreditsForAllAccounts(account, _tokenSource.Token); },
+                Task.Run(() => { _creditClaimer.ClaimCreditsForAllAccounts(account, driverCreationStrategy, _tokenSource.Token); },
                     _tokenSource.Token));
             await Task.WhenAll(tasks);
         }
@@ -90,7 +94,7 @@ public class CreditClaimerViewModel : BaseViewModel
             await Task.Run(
                 () =>
                 {
-                    _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), _tokenSource.Token);
+                    _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), driverCreationStrategy, _tokenSource.Token);
                 }, _tokenSource.Token);
         }
 
@@ -110,14 +114,6 @@ public class CreditClaimerViewModel : BaseViewModel
     private void UpdateBotOperationStatus(object? sender, UserAccount e)
     {
         OperationStatus = $"Claiming credits for {e.Email}";
-    }
-
-
-    private void SendNotification(object? sender, EventArgs e)
-    {
-        if (_configManager.GetConfig().ToastNotifications)
-            _notificationSender.SendNotification("PixaiBot", "Credits already claimed on this account",
-                NotificationType.Warning);
     }
 
     private void SendNotification(object? sender, UserAccount e)
