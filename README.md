@@ -11,7 +11,7 @@ You can download the application [here](https://github.com/Harabe-x/PixaiBot/rel
 - If the application doesn't start, you'll need to install [.NET Framework](https://dotnet.microsoft.com/en-us/download).
 
 # Usage 
-To run the bot, add an account in the settings and click the `Claim Credits` button.
+To run the bot, add an account in the settings and click the `Start Claiming` button.
 
 # User Interface
 
