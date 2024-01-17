@@ -45,7 +45,7 @@ public static class InitialConfiguration
     /// </summary>
     public static void CreateConfigFile()
     {
-        if (File.Exists(UserConfigPath)) return;
+     
 
         var userConfig = new UserConfig()
         {
@@ -65,7 +65,14 @@ public static class InitialConfiguration
     /// </summary>
     public static void CreateStatisticsFile()
     {
-        if (File.Exists(StatisticsFilePath)) return;
+        if (File.Exists(StatisticsFilePath))
+        {
+            var currentStatistics = JsonReader.ReadStatisticsFile(StatisticsFilePath);
+            if (currentStatistics.BotVersion == BotVersion) return;
+            currentStatistics.BotVersion = BotVersion;
+            JsonWriter.WriteJson(currentStatistics, StatisticsFilePath);
+            return;
+        };
 
         var statistics = new BotStatistics()
         {
