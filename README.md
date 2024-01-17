@@ -8,6 +8,7 @@ You can download the application [here](https://github.com/Harabe-x/PixaiBot/rel
 
 ## Requirements 
 - Google Chrome
+- Windows 7 or newer
 - If the application doesn't start, you'll need to install [.NET Framework](https://dotnet.microsoft.com/en-us/download).
 
 ## Usage 
