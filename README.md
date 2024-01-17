@@ -34,9 +34,13 @@ In this tab, you can find basic options related to account creation.
 Upon selecting 'Verify Email?', a textbox will appear where you need to enter the API Key.
 
 To enable the bot to verify emails during account creation, you must provide the Temp Mail API key, which can be obtained at: https://rapidapi.com/Privatix/api/temp-mail
+
 When 'Use proxy?' is selected, a button will appear that, when clicked, allows you to add a proxy. The program currently supports HTTP/SOCKS4/SOCKS5 proxies.
+
 If the user does not choose a proxy, accounts will be created with a 5-minute interval. This is a cooldown imposed by Pixai for creating new accounts.
-After creating the account, it will be automatically added to the account list. You can see the account login details by clicking the button in the account list tab.
+After creating the account, it will be automatically added to the account list.
+You can see the account login details by clicking the button in the account list tab.
+
 ![Account Creator tab](https://i.imgur.com/L2NQQ4T.png)  
 
 ## Account Info Logger Tab
@@ -61,7 +65,7 @@ In the settings, you'll find two sections:
    - Check the 'Toast Notifications' checkbox to receive notifications about Credit Claimer results. Example: ![Notification Example](https://i.imgur.com/RrwHiJS.png)
    - Check the 'Headless Browser' checkbox to enable invisible browser mode. In some cases, this mode may cause problems with the program, so if you notice a problem with the bot, try unchecking this option
    - Check the 'Multi-Threading' checkbox to show a textbox in which you can specify the number of threads in which the program will run. In plain language, this option will control the maximum number of browsers running at once. Changing this option can consume a lot of computer resources, so I recommend adjusting the number of threads to match your hardware capabilities.
-
+   - 
 ![Settings Tab](https://i.imgur.com/saXy5dh.png)
 
 In the navigation panel, you'll also find the option to "Hide Application," which minimizes the application to the system tray.
