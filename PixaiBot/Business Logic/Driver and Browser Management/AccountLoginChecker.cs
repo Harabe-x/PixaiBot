@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Notification.Wpf;
 using OpenQA.Selenium.Support.UI;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
@@ -20,6 +21,7 @@ public class AccountLoginChecker : IAccountLoginChecker
 
     #endregion
 
+    #region Methods
 
     public bool CheckAccountLogin(UserAccount userAccount,IDriverCreationStrategy driverCreationStrategy)
     {
@@ -64,19 +66,20 @@ public class AccountLoginChecker : IAccountLoginChecker
                 if (CheckAccountLogin(userAccount,driverCreationStrategy))
                 {
                     validAccounts.Add(userAccount);
-                    continue;
+                    AccountChecked?.Invoke(this, new UI.Models.Notification { Message = $"{userAccount.Email} is valid", NotificationType = NotificationType.Success });
                 }
             }
             catch (Exception)
             {
-                continue;
+                AccountChecked?.Invoke(this, new UI.Models.Notification { Message = $"{userAccount.Email} is invalid", NotificationType = NotificationType.Error });
             }
-
-            ValidAccountLogin?.Invoke(this, userAccount);
         }
 
         return validAccounts;
     }
+    #endregion
+
+    #region Fields
 
     private const int MaxLoginAttemptSeconds = 5;
 
@@ -88,5 +91,9 @@ public class AccountLoginChecker : IAccountLoginChecker
 
     private readonly ILogger _logger;
 
-    public event EventHandler<UserAccount> ValidAccountLogin;
+    public event EventHandler<UI.Models.Notification>? AccountChecked;
+    
+    #endregion
+    
+
 }

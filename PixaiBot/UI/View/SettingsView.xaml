@@ -25,7 +25,7 @@
             <TextBlock FontWeight="Regular" Foreground="#2d3436" Style="{StaticResource TitleText}"
                        HorizontalAlignment="Center" Text="Settings" VerticalAlignment="Center" />
             <TextBlock FontWeight="Regular" Style="{StaticResource SecondaryText}" HorizontalAlignment="Center"
-                       Text="Here you can add accounts and configure bot" VerticalAlignment="Center" />
+                       Text="Here, you can add accounts and configure the bot." VerticalAlignment="Center" />
         </StackPanel>
 
         <Grid Grid.Row="1" Margin="0 -5 0 0">

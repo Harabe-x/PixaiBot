@@ -20,7 +20,7 @@
             <TextBlock FontWeight="Regular" Foreground="#2d3436" Style="{StaticResource TitleText}"
                        HorizontalAlignment="Center" Text="Dashboard" VerticalAlignment="Center" />
             <TextBlock FontWeight="Regular" Style="{StaticResource SecondaryText}" HorizontalAlignment="Center"
-                       Text="Here you can find claim button or info about added accounts" VerticalAlignment="Center" />
+                       Text="Here, you can find the claim button and basic bot information." VerticalAlignment="Center" />
         </StackPanel>
 
 

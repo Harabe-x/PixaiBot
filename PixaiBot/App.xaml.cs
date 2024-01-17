@@ -72,13 +72,13 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        _logger.Log("=====Application Closed=====\n", _logger.ApplicationLogFilePath);
         base.OnExit(e);
+        _logger.Log("=====Application Closed=====\n", _logger.ApplicationLogFilePath);
     }
 
     private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        //_logger.Log($"{e.Exception} | {e.Exception.Message}", _logger.ApplicationLogFilePath);
-        //e.Handled = true;
+        _logger.Log($"{e.Exception} | {e.Exception.Message} | {e.Exception.InnerException}", _logger.ApplicationLogFilePath);
+        e.Handled = true;
     }
 }

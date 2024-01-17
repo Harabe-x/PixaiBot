@@ -113,6 +113,8 @@ internal class AccountCreatorViewModel : BaseViewModel
             ? new ProxyDriverCreationStrategy(_proxyManager)
             : new HiddenDriverCreationStrategy();
 
+        if(_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account creation process started", NotificationType.Information);
+
         await Task.Run(() =>
         {
 
@@ -133,6 +135,7 @@ internal class AccountCreatorViewModel : BaseViewModel
     {
         IsRunning = false;
         OperationStatus = "Idle.";
+        if (_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account creation process ended", NotificationType.Information);
         AccountsCreatorButtonText = "Start Account Creation";
         _tokenSource.Cancel();
         _logger.Log("Account creation process ended", _logger.ApplicationLogFilePath);

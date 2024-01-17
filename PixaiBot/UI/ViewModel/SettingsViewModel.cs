@@ -41,7 +41,7 @@ public class SettingsViewModel : BaseViewModel
             accountsManager, IDataValidator dataValidator, IAccountLoginChecker
             accountLoginChecker, ILogger logger, IBotStatisticsManager botStatisticsManager,
         IConfigManager configManager,
-        IToastNotificationSender toastNotificationSender)
+        IToastNotificationSender notificationSender)
     {
         ShowAddAccountWindowCommand = new RelayCommand(_ => ShowAddAccountWindow());
         AddManyAccountsCommand = new RelayCommand(_ => AddManyAccounts());
@@ -49,7 +49,7 @@ public class SettingsViewModel : BaseViewModel
         StartWithSystemCommand = new RelayCommand(_ => StartWithSystem());
         UpdateToastNotificationPreferenceCommand = new RelayCommand(_ => UpdateToastNotificationPreference());
 
-        _toastNotificationSender = toastNotificationSender;
+        _notificationSender = notificationSender;
         _configManager = configManager;
         _botStatisticsManager = botStatisticsManager;
         _dialogService = dialogService;
@@ -57,6 +57,7 @@ public class SettingsViewModel : BaseViewModel
         _accountsManager = accountsManager;
         _dataValidator = dataValidator;
         _accountLoginChecker = accountLoginChecker;
+        _accountLoginChecker.AccountChecked += SendNotification;
         _settingsModel = new SettingsModel
         {
             UserConfig = _configManager.GetConfig()
@@ -71,7 +72,7 @@ public class SettingsViewModel : BaseViewModel
 
     private void UpdateToastNotificationPreference()
     {
-        _toastNotificationSender.SendNotification("PixaiBot",
+        _notificationSender.SendNotification("PixaiBot",
             EnableToastNotifications
                 ? "Toast Notifications enabled,Now you will receive notifications"
                 : "Toast Notifications disabled,Now you won't receive notifications",
@@ -81,7 +82,7 @@ public class SettingsViewModel : BaseViewModel
     private void ShowAddAccountWindow()
     {
         _dialogService.ShowDialog(new AddAccountView(),
-            new AddAccountViewModel(_accountsManager, _dataValidator, _logger), true);
+            new AddAccountViewModel(_accountsManager, _notificationSender, _dataValidator, _logger, _configManager), true);
     }
 
     private void AddManyAccounts()
@@ -102,13 +103,12 @@ public class SettingsViewModel : BaseViewModel
         IsAccountCheckerRunning = true;
         _tokenSource = new CancellationTokenSource();
         AccountCheckerButtonText = "Stop";
-        var config = _configManager.GetConfig();
         var accountsList = _accountsManager.GetAllAccounts();
-        IDriverCreationStrategy driverCreationStrategy = config.HeadlessBrowser
+        IDriverCreationStrategy driverCreationStrategy = HeadlessBrowser
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
-
         IEnumerable<UserAccount> validAccounts = null;
+        if (EnableToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account checking started", NotificationType.Information);
 
         await Task.Run(() =>
         {
@@ -128,16 +128,25 @@ public class SettingsViewModel : BaseViewModel
     {
         _logger.Log("Account checking ended", _logger.ApplicationLogFilePath);
         IsAccountCheckerRunning = false;
+        if (EnableToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account checking ended", NotificationType.Information);
+
         AccountCheckerButtonText = "Validate accounts";
         _tokenSource.Cancel();
     }
 
     private void StartWithSystem()
     {
-        var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         _logger.Log("Start with system option changed", _logger.ApplicationLogFilePath);
+       
+        var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        
         if (ShouldStartWithSystem) registryKey?.SetValue("PixaiBot", _executablePath);
         else registryKey?.DeleteValue("PixaiBot", false);
+    }
+
+    private void SendNotification(object? s, Models.Notification e)
+    {
+        if (EnableToastNotifications) _notificationSender.SendNotification("PixaiBot", e.Message, e.NotificationType);
     }
 
     #endregion
@@ -158,7 +167,7 @@ public class SettingsViewModel : BaseViewModel
 
     private readonly IConfigManager _configManager;
 
-    private readonly IToastNotificationSender _toastNotificationSender;
+    private readonly IToastNotificationSender _notificationSender;
 
     private readonly ILogger _logger;
 
@@ -254,7 +263,7 @@ public class SettingsViewModel : BaseViewModel
         get => _settingsModel.UserConfig.NumberOfThreads.ToString();
         set
         {
-            if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads) return;
+            if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads || parsedValue < 1) return;
             _settingsModel.UserConfig.NumberOfThreads = parsedValue;
             _configManager.SaveConfig(_settingsModel.UserConfig);
             OnPropertyChanged();

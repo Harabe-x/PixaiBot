@@ -19,7 +19,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             <TextBlock Style="{StaticResource SecondaryText}"
-                       Text="Here you can see your accounts list and edit accounts" HorizontalAlignment="Center" />
+                       Text="Here, you can view your list of accounts and edit them." HorizontalAlignment="Center" />
         </StackPanel>
 
         <Grid Grid.Row="1" Width="350" Height="500">

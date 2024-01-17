@@ -21,7 +21,7 @@
             <TextBlock FontWeight="Regular" Foreground="#2d3436" Style="{StaticResource TitleText}"
                        HorizontalAlignment="Center" Text="Account Creator" VerticalAlignment="Center" />
             <TextBlock FontWeight="Regular" Style="{StaticResource SecondaryText}" HorizontalAlignment="Center"
-                       Text="Here you can create accounts" VerticalAlignment="Center" />
+                       Text="Here, you can create accounts." VerticalAlignment="Center" />
         </StackPanel>
 
 

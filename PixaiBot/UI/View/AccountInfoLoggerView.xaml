@@ -21,7 +21,7 @@
             <TextBlock FontWeight="Regular" Foreground="#2d3436" Style="{StaticResource TitleText}"
                        HorizontalAlignment="Center" Text="Account Info Logger" VerticalAlignment="Center" />
             <TextBlock FontWeight="Regular" Style="{StaticResource SecondaryText}" HorizontalAlignment="Center"
-                       Text="Here you can log your accounts info to text file" VerticalAlignment="Center" />
+                       Text="Here, you can log your account information to a text file." VerticalAlignment="Center" />
         </StackPanel>
 
 

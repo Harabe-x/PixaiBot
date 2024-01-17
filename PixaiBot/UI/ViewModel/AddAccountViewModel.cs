@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
@@ -23,12 +24,13 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
 
     #region Constructor
 
-    public AddAccountViewModel(IAccountsManager accountsManager, IDataValidator dataValidator, ILogger logger)
+    public AddAccountViewModel(IAccountsManager accountsManager,IToastNotificationSender notificationSender, IDataValidator dataValidator, ILogger logger,IConfigManager configManager )
     {
         AddAccountCommand = new RelayCommand(_ => AddAccount());
         CloseWindowCommand = new RelayCommand(_ => CloseWindow());
         _addAccountModel = new AddAccountModel();
         _accountsManger = accountsManager;
+        _notificationSender = notificationSender;
         _dataValidator = dataValidator;
         _logger = logger;
     }
@@ -60,12 +62,13 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
             Password = Password
         };
         _accountsManger.AddAccount(userAccount);
+        if(_configManager.GetConfig().ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account added successfully", NotificationType.Success);
         CloseWindow();
-        _logger.Log("Account Added", _logger.ApplicationLogFilePath);
+        _logger.Log("Account Added ", _logger.ApplicationLogFilePath);
     }
 
     public bool CanCloseWindow()
-    {
+    { 
         return true;
     }
 
@@ -78,6 +81,10 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
     private readonly ILogger _logger;
 
     private readonly IAccountsManager _accountsManger;
+
+    private readonly IToastNotificationSender _notificationSender;
+
+    private readonly IConfigManager _configManager;
 
     private readonly AddAccountModel _addAccountModel;
 

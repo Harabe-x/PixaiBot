@@ -19,8 +19,15 @@ namespace PixaiBot.UI.ViewModel;
 
 public class CreditClaimerViewModel : BaseViewModel
 {
+
+
+    #region Commands
+    
     public ICommand ClaimCreditsCommand { get; }
 
+    #endregion  
+
+    #region Constructor
 
     public CreditClaimerViewModel(ICreditClaimer creditClaimer, IToastNotificationSender notificationSender,
         IAccountsManager accountManager, IConfigManager configManager, IBotStatisticsManager botStatisticsManager,
@@ -38,8 +45,8 @@ public class CreditClaimerViewModel : BaseViewModel
         _logger = logger;
 
         _creditClaimer.CreditsClaimed += SendNotification;
-        _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
         _creditClaimer.ErrorOccurred += SendNotification;
+        _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
 
@@ -58,6 +65,7 @@ public class CreditClaimerViewModel : BaseViewModel
         OperationStatus = "Idle.";
     }
 
+    #endregion
 
     #region Methods
 
@@ -72,6 +80,9 @@ public class CreditClaimerViewModel : BaseViewModel
 
         var config = _configManager.GetConfig();
         _tokenSource = new CancellationTokenSource();
+
+        if (config.ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Credits claiming process started", NotificationType.Information);
+
         ClaimButtonText = "Stop";
         IsRunning = true;
 
@@ -97,7 +108,6 @@ public class CreditClaimerViewModel : BaseViewModel
                     _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), driverCreationStrategy, _tokenSource.Token);
                 }, _tokenSource.Token);
         }
-
         StopClaiming();
     }
 
@@ -107,6 +117,7 @@ public class CreditClaimerViewModel : BaseViewModel
         IsRunning = false;
         ClaimButtonText = "Start Claiming";
         OperationStatus = "Idle.";
+        if (_configManager.GetConfig().ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Credits claiming process ended", NotificationType.Information);
         _tokenSource.Cancel();
         _logger.Log("Credits claiming process ended", _logger.ApplicationLogFilePath);
     }
@@ -136,7 +147,6 @@ public class CreditClaimerViewModel : BaseViewModel
     }
 
     #endregion
-
 
     #region Fields
 

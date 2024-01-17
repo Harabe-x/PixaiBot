@@ -122,7 +122,5 @@ internal class CreditClaimerV2 : ICreditClaimer
 
     public event EventHandler<UserAccount>? ProcessStartedForAccount;
 
-    public event EventHandler CreditsAlreadyClaimed;
-
     #endregion
 }   

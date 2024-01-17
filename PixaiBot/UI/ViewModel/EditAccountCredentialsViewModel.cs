@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
@@ -22,8 +23,8 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
 
     #region Constructor
 
-    public EditAccountCredentialsViewModel(IAccountsManager accountsManager, ILogger logger,
-        UserAccount editedAccount, IDataValidator dataValidator)
+    public  EditAccountCredentialsViewModel(IAccountsManager accountsManager, ILogger logger,
+        UserAccount editedAccount, IDataValidator dataValidator,IToastNotificationSender notificationSender,IConfigManager configManager)
     {
         SaveAccountCommand = new RelayCommand(_ => SaveAccount());
         CloseWindowCommand = new RelayCommand(_ => CLoseWindow());
@@ -32,7 +33,8 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
         _dataValidator = dataValidator;
         _accountsManager = accountsManager;
         _logger = logger;
-
+        _notificationSender = notificationSender;
+        _configManager = configManager;
         Account = editedAccount;
         Email = Account.Email;
         Password = Account.Password;
@@ -44,13 +46,14 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
 
     private void SaveAccount()
     {
-        _logger.Log("Editing account", _logger.CreditClaimerLogFilePath);
+        _logger.Log("Editing account ", _logger.CreditClaimerLogFilePath);
 
         if (!_dataValidator.IsEmailValid(Email) || !_dataValidator.IsPasswordValid(Password)) return;
 
         _accountsManager.EditAccount(Account, Email, Password);
-        _logger.Log("Account edited", _logger.CreditClaimerLogFilePath);
-        Close?.Invoke();
+        _logger.Log("Account edited successfully", _logger.CreditClaimerLogFilePath);
+        if(_configManager.GetConfig().ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account edited successfully", NotificationType.Success);
+            Close?.Invoke();
     }
 
     private void CLoseWindow()
@@ -100,6 +103,10 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
     private readonly IAccountsManager _accountsManager;
 
     private readonly ILogger _logger;
+
+    private readonly IToastNotificationSender _notificationSender;
+
+    private readonly IConfigManager _configManager;
 
     private readonly IDataValidator _dataValidator;
 

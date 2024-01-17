@@ -67,9 +67,13 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         OperationStatus = "Running...";
         LogButtonText = "Stop";
 
+        if(config.ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account info logging process started",NotificationType.Information);
+        
         IDriverCreationStrategy driverCreationStrategy = config.HeadlessBrowser
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
+
+
 
         _accountInfoLogger.ClearStringBuilderContent();
         var result = string.Empty;
@@ -112,6 +116,7 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         _logger.Log("Account info logging process Ended", _logger.ApplicationLogFilePath);
         IsRunning = false;
         OperationStatus = "Idle.";
+        if(_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account info logging process ended", NotificationType.Information);
         LogButtonText = "Start Logging";
         _tokenSource.Cancel();
     }

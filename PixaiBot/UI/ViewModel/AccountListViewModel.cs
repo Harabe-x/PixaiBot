@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
@@ -26,13 +27,15 @@ internal class AccountListViewModel : BaseViewModel
     #region Constructor
 
     public AccountListViewModel(IAccountsManager accountsManager, ILogger logger, IDialogService dialogService,
-        IDataValidator DataValidator)
+        IDataValidator DataValidator,IToastNotificationSender notificationSender,IConfigManager configManager)
     {
         RemoveAccountCommand = new RelayCommand(_ => RemoveAccount());
         EditAccountCommand = new RelayCommand(_ => EditAccount());
         _dataValidator = DataValidator;
         _accountsManager = accountsManager;
         _dialogService = dialogService;
+        _notificationSender = notificationSender;
+        _configManager = configManager;
         _logger = logger;
         _accountListModel = new AccountListModel();
         UserAccounts = new ObservableCollection<UserAccount>(_accountsManager.GetAllAccounts());
@@ -50,6 +53,8 @@ internal class AccountListViewModel : BaseViewModel
 
         _logger.Log("Remove account command called", _logger.ApplicationLogFilePath);
         _accountsManager.RemoveAccount(SelectedAccount);
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Account deleted successfully", NotificationType.Success);
     }
 
     private void EditAccount()
@@ -59,7 +64,7 @@ internal class AccountListViewModel : BaseViewModel
         if (SelectedAccount == null) return;
 
         _dialogService.ShowDialog(new EditAccountCredentialsView(),
-            new EditAccountCredentialsViewModel(_accountsManager, _logger, SelectedAccount, _dataValidator), true);
+            new EditAccountCredentialsViewModel(_accountsManager, _logger, SelectedAccount, _dataValidator,_notificationSender,_configManager), true);
     }
 
     private void AccountsManagerOnAccountsListChanged(object? sender, EventArgs e)
@@ -79,6 +84,10 @@ internal class AccountListViewModel : BaseViewModel
     private readonly IDataValidator _dataValidator;
 
     private readonly IAccountsManager _accountsManager;
+
+    private readonly IConfigManager _configManager;
+
+    private readonly IToastNotificationSender _notificationSender;
 
     private readonly AccountListModel _accountListModel;
 
@@ -101,6 +110,8 @@ internal class AccountListViewModel : BaseViewModel
             OnPropertyChanged();
         }
     }
+
+
 
     #endregion
 }

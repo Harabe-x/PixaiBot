@@ -19,7 +19,6 @@ internal class PixaiNavigation : IPixaiNavigation
 
     #endregion
 
-
     #region Methods
 
     #region IPixaiNavigation
@@ -197,7 +196,6 @@ internal class PixaiNavigation : IPixaiNavigation
     }
 
     #endregion
-
 
     #region Fields
 

@@ -12,7 +12,7 @@ namespace PixaiBot.Data.Interfaces;
 internal interface IAccountInfoLogger
 {
     /// <summary>
-    ///  Clears the of the <see cref="StringBuilder"/> content.
+    ///  Clears <see cref="StringBuilder"/> content.
     /// </summary>
     public void ClearStringBuilderContent();
 

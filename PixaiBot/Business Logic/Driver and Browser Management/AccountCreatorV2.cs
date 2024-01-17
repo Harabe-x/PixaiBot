@@ -11,6 +11,8 @@ namespace PixaiBot.Business_Logic.Driver_and_Browser_Management;
 
 internal class AccountCreatorV2 : IAccountCreator
 {
+
+    #region Constructor
     public AccountCreatorV2(IPixaiNavigation pixaiNavigation, ITempMailApiManager tempMailApiManager,
         ILoginCredentialsMaker loginCredentialsMaker, ILogger logger, IProxyManager proxyManager)
     {
@@ -21,8 +23,9 @@ internal class AccountCreatorV2 : IAccountCreator
         _pixaiNavigation = pixaiNavigation;
     }
 
+    #endregion
 
-   
+    #region Methods
     public void CreateAccounts(int amount, string tempMailApiKey, bool shouldVerifyEmail,
      IDriverCreationStrategy driverCreationStrategy, TimeSpan interval, CancellationToken token)
     {
@@ -33,7 +36,7 @@ internal class AccountCreatorV2 : IAccountCreator
             if (token.IsCancellationRequested) return;
 
             var driver = driverCreationStrategy.CreateDriver();
-           
+
             _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
             try
@@ -59,7 +62,7 @@ internal class AccountCreatorV2 : IAccountCreator
         _logger.Log("The account creation process has ended", _logger.CreditClaimerLogFilePath);
     }
 
-    private void CreateAccount(IWebDriver driver,bool shouldVerifyEmail, string tempMailApiKey)
+    private void CreateAccount(IWebDriver driver, bool shouldVerifyEmail, string tempMailApiKey)
     {
         _logger.Log("Creating account login details", _logger.CreditClaimerLogFilePath);
 
@@ -67,7 +70,7 @@ internal class AccountCreatorV2 : IAccountCreator
         var email = shouldVerifyEmail
             ? _loginCredentialsMaker.GenerateEmail(tempMailApiKey)
             : _loginCredentialsMaker.GenerateEmail();
-        
+
         var password = _loginCredentialsMaker.GeneratePassword();
 
         _logger.Log("Creating account login details", _logger.CreditClaimerLogFilePath);
@@ -136,7 +139,7 @@ internal class AccountCreatorV2 : IAccountCreator
 
         _logger.Log("Email verified\n=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
     }
-
+    #endregion
 
     #region Fields
 

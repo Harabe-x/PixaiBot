@@ -7,10 +7,17 @@ namespace PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCor
 
 internal class PixaiDataReader : IPixaiDataReader
 {
+
+    #region Constructor
+ 
     public PixaiDataReader(ILogger logger)
     {
         _logger = logger;
     }
+
+    #endregion
+
+    #region Methods
 
     public string GetAccountId(ISearchContext searchContext)
     {
@@ -86,7 +93,7 @@ internal class PixaiDataReader : IPixaiDataReader
 
         return element.Text;
     }
-
+    #endregion
 
     #region Fields
 

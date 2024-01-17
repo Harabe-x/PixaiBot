@@ -14,9 +14,9 @@ namespace PixaiBot.Data.Interfaces;
 public interface IAccountLoginChecker
 {
     /// <summary>
-    ///  Occurs when login to the account is successful.
+    ///  Occurs when the account is checked
     /// </summary>
-    event EventHandler<UserAccount> ValidAccountLogin;
+    event EventHandler<UI.Models.Notification> AccountChecked;
 
     /// <summary>
     /// Checks the credentials of a single account.
