@@ -10,7 +10,7 @@ You can download the application [here](https://github.com/Harabe-x/PixaiBot/rel
 - Google Chrome
 - If the application doesn't start, you'll need to install [.NET Framework](https://dotnet.microsoft.com/en-us/download).
 
-# Usage 
+## Usage 
 To run the bot, add an account in the settings and click the `Start Claiming` button.
 
 # User Interface
