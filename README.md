@@ -22,7 +22,9 @@ The Dashboard panel features a button to start the credit claiming process along
 
 ### Account List Tab
 In this tab, you can view the list of accounts that have been added to the bot.
+
 At the bottom, you will find a button for editing an account. To edit account details, click on the email address and then click the edit button.
+
 You will also find buttons at the bottom for removing an account. To do this, click on the email address in the list, and then click remove.
 
 ![Account List Tab](https://i.imgur.com/NLdwotL.png)  
