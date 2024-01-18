@@ -42,7 +42,7 @@ When 'Use proxy?' is selected, a button will appear that, when clicked, allows y
 
 If the user does not choose a proxy, accounts will be created with a 5-minute interval. This is a cooldown imposed by Pixai for creating new accounts.
 After creating the account, it will be automatically added to the account list.
-You can see the account login details by clicking the button in the account list tab.
+You can see the account login details in the account list tab.
 
 ![Account Creator tab](https://i.imgur.com/L2NQQ4T.png)  
 
