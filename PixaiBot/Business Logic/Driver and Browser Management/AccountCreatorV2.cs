@@ -103,6 +103,8 @@ internal class AccountCreatorV2 : IAccountCreator
 
         if (!shouldVerifyEmail) return;
 
+        _pixaiNavigation.ClosePopup(driver);
+
         _logger.Log("Trying to confirm email", _logger.CreditClaimerLogFilePath);
 
         _pixaiNavigation.NavigateToProfileSettings(driver);

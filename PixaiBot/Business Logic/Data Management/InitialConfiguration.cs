@@ -45,7 +45,8 @@ public static class InitialConfiguration
     /// </summary>
     public static void CreateConfigFile()
     {
-     
+
+        if (File.Exists(UserConfigPath)) return;
 
         var userConfig = new UserConfig()
         {

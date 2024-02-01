@@ -110,6 +110,11 @@ internal class PixaiNavigation : IPixaiNavigation
         driver.Navigate().GoToUrl(url);
     }
 
+    public void ClosePopup(ISearchContext searchContext)
+    {
+        ClickElement(searchContext, ".enSzCK > svg");
+    }
+
     public void ClickClaimCreditButton(ISearchContext searchContext)
     {
         try

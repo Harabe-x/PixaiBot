@@ -123,6 +123,14 @@ public interface IPixaiNavigation
     /// <param name="keys">The text to be sent to the element</param>
     public void SendKeysToElement(ISearchContext searchContext, string cssSelector, string keys);
 
+
+    /// <summary>
+    ///  Closes the pop-up window that appears after login.
+    ///  This method will be useless after Pixai removes the  popup after login
+    /// </summary>
+    /// <param name="searchContext">>The WebDriver instance representing the browser or a frame.</param>
+    public void ClosePopup(ISearchContext searchContext);
+    
     /// <summary>
     ///  Clicks the element with the selected <paramref name="tagName"/> and <paramref name="text"/>
     /// </summary>
@@ -148,4 +156,5 @@ public interface IPixaiNavigation
     /// <param name="text">The text content that the located element should contain.</param>
     /// <returns>The <see cref="IWebElement"/> representing the located HTML element.</returns>
     public IWebElement GetElement(ISearchContext searchContext, string tagName, string text);
+
 }

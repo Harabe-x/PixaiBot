@@ -50,19 +50,20 @@ public class CreditClaimerViewModel : BaseViewModel
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
 
-
-        if (_configManager.GetConfig().CreditsAutoClaim)
-        {
-            ClaimCredits();
-            _creditClaimerTimer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromHours(AutoCreditsClaimInterval)
-            };
-            _creditClaimerTimer.Tick += (sender, args) => { ClaimCredits(); };
-        }
-
         ClaimButtonText = "Start Claiming";
         OperationStatus = "Idle.";
+        
+        if (!_configManager.GetConfig().CreditsAutoClaim) return;
+        
+        ClaimButtonText = "Stop";
+        ClaimCredits();
+        _creditClaimerTimer = new DispatcherTimer()
+        {
+            Interval = TimeSpan.FromHours(AutoCreditsClaimInterval)
+        };
+        _creditClaimerTimer.Tick += (sender, args) => { ClaimCredits(); };
+
+
     }
 
     #endregion
@@ -205,7 +206,7 @@ public class CreditClaimerViewModel : BaseViewModel
 
     public string LastCreditClaimDate
     {
-        get => $"Last credits claim date: {_creditClaimerModel.BotStatistics.LastCreditClaimDateTime:g}";
+        get => $"Last credits claim date: {_creditClaimerModel.BotStatistics.LastCreditClaimDateTime:d}";
         set
         {
             _creditClaimerModel.BotStatistics.LastCreditClaimDateTime = DateTime.Parse(value);

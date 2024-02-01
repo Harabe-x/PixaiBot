@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows.Forms;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
@@ -49,6 +48,8 @@ internal class CreditClaimerV2 : ICreditClaimer
             driver.Quit();
             return;
         }
+
+        _pixaiNavigation.ClosePopup(driver);
 
         //Ensures that user in on profile page
         while (!driver.Url.Contains('@'))

@@ -79,6 +79,8 @@ internal class AccountInfoLogger : IAccountInfoLogger
             return;
         }
 
+        _pixaiNavigation.ClosePopup(driver);    
+
         _logger.Log($"Reading account data", _logger.CreditClaimerLogFilePath);
 
         while (!driver.Url.Contains('@'))
