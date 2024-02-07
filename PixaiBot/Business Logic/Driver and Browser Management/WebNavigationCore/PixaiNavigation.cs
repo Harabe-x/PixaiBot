@@ -112,7 +112,20 @@ internal class PixaiNavigation : IPixaiNavigation
 
     public void ClosePopup(ISearchContext searchContext)
     {
-        ClickElement(searchContext, ".enSzCK > svg");
+        try
+        {
+            ClickElement(searchContext, ".dfAnPH > svg");
+        }
+        catch (NoSuchElementException)
+        {
+            //After some time, Pixai may remove the popup,
+            //so after catching this exception,
+            //I can safely ignore it and the bot will still perform its task correctly.
+            _logger.Log("No popup found", _logger.CreditClaimerLogFilePath);
+          return;
+        }
+        _logger.Log("Popup closed",_logger.CreditClaimerLogFilePath);
+
     }
 
     public void ClickClaimCreditButton(ISearchContext searchContext)
