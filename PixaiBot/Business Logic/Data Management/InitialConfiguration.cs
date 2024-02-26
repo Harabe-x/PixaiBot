@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using PixaiBot.Business_Logic.Data_Handling;
@@ -23,6 +24,7 @@ public static class InitialConfiguration
         AccountsFilePath =
             $"{ApplicationDataPath}\\accounts.json";
         BotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        ApiKeysFilePath = $"{ApplicationDataPath}\\apiKeys.json";
         if (!Directory.Exists(ApplicationDataPath)) CreateDirectories();
     }
 
@@ -33,7 +35,7 @@ public static class InitialConfiguration
     /// <summary>
     /// Creates the directories needed for the bot to work
     /// </summary>
-    public static void CreateDirectories()
+    private static void CreateDirectories()
     {
         Directory.CreateDirectory(
             $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\Logs");
@@ -84,6 +86,15 @@ public static class InitialConfiguration
         JsonWriter.WriteJson(statistics, StatisticsFilePath);
     }
 
+    public static void CreateApiKeysFile()
+    {
+        if (File.Exists(ApiKeysFilePath)) return;
+
+        var apiKeys = new Dictionary<string, IEnumerable<string>>();
+        JsonWriter.WriteJson(apiKeys,ApiKeysFilePath);
+    }
+    
+
     #endregion
 
     #region Fields
@@ -115,6 +126,12 @@ public static class InitialConfiguration
     /// Path to the accounts file 
     /// </summary>
     public static string AccountsFilePath { get; }
+
+
+    /// <summary>
+    ///  Temp-mail domain list               
+    /// </summary>
+    public static string ApiKeysFilePath { get; }
 
 
     /// <summary>

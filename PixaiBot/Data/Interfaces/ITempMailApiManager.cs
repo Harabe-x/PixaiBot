@@ -18,7 +18,7 @@ public interface ITempMailApiManager
     /// </summary>
     /// <param name="tempMailApiKey">Temp-mail api key</param>
     /// <returns>List of available domains </returns>
-    IEnumerable<string> GetDomains(string tempMailApiKey);
+    string GetDomain(string tempMailApiKey);
 
     /// <summary>
     /// Gets Verification link from email.

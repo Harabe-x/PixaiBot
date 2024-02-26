@@ -29,8 +29,8 @@ internal class LoginCredentialsMaker : ILoginCredentialsMaker
     public string GenerateEmail(string tempMailApiKey)
     {
         _logger.Log("Creating email with temp mail domain ", _logger.CreditClaimerLogFilePath);
-        var domains = _tempMailApiManager.GetDomains(tempMailApiKey);
-        return GenerateRandomString(7, Letters) + domains.ToList()[_random.Next(domains.Count())];
+        var domain = _tempMailApiManager.GetDomain(tempMailApiKey);
+        return GenerateRandomString(7, Letters) + domain;
     }
 
     public string GeneratePassword()

@@ -64,6 +64,7 @@ public partial class App : Application
     {
         InitialConfiguration.CreateConfigFile();
         InitialConfiguration.CreateStatisticsFile();
+        InitialConfiguration.CreateApiKeysFile();
         _logger.Log("=====Application Started=====", _logger.ApplicationLogFilePath);
         base.OnStartup(e);
         var mainWindow = _serviceProvider.GetRequiredService<NavigationPanelView>();

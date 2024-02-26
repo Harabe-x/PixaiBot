@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using PixaiBot.Business_Logic.Data_Handling;
 using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.Business_Logic.Data_Management;
@@ -16,6 +18,7 @@ public class TempMailApiManager : ITempMailApiManager
     public TempMailApiManager(ILogger logger)
     {
         _httpClient = new HttpClient();
+        _random = new Random();
         _logger = logger;
     }
 
@@ -49,6 +52,29 @@ public class TempMailApiManager : ITempMailApiManager
 
         var responseText = response.Content.ReadAsStringAsync().Result;
         return _domainList = JsonSerializer.Deserialize<List<string>>(responseText);
+    }
+
+    public string GetDomain(string tempMailApiKey)
+    {
+        var domainsAssociatedWithApiKeys = JsonReader.GetDomainsAssociatedWithApiKeys(InitialConfiguration.ApiKeysFilePath);
+
+        if (domainsAssociatedWithApiKeys == null)
+        {
+            domainsAssociatedWithApiKeys = new Dictionary<string, IEnumerable<string>>();
+            JsonWriter.WriteJson(domainsAssociatedWithApiKeys, InitialConfiguration.ApiKeysFilePath);
+        }
+
+        if (domainsAssociatedWithApiKeys.ContainsKey(tempMailApiKey))
+        {
+            return domainsAssociatedWithApiKeys[tempMailApiKey]
+                .ElementAt(_random.Next(domainsAssociatedWithApiKeys[tempMailApiKey].Count()));
+        }
+        var domains = GetDomains(tempMailApiKey);
+        domainsAssociatedWithApiKeys.Add(tempMailApiKey, domains);
+        JsonWriter.WriteJson(domainsAssociatedWithApiKeys, InitialConfiguration.ApiKeysFilePath);
+
+        return domainsAssociatedWithApiKeys[tempMailApiKey]
+            .ElementAt(_random.Next(domainsAssociatedWithApiKeys[tempMailApiKey].Count()));
     }
 
     public string GetVerificationLink(string email, string apiKey)
@@ -116,6 +142,8 @@ public class TempMailApiManager : ITempMailApiManager
     private IList<string> _domainList;
 
     private readonly ILogger _logger;
+
+    private readonly Random _random;
 
     #endregion
 }

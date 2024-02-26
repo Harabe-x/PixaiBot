@@ -111,7 +111,7 @@ internal class AccountCreatorViewModel : BaseViewModel
 
         IDriverCreationStrategy driverCreationStrategy = ShouldUseProxy
             ? new ProxyDriverCreationStrategy(_proxyManager)
-            : new HiddenDriverCreationStrategy();
+            : new DebugDriverCreationStrategy();
 
         if(_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account creation process started", NotificationType.Information);
 
