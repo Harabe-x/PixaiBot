@@ -13,6 +13,7 @@ using PixaiBot.UI.Base;
 using PixaiBot.UI.Services;
 using PixaiBot.UI.View;
 using PixaiBot.UI.ViewModel;
+using PixaiBot.AutoUpdater;
 
 namespace PixaiBot;
 
@@ -27,6 +28,9 @@ public partial class App : Application
 
     public App()
     {
+
+        var autoUpdater = new ApplicationAutoUpdater();
+        autoUpdater.CheckForUpdate();
         _logger = new Logger();
         IServiceCollection services = new ServiceCollection();
         services.AddSingleton<NavigationPanelView>(provider => new NavigationPanelView()
