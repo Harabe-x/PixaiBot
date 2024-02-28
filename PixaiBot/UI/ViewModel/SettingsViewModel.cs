@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
@@ -137,10 +138,10 @@ public class SettingsViewModel : BaseViewModel
     private void StartWithSystem()
     {
         _logger.Log("Start with system option changed", _logger.ApplicationLogFilePath);
-       
+        var autoUpdaterPath = Directory.GetParent(Path.GetDirectoryName(_executablePath)).FullName + "\\PixaiBot.exe";
         var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         
-        if (ShouldStartWithSystem) registryKey?.SetValue("PixaiBot", _executablePath);
+        if (ShouldStartWithSystem) registryKey?.SetValue("PixaiBot", autoUpdaterPath);
         else registryKey?.DeleteValue("PixaiBot", false);
     }
 
