@@ -118,6 +118,7 @@ public class CreditClaimerViewModel : BaseViewModel
         IsRunning = false;
         ClaimButtonText = "Start Claiming";
         OperationStatus = "Idle.";
+        LastCreditClaimDate = DateTime.Now.ToString("d");
         if (_configManager.GetConfig().ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Credits claiming process ended", NotificationType.Information);
         _tokenSource.Cancel();
         _logger.Log("Credits claiming process ended", _logger.ApplicationLogFilePath);
