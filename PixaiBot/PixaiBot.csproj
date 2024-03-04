@@ -31,7 +31,7 @@
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Notification.Wpf" Version="7.0.0.2" />
-    <PackageReference Include="Selenium.WebDriver" Version="4.12.2" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.18.1" />
   </ItemGroup>
 
   <ItemGroup>
