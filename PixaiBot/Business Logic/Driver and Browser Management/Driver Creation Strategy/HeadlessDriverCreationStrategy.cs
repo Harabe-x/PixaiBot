@@ -10,7 +10,8 @@ namespace PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_
         {
             var options = new ChromeOptions();
 
-            options.AddArgument("--headless");
+            options.AddArguments("--headless", "--disable-crash-reporter", "--disable-gpu", "--disable-crash-reporter");
+            options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
 
             var service = ChromeDriverService.CreateDefaultService();
 

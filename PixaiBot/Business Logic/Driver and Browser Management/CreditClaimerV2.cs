@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -49,9 +50,18 @@ internal class CreditClaimerV2 : ICreditClaimer
             return;
         }
 
-        _pixaiNavigation.ClosePopup(driver);
 
-        //Ensures that user in on profile page
+        try
+        {
+            _pixaiNavigation.ClosePopup(driver);
+        }
+        catch (NoSuchElementException e)
+        {
+            // Sometimes popup does not appear. This seems to be a random occurrence.
+            _logger.Log("the popup did not appear",_logger.CreditClaimerLogFilePath);
+        }
+
+        //Ensures that user in on profile page. User profile page always contains '@' in the url.   
         while (!driver.Url.Contains('@'))
         {
             _pixaiNavigation.ClickDropdownMenu(driver);
@@ -89,12 +99,12 @@ internal class CreditClaimerV2 : ICreditClaimer
                 _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
 
             }
-            catch (ChromeDriverException e)
+            catch (InvalidPageContentException e)
             {
                 _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
                 ErrorOccurred?.Invoke(this, e.InnerException?.GetType().ToString() ?? "Error occurred");
             }
-            catch (InvalidPageContentException e)
+            catch (Exception e)
             {
                 _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
                 ErrorOccurred?.Invoke(this, e.InnerException?.GetType().ToString() ?? "Error occurred");

@@ -6,6 +6,7 @@ using PixaiBot.UI.Base;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
@@ -109,7 +110,10 @@ public class CreditClaimerViewModel : BaseViewModel
                     _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), driverCreationStrategy, _tokenSource.Token);
                 }, _tokenSource.Token);
         }
-        StopClaiming();
+        
+
+
+            StopClaiming();
     }
 
 

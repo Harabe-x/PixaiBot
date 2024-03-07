@@ -151,14 +151,7 @@ internal class PixaiNavigation : IPixaiNavigation
 
     public void ClickElement(ISearchContext driver, string cssSelector)
     {
-        try
-        {
-            driver.FindElement(By.CssSelector(cssSelector)).Click();
-        }
-        catch (Exception e)
-        {
-            throw new ChromeDriverException("ChromeDriver exception occurred", e);
-        }
+        driver.FindElement(By.CssSelector(cssSelector)).Click();
     }
 
     public void ClickElement(ISearchContext driver, string tagName, string text)
