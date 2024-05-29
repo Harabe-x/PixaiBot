@@ -33,7 +33,7 @@ public static class InitialConfiguration
     #region Methods
 
     /// <summary>
-    /// Creates the directories needed for the bot to work
+    ///     Creates the directories needed for the bot to work
     /// </summary>
     private static void CreateDirectories()
     {
@@ -43,28 +43,27 @@ public static class InitialConfiguration
 
 
     /// <summary>
-    /// Creates the config file if it doesn't exist
+    ///     Creates the config file if it doesn't exist
     /// </summary>
     public static void CreateConfigFile()
     {
-
         if (File.Exists(UserConfigPath)) return;
 
-        var userConfig = new UserConfig()
+        var userConfig = new UserConfig
         {
             StartWithSystem = false,
             ToastNotifications = false,
             CreditsAutoClaim = false,
             MultiThreading = false,
             HeadlessBrowser = false,
-            NumberOfThreads = 1,
+            NumberOfThreads = 1
         };
         JsonWriter.WriteJson(userConfig, UserConfigPath);
     }
 
 
     /// <summary>
-    /// Creates the statistics file if it doesn't exist
+    ///     Creates the statistics file if it doesn't exist
     /// </summary>
     public static void CreateStatisticsFile()
     {
@@ -75,9 +74,11 @@ public static class InitialConfiguration
             currentStatistics.BotVersion = BotVersion;
             JsonWriter.WriteJson(currentStatistics, StatisticsFilePath);
             return;
-        };
+        }
 
-        var statistics = new BotStatistics()
+        ;
+
+        var statistics = new BotStatistics
         {
             AccountsCount = 0,
             BotVersion = BotVersion,
@@ -91,51 +92,50 @@ public static class InitialConfiguration
         if (File.Exists(ApiKeysFilePath)) return;
 
         var apiKeys = new Dictionary<string, IEnumerable<string>>();
-        JsonWriter.WriteJson(apiKeys,ApiKeysFilePath);
+        JsonWriter.WriteJson(apiKeys, ApiKeysFilePath);
     }
-    
 
     #endregion
 
     #region Fields
 
     /// <summary>
-    /// Current Bot Version
+    ///     Current Bot Version
     /// </summary>
     public static string BotVersion { get; }
 
 
     /// <summary>
-    /// Path to the user config file
+    ///     Path to the user config file
     /// </summary>
     public static string UserConfigPath { get; }
 
 
     /// <summary>
-    /// Path to the bot logs folder
+    ///     Path to the bot logs folder
     /// </summary>
     public static string BotLogsPath { get; }
 
 
     /// <summary>
-    /// Path to the bot statistics file
+    ///     Path to the bot statistics file
     /// </summary>
     public static string StatisticsFilePath { get; }
 
     /// <summary>
-    /// Path to the accounts file 
+    ///     Path to the accounts file
     /// </summary>
     public static string AccountsFilePath { get; }
 
 
     /// <summary>
-    ///  Temp-mail domain list               
+    ///     Temp-mail domain list
     /// </summary>
     public static string ApiKeysFilePath { get; }
 
 
     /// <summary>
-    /// Path to the application data folder
+    ///     Path to the application data folder
     /// </summary>
     public static string ApplicationDataPath { get; }
 

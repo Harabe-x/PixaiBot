@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.UI.Models;
 
@@ -14,12 +9,12 @@ namespace PixaiBot.Data.Interfaces;
 public interface IAccountLoginChecker
 {
     /// <summary>
-    ///  Occurs when the account is checked
+    ///     Occurs when the account is checked
     /// </summary>
     event EventHandler<UI.Models.Notification> AccountChecked;
 
     /// <summary>
-    /// Checks the credentials of a single account.
+    ///     Checks the credentials of a single account.
     /// </summary>
     /// <param name="userAccount">Checked account.</param>
     /// <param name="driverCreationStrategy">Driver creation strategy.</param>
@@ -27,11 +22,12 @@ public interface IAccountLoginChecker
     bool CheckAccountLogin(UserAccount userAccount, IDriverCreationStrategy driverCreationStrategy);
 
     /// <summary>
-    /// Checks the correctness of login details of accounts on the list.
+    ///     Checks the correctness of login details of accounts on the list.
     /// </summary>
     /// <param name="accountsList">Accounts to be checked.</param>
     /// <param name="token">Cancellation token to cancel operation.</param>
     /// <param name="driverCreationStrategy">Driver creation strategy.</param>
-    /// <returns>List of valid <see cref="UserAccount"/>.</returns>
-    IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList, IDriverCreationStrategy driverCreationStrategy,CancellationToken token);
+    /// <returns>List of valid <see cref="UserAccount" />.</returns>
+    IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList,
+        IDriverCreationStrategy driverCreationStrategy, CancellationToken token);
 }

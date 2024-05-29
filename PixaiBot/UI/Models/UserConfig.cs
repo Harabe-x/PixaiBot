@@ -13,5 +13,4 @@ public class UserConfig
     public bool MultiThreading { get; set; }
 
     public int NumberOfThreads { get; set; }
-
 }

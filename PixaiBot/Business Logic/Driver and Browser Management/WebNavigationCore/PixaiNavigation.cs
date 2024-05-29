@@ -44,7 +44,7 @@ internal class PixaiNavigation : IPixaiNavigation
     public void GoToLoginPage(ISearchContext searchContext)
     {
         _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-        ClickElement(searchContext, "button", "Log in with email");
+        ClickElement(searchContext, "button", "Continue with Email");
     }
 
     public void SendLoginCredentialsToTextBoxes(ISearchContext searchContext, string email, string password)
@@ -54,9 +54,9 @@ internal class PixaiNavigation : IPixaiNavigation
 
         _logger.Log("Sending email & password to textboxes ", _logger.CreditClaimerLogFilePath);
 
-        SendKeysToElement(searchContext, "* > * > *:nth-child(2) > * > *:nth-child(1) > * > *", email);
+        SendKeysToElement(searchContext, "#email-input",email);
 
-        SendKeysToElement(searchContext, "*:nth-child(2) > * > *:nth-child(2) > * > *", password);
+        SendKeysToElement(searchContext, "#password-input",password);
     }
 
     public void ClickOnRegisterButton(ISearchContext searchContext)
@@ -97,6 +97,12 @@ internal class PixaiNavigation : IPixaiNavigation
     {
         _logger.Log("Clicking dropdown menu", _logger.CreditClaimerLogFilePath);
         ClickElement(driver, ".shrink-0");
+    }
+
+    public void NavigateToAccountTabInEditProfilePage(ISearchContext searchContext)
+    {
+        _logger.Log("Clicking Account tab",_logger.CreditClaimerLogFilePath);
+        ClickElement(searchContext, "div:nth-child(3) > a");
     }
 
     public void NavigateToMyWorkTab(IWebDriver driver)
@@ -167,7 +173,7 @@ internal class PixaiNavigation : IPixaiNavigation
         }
     }
 
-    public IWebElement GetElement(ISearchContext searchContext, string cssSelector)
+    public IWebElement GetElementByCssSelector(ISearchContext searchContext, string cssSelector)
     {
         try
         {
@@ -179,7 +185,7 @@ internal class PixaiNavigation : IPixaiNavigation
         }
     }
 
-    public IWebElement GetElement(ISearchContext searchContext, string tagName, string text)
+    public IWebElement GetElementByText(ISearchContext searchContext, string tagName, string text)
     {
         try
         {
@@ -192,11 +198,11 @@ internal class PixaiNavigation : IPixaiNavigation
         }
     }
 
-    public void SendKeysToElement(ISearchContext driver, string cssSelector, string keys)
+    public void SendKeysToElement(ISearchContext searchContext,string cssSelector, string keys)
     {
         try
         {
-            var element = driver.FindElement(By.CssSelector(cssSelector));
+            var element = searchContext.FindElement(By.CssSelector(cssSelector));
             element.Click();
             element.SendKeys(keys);
         }

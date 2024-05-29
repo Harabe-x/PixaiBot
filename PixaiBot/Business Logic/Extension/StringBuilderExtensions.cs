@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace PixaiBot.Business_Logic.Extension;
 
 internal static class StringBuilderExtensions
 {
     /// <summary>
-    ///   Appends a line to the end of the <see cref="StringBuilder" /> if the condition is true.
+    ///     Appends a line to the end of the <see cref="StringBuilder" /> if the condition is true.
     /// </summary>
     /// <param name="stringBuilder"></param>
     /// <param name="condition"></param>

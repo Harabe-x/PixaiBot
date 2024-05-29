@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 
@@ -15,6 +11,11 @@ public class NavigationService : BaseViewModel, INavigationService
 
     private BaseViewModel _currentView;
 
+    public NavigationService(Func<Type, BaseViewModel> viewModelFactory)
+    {
+        _viewModelFactory = viewModelFactory;
+    }
+
     public BaseViewModel CurrentView
     {
         get => _currentView;
@@ -23,11 +24,6 @@ public class NavigationService : BaseViewModel, INavigationService
             _currentView = value;
             OnPropertyChanged();
         }
-    }
-
-    public NavigationService(Func<Type, BaseViewModel> viewModelFactory)
-    {
-        _viewModelFactory = viewModelFactory;
     }
 
 

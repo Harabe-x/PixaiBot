@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.UI.Models;
 
@@ -12,18 +8,18 @@ namespace PixaiBot.Data.Interfaces;
 internal interface IAccountCreator
 {
     /// <summary>
-    ///   Occurs when an account is created.
+    ///     Occurs when an account is created.
     /// </summary>
     event EventHandler<UserAccount> AccountCreated;
 
     /// <summary>
-    ///  Occurs when an error occurs.
+    ///     Occurs when an error occurs.
     /// </summary>
     event EventHandler<string> ErrorOccurred;
 
 
     /// <summary>
-    ///  Creates accounts on https://pixai.art.
+    ///     Creates accounts on https://pixai.art.
     /// </summary>
     /// <param name="amount">Number of accounts to create.</param>
     /// <param name="tempMailApiKey">TempMail api key.</param>
@@ -31,6 +27,7 @@ internal interface IAccountCreator
     /// <param name="interval">interval between the creation of accounts </param>
     /// <param name="token">cancellation token to cancel account creation process.</param>
     /// <param name="driverCreationStrategy">Driver creation strategy.</param>
-    void CreateAccounts(int amount, string tempMailApiKey, bool shouldVerifyEmail,IDriverCreationStrategy driverCreationStrategy
-        , TimeSpan interval,CancellationToken token);
+    void CreateAccounts(int amount, string tempMailApiKey, bool shouldVerifyEmail,
+        IDriverCreationStrategy driverCreationStrategy
+        , TimeSpan interval, CancellationToken token);
 }

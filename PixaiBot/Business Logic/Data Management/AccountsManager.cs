@@ -27,7 +27,7 @@ public class AccountsManager : IAccountsManager
     #region Methods
 
     /// <summary>
-    /// Adds new account to the account list.
+    ///     Adds new account to the account list.
     /// </summary>
     /// <param name="account">Account to add.</param>
     public void AddAccount(UserAccount account)
@@ -68,7 +68,7 @@ public class AccountsManager : IAccountsManager
 
 
     /// <summary>
-    /// Removes account from account file.
+    ///     Removes account from account file.
     /// </summary>
     /// <param name="userAccount">Account to remove.</param>
     public void RemoveAccount(UserAccount userAccount)
@@ -99,7 +99,7 @@ public class AccountsManager : IAccountsManager
 
 
     /// <summary>
-    ///  Reads and returns all accounts from accounts file.
+    ///     Reads and returns all accounts from accounts file.
     /// </summary>
     /// <returns></returns>
     public IEnumerable<UserAccount> GetAllAccounts()
@@ -113,11 +113,11 @@ public class AccountsManager : IAccountsManager
 
 
     /// <summary>
-    /// Opens File Dialog and extracts user accounts from txt file.
+    ///     Opens File Dialog and extracts user accounts from txt file.
     /// </summary>
     public void AddManyAccounts()
     {
-        var dialog = new OpenFileDialog()
+        var dialog = new OpenFileDialog
         {
             Title = "Select File:",
             Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
@@ -135,7 +135,7 @@ public class AccountsManager : IAccountsManager
     }
 
     /// <summary>
-    /// Edits an existing account.
+    ///     Edits an existing account.
     /// </summary>
     /// <param name="account">Old account.</param>
     /// <param name="newEmail">New account email.</param>
@@ -146,7 +146,7 @@ public class AccountsManager : IAccountsManager
 
         if (!_dataValidator.IsEmailValid(newEmail) || !_dataValidator.IsPasswordValid(newPassword)) return;
 
-        var newAccount = new UserAccount()
+        var newAccount = new UserAccount
         {
             Email = newEmail,
             Password = newPassword
@@ -161,7 +161,7 @@ public class AccountsManager : IAccountsManager
 
 
     /// <summary>
-    /// Extracts accounts from a text file.
+    ///     Extracts accounts from a text file.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>

@@ -6,6 +6,12 @@ namespace PixaiBot.Business_Logic.Data_Management;
 
 public class ConfigManager : IConfigManager
 {
+    #region Fields
+
+    private readonly ILogger _logger;
+
+    #endregion
+
     #region Constructor
 
     public ConfigManager(ILogger logger)
@@ -18,7 +24,7 @@ public class ConfigManager : IConfigManager
     #region Methods
 
     /// <summary>
-    /// Saves config.
+    ///     Saves config.
     /// </summary>
     /// <param name="config">Config to save.</param>
     public void SaveConfig(UserConfig config)
@@ -28,7 +34,7 @@ public class ConfigManager : IConfigManager
     }
 
     /// <summary>
-    /// Reads config
+    ///     Reads config
     /// </summary>
     /// <returns>User configuration.</returns>
     public UserConfig GetConfig()
@@ -44,12 +50,6 @@ public class ConfigManager : IConfigManager
 
         return readConfig;
     }
-
-    #endregion
-
-    #region Fields
-
-    private readonly ILogger _logger;
 
     #endregion
 }

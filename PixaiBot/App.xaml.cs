@@ -1,7 +1,7 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using PixaiBot.Business_Logic.Data_Handling;
 using PixaiBot.Business_Logic.Data_Management;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management;
@@ -17,19 +17,18 @@ using PixaiBot.UI.ViewModel;
 namespace PixaiBot;
 
 /// <summary>
-/// Interaction logic for App.xaml
+///     Interaction logic for App.xaml
 /// </summary>
 public partial class App : Application
 {
-    private readonly ServiceProvider _serviceProvider;
-
     private readonly ILogger _logger;
+    private readonly ServiceProvider _serviceProvider;
 
     public App()
     {
         _logger = new Logger();
         IServiceCollection services = new ServiceCollection();
-        services.AddSingleton<NavigationPanelView>(provider => new NavigationPanelView()
+        services.AddSingleton<NavigationPanelView>(provider => new NavigationPanelView
             { DataContext = provider.GetService<NavigationPanelViewModel>() });
         services.AddSingleton<NavigationPanelViewModel>();
         services.AddSingleton<CreditClaimerViewModel>();
@@ -79,7 +78,8 @@ public partial class App : Application
 
     private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        _logger.Log($"{e.Exception} | {e.Exception.Message} | {e.Exception.InnerException}", _logger.ApplicationLogFilePath);
+        _logger.Log($"{e.Exception} | {e.Exception.Message} | {e.Exception.InnerException}",
+            _logger.ApplicationLogFilePath);
         e.Handled = true;
     }
 }

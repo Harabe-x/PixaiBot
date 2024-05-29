@@ -71,7 +71,7 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         
         IDriverCreationStrategy driverCreationStrategy = config.HeadlessBrowser
             ? new HeadlessDriverCreationStrategy()
-            : new HiddenDriverCreationStrategy();
+            : new DebugDriverCreationStrategy();
 
 
 

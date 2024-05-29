@@ -1,31 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
-using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.Win32;
 using Notification.Wpf;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace PixaiBot.UI.ViewModel;
 
 internal class AccountCreatorViewModel : BaseViewModel
 {
-    #region Commands
-
-    public ICommand AddProxyCommand { get; }
-
-    public ICommand StartAccountCreationCommand { get; }
-
-    #endregion
-
     #region Constructor
 
     public AccountCreatorViewModel(IProxyManager proxyManager, ILogger logger, IAccountsManager accountsManager,
@@ -53,12 +40,20 @@ internal class AccountCreatorViewModel : BaseViewModel
 
     #endregion
 
+    #region Commands
+
+    public ICommand AddProxyCommand { get; }
+
+    public ICommand StartAccountCreationCommand { get; }
+
+    #endregion
+
     #region Methods
 
     private void AddProxy()
     {
         _logger.Log("Adding proxy", _logger.ApplicationLogFilePath);
-        var dialog = new OpenFileDialog()
+        var dialog = new OpenFileDialog
         {
             Title = "Select File:",
             Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
@@ -80,7 +75,7 @@ internal class AccountCreatorViewModel : BaseViewModel
         _logger.Log("Account created, adding account to account list", _logger.ApplicationLogFilePath);
 
         if (_configManager.GetConfig().ToastNotifications)
-            _toastNotificationSender.SendNotification("PixaiBot", $"Account Created", NotificationType.Success);
+            _toastNotificationSender.SendNotification("PixaiBot", "Account Created", NotificationType.Success);
     }
 
     private void OnErrorOccurred(object? sender, string e)
@@ -113,19 +108,20 @@ internal class AccountCreatorViewModel : BaseViewModel
             ? new ProxyDriverCreationStrategy(_proxyManager)
             : new HiddenDriverCreationStrategy();
 
-        if(_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account creation process started", NotificationType.Information);
+        if (_configManager.GetConfig().ToastNotifications)
+            _toastNotificationSender.SendNotification("PixaiBot", "Account creation process started",
+                NotificationType.Information);
 
         await Task.Run(() =>
         {
-
             // Determine the interval based on proxy usage
             var interval = ShouldUseProxy ? TimeSpan.Zero : TimeSpan.FromMinutes(5);
-            
+
             // Pixai limits the amount of accounts that can be created from the same IP address.
             // if the user uses a proxy, the interval may be zero because a different proxy will be selected for each account
             // if the user does not use a proxy, the interval will be 5 minutes to avoid being blocked by Pixai.
-            _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldVerifyEmail,driverCreationStrategy,
-                interval,_tokenSource.Token);
+            _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldVerifyEmail, driverCreationStrategy,
+                interval, _tokenSource.Token);
         });
 
         StopCreating();
@@ -135,7 +131,9 @@ internal class AccountCreatorViewModel : BaseViewModel
     {
         IsRunning = false;
         OperationStatus = "Idle.";
-        if (_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account creation process ended", NotificationType.Information);
+        if (_configManager.GetConfig().ToastNotifications)
+            _toastNotificationSender.SendNotification("PixaiBot", "Account creation process ended",
+                NotificationType.Information);
         AccountsCreatorButtonText = "Start Account Creation";
         _tokenSource.Cancel();
         _logger.Log("Account creation process ended", _logger.ApplicationLogFilePath);

@@ -104,10 +104,14 @@ internal class AccountInfoLogger : IAccountInfoLogger
 
         Thread.Sleep(TimeSpan.FromSeconds(DynamicDataLoadDelay));
 
-        internalStringBuilder.AppendLineIf(settings.ShouldLogEmailVerificationStatus,
-            $"Email Verification Status : {_pixaiDataReader.GetEmailVerificationStatus(driver)}");
         internalStringBuilder.AppendLineIf(settings.ShouldLogAccountId,
             $"Account Id : {_pixaiDataReader.GetAccountId(driver)}");
+
+        _pixaiNavigation.NavigateToAccountTabInEditProfilePage(driver);
+
+        internalStringBuilder.AppendLineIf(settings.ShouldLogEmailVerificationStatus,
+            $"Email Verification Status : {_pixaiDataReader.GetEmailVerificationStatus(driver)}");
+
 
         internalStringBuilder.AppendLine("===============");
         _stringBuilder.AppendLine(internalStringBuilder.ToString());

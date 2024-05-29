@@ -114,7 +114,6 @@ internal class CreditClaimerV2 : ICreditClaimer
 
     #endregion
 
-
     #region Fields
 
     private readonly ILogger _logger;

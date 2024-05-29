@@ -92,7 +92,7 @@ public class CreditClaimerViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
 
-        if (config.MultiThreading)
+        if (config.MultiThreading)  
         {
             _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
             var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);

@@ -28,7 +28,7 @@ internal class ProxyManager : IProxyManager
     }
 
     /// <summary>
-    ///  Returns random proxy from proxy list.
+    ///     Returns random proxy from proxy list.
     /// </summary>
     /// <returns></returns>
     public string GetRandomProxy()
@@ -39,7 +39,7 @@ internal class ProxyManager : IProxyManager
 
 
     /// <summary>
-    /// Reads proxy file and adds proxies to proxy list.
+    ///     Reads proxy file and adds proxies to proxy list.
     /// </summary>
     /// <param name="filePath"></param>
     public void ReadProxyFile(string filePath)

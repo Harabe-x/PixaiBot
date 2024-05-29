@@ -23,7 +23,7 @@ public class AccountLoginChecker : IAccountLoginChecker
 
     #region Methods
 
-    public bool CheckAccountLogin(UserAccount userAccount,IDriverCreationStrategy driverCreationStrategy)
+    public bool CheckAccountLogin(UserAccount userAccount, IDriverCreationStrategy driverCreationStrategy)
     {
         using var driver = driverCreationStrategy.CreateDriver();
 
@@ -52,8 +52,9 @@ public class AccountLoginChecker : IAccountLoginChecker
     }
 
 
-    public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList, IDriverCreationStrategy driverCreationStrategy
-        ,CancellationToken token)
+    public IEnumerable<UserAccount> CheckAllAccountsLogin(IEnumerable<UserAccount> accountsList,
+        IDriverCreationStrategy driverCreationStrategy
+        , CancellationToken token)
     {
         var validAccounts = new List<UserAccount>();
 
@@ -63,20 +64,25 @@ public class AccountLoginChecker : IAccountLoginChecker
 
             try
             {
-                if (CheckAccountLogin(userAccount,driverCreationStrategy))
+                if (CheckAccountLogin(userAccount, driverCreationStrategy))
                 {
                     validAccounts.Add(userAccount);
-                    AccountChecked?.Invoke(this, new UI.Models.Notification { Message = $"{userAccount.Email} is valid", NotificationType = NotificationType.Success });
+                    AccountChecked?.Invoke(this,
+                        new UI.Models.Notification
+                            { Message = $"{userAccount.Email} is valid", NotificationType = NotificationType.Success });
                 }
             }
             catch (Exception)
             {
-                AccountChecked?.Invoke(this, new UI.Models.Notification { Message = $"{userAccount.Email} is invalid", NotificationType = NotificationType.Error });
+                AccountChecked?.Invoke(this,
+                    new UI.Models.Notification
+                        { Message = $"{userAccount.Email} is invalid", NotificationType = NotificationType.Error });
             }
         }
 
         return validAccounts;
     }
+
     #endregion
 
     #region Fields
@@ -92,8 +98,6 @@ public class AccountLoginChecker : IAccountLoginChecker
     private readonly ILogger _logger;
 
     public event EventHandler<UI.Models.Notification>? AccountChecked;
-    
-    #endregion
-    
 
+    #endregion
 }

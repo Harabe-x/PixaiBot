@@ -130,7 +130,7 @@ public interface IPixaiNavigation
     /// </summary>
     /// <param name="searchContext">>The WebDriver instance representing the browser or a frame.</param>
     public void ClosePopup(ISearchContext searchContext);
-    
+
     /// <summary>
     ///  Clicks the element with the selected <paramref name="tagName"/> and <paramref name="text"/>
     /// </summary>
@@ -145,7 +145,7 @@ public interface IPixaiNavigation
     /// <param name="searchContext">The WebDriver instance representing the browser or a frame in which the element is to be searched.</param>
     /// <param name="cssSelector">The CSS selector used to locate the desired HTML element within the specified search context.</param>
     /// <returns>The <see cref="IWebElement"/> representing the located HTML element.</returns>
-    public IWebElement GetElement(ISearchContext searchContext, string cssSelector);
+    public IWebElement GetElementByCssSelector(ISearchContext searchContext, string cssSelector);
 
     /// <summary>
     /// Retrieves and returns the HTML element with the specified <paramref name="tagName"/> and containing the specified <paramref name="text"/>
@@ -155,6 +155,13 @@ public interface IPixaiNavigation
     /// <param name="tagName">The HTML tag name of the element to be located.</param>
     /// <param name="text">The text content that the located element should contain.</param>
     /// <returns>The <see cref="IWebElement"/> representing the located HTML element.</returns>
-    public IWebElement GetElement(ISearchContext searchContext, string tagName, string text);
+    public IWebElement GetElementByText(ISearchContext searchContext, string tagName, string text);
+
+
+    /// <summary>
+    ///  Navigates to Account tab in Edit Profile Page
+    /// </summary>
+    /// <param name="searchContext"></param>
+    public void NavigateToAccountTabInEditProfilePage(ISearchContext searchContext);
 
 }

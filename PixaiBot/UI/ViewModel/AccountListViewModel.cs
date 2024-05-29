@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
@@ -16,18 +11,10 @@ namespace PixaiBot.UI.ViewModel;
 
 internal class AccountListViewModel : BaseViewModel
 {
-    #region Commands
-
-    public ICommand EditAccountCommand { get; }
-
-    public ICommand RemoveAccountCommand { get; }
-
-    #endregion
-
     #region Constructor
 
     public AccountListViewModel(IAccountsManager accountsManager, ILogger logger, IDialogService dialogService,
-        IDataValidator DataValidator,IToastNotificationSender notificationSender,IConfigManager configManager)
+        IDataValidator DataValidator, IToastNotificationSender notificationSender, IConfigManager configManager)
     {
         RemoveAccountCommand = new RelayCommand(_ => RemoveAccount());
         EditAccountCommand = new RelayCommand(_ => EditAccount());
@@ -41,6 +28,14 @@ internal class AccountListViewModel : BaseViewModel
         UserAccounts = new ObservableCollection<UserAccount>(_accountsManager.GetAllAccounts());
         _accountsManager.AccountsListChanged += AccountsManagerOnAccountsListChanged;
     }
+
+    #endregion
+
+    #region Commands
+
+    public ICommand EditAccountCommand { get; }
+
+    public ICommand RemoveAccountCommand { get; }
 
     #endregion
 
@@ -64,7 +59,8 @@ internal class AccountListViewModel : BaseViewModel
         if (SelectedAccount == null) return;
 
         _dialogService.ShowDialog(new EditAccountCredentialsView(),
-            new EditAccountCredentialsViewModel(_accountsManager, _logger, SelectedAccount, _dataValidator,_notificationSender,_configManager), true);
+            new EditAccountCredentialsViewModel(_accountsManager, _logger, SelectedAccount, _dataValidator,
+                _notificationSender, _configManager), true);
     }
 
     private void AccountsManagerOnAccountsListChanged(object? sender, EventArgs e)
@@ -110,8 +106,6 @@ internal class AccountListViewModel : BaseViewModel
             OnPropertyChanged();
         }
     }
-
-
 
     #endregion
 }

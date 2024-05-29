@@ -8,7 +8,7 @@ namespace PixaiBot.Business_Logic.Data_Handling;
 public static class JsonReader
 {
     /// <summary>
-    /// Reads a json file and returns a list of user accounts.
+    ///     Reads a json file and returns a list of user accounts.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
@@ -21,7 +21,7 @@ public static class JsonReader
 
 
     /// <summary>
-    /// Reads a json file and returns a user config object.
+    ///     Reads a json file and returns a user config object.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
@@ -34,7 +34,7 @@ public static class JsonReader
 
 
     /// <summary>
-    /// Reads a json file and returns a bot statistics object.
+    ///     Reads a json file and returns a bot statistics object.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
@@ -45,12 +45,10 @@ public static class JsonReader
         return statistics;
     }
 
-    public static Dictionary<string, IEnumerable<string>>? GetDomainsAssociatedWithApiKeys (string filePath)
+    public static Dictionary<string, IEnumerable<string>>? GetDomainsAssociatedWithApiKeys(string filePath)
     {
         var jsonString = File.ReadAllText(filePath);
         var domains = JsonSerializer.Deserialize<Dictionary<string, IEnumerable<string>>>(jsonString);
         return domains;
-
     }
-
 }

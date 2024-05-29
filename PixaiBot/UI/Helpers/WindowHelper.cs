@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using PixaiBot.Data.Interfaces;
 
 namespace PixaiBot.UI.Helpers;
 
 public class WindowHelper
 {
+    public static readonly DependencyProperty EnableClosingProperty =
+        DependencyProperty.RegisterAttached("EnableClosing", typeof(bool), typeof(WindowHelper),
+            new PropertyMetadata(false, OnEnableClosingChanged));
+
     public static bool GetEnableClosing(DependencyObject obj)
     {
         return (bool)obj.GetValue(EnableClosingProperty);
@@ -19,10 +18,6 @@ public class WindowHelper
     {
         obj.SetValue(EnableClosingProperty, value);
     }
-
-    public static readonly DependencyProperty EnableClosingProperty =
-        DependencyProperty.RegisterAttached("EnableClosing", typeof(bool), typeof(WindowHelper),
-            new PropertyMetadata(false, OnEnableClosingChanged));
 
     private static void OnEnableClosingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {

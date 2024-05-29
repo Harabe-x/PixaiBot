@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
 using PixaiBot.Data.Interfaces;
@@ -12,6 +7,15 @@ namespace PixaiBot.UI.Helpers;
 
 public class TrayIconHelper
 {
+    // Using a DependencyProperty as the backing store for CanShowWindow.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty CanShowWindowProperty =
+        DependencyProperty.RegisterAttached("CanShowWindow", typeof(bool), typeof(TrayIconHelper),
+            new PropertyMetadata(false, ShowWindow));
+
+    public static readonly DependencyProperty CanHideToTrayProperty =
+        DependencyProperty.RegisterAttached("CanHideToTray", typeof(bool), typeof(TrayIconHelper),
+            new PropertyMetadata(false, HideToTray));
+
     public static bool GetCanShowWindow(DependencyObject obj)
     {
         return (bool)obj.GetValue(CanShowWindowProperty);
@@ -21,11 +25,6 @@ public class TrayIconHelper
     {
         obj.SetValue(CanShowWindowProperty, value);
     }
-
-    // Using a DependencyProperty as the backing store for CanShowWindow.  This enables animation, styling, binding, etc...
-    public static readonly DependencyProperty CanShowWindowProperty =
-        DependencyProperty.RegisterAttached("CanShowWindow", typeof(bool), typeof(TrayIconHelper),
-            new PropertyMetadata(false, ShowWindow));
 
     private static void ShowWindow(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -51,10 +50,6 @@ public class TrayIconHelper
         obj.SetValue(CanHideToTrayProperty, value);
     }
 
-    public static readonly DependencyProperty CanHideToTrayProperty =
-        DependencyProperty.RegisterAttached("CanHideToTray", typeof(bool), typeof(TrayIconHelper),
-            new PropertyMetadata(false, HideToTray));
-
     private static void HideToTray(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is Window window)
@@ -67,7 +62,7 @@ public class TrayIconHelper
 
                         window.Hide();
 
-                        var notifyIcon = new NotifyIcon()
+                        var notifyIcon = new NotifyIcon
                         {
                             Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
                             Visible = true,

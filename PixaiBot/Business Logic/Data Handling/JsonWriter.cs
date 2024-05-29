@@ -6,7 +6,7 @@ namespace PixaiBot.Business_Logic.Data_Handling;
 public class JsonWriter
 {
     /// <summary>
-    /// Writes a json file with the given object.
+    ///     Writes a json file with the given object.
     /// </summary>
     /// <typeparam name="T">Type of object to write.</typeparam>
     /// <param name="obj">Object to write.</param>

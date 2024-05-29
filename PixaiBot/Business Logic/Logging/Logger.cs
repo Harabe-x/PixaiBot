@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using PixaiBot.Business_Logic.Data_Management;
 using PixaiBot.Data.Interfaces;
 
@@ -8,10 +7,6 @@ namespace PixaiBot.Business_Logic.Logging;
 
 public class Logger : ILogger
 {
-    public string CreditClaimerLogFilePath { get; }
-
-    public string ApplicationLogFilePath { get; }
-
     public Logger()
     {
         CreditClaimerLogFilePath =
@@ -22,8 +17,12 @@ public class Logger : ILogger
         if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath).Close();
     }
 
+    public string CreditClaimerLogFilePath { get; }
+
+    public string ApplicationLogFilePath { get; }
+
     /// <summary>
-    /// Logs a message to the log file  
+    ///     Logs a message to the log file
     /// </summary>
     /// <param name="message"></param>
     /// <param name="filePath"></param>

@@ -6,9 +6,8 @@ namespace PixaiBot.Business_Logic.Notifications;
 
 public class ToastNotificationSender : IToastNotificationSender
 {
-    private readonly NotificationManager _notification;
-
     private readonly ILogger _logger;
+    private readonly NotificationManager _notification;
 
     public ToastNotificationSender(ILogger logger)
     {
@@ -17,7 +16,7 @@ public class ToastNotificationSender : IToastNotificationSender
     }
 
     /// <summary>
-    /// Sends a notification to the user
+    ///     Sends a notification to the user
     /// </summary>
     /// <param name="title"></param>
     /// <param name="message"></param>

@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PixaiBot.UI.Models;
+﻿using PixaiBot.UI.Models;
 
 namespace PixaiBot.Data.Interfaces;
 
 public interface IConfigManager
 {
     /// <summary>
-    ///   Saves the config to the file.
+    ///     Saves the config to the file.
     /// </summary>
     /// <param name="config">Config to write</param>
     public void SaveConfig(UserConfig config);
 
     /// <summary>
-    ///  Gets the config from the file.
+    ///     Gets the config from the file.
     /// </summary>
-    /// <returns> <see cref="UserConfig"/> which represents the application configuration></returns>
+    /// <returns> <see cref="UserConfig" /> which represents the application configuration></returns>
     public UserConfig GetConfig();
 }
