@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
+using System.Windows.Input;
 using OpenQA.Selenium;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
 using PixaiBot.Data.Interfaces;
@@ -10,6 +10,12 @@ namespace PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCor
 
 internal class PixaiNavigation : IPixaiNavigation
 {
+    #region Fields
+
+    private readonly ILogger _logger;
+
+    #endregion
+
     #region Constructor
 
     public PixaiNavigation(ILogger logger)
@@ -38,7 +44,7 @@ internal class PixaiNavigation : IPixaiNavigation
     public void NavigateToRegistrationPage(ISearchContext searchContext)
     {
         _logger.Log("Finding button to navigate to registration form", _logger.CreditClaimerLogFilePath);
-        ClickElement(searchContext, ".MuiButton-text");
+        ClickElement(searchContext, ".flex-row > .normal-case");
     }
 
     public void GoToLoginPage(ISearchContext searchContext)
@@ -54,23 +60,24 @@ internal class PixaiNavigation : IPixaiNavigation
 
         _logger.Log("Sending email & password to textboxes ", _logger.CreditClaimerLogFilePath);
 
-        SendKeysToElement(searchContext, "#email-input",email);
+        SendKeysToElement(searchContext, "#email-input", email);
 
-        SendKeysToElement(searchContext, "#password-input",password);
+        SendKeysToElement(searchContext, "#password-input", password);
     }
 
     public void ClickOnRegisterButton(ISearchContext searchContext)
     {
         _logger.Log("Clicking register button", _logger.CreditClaimerLogFilePath);
 
-        ClickElement(searchContext, "#\\:r2\\:");
+        SendKeysToElement(searchContext, "#password-input", Keys.Enter);
     }
 
     public void ClickOnLoginButton(ISearchContext searchContext)
     {
         _logger.Log("Clicking login button ", _logger.CreditClaimerLogFilePath);
 
-        ClickElement(searchContext, "button", "Login");
+        SendKeysToElement(searchContext, "#password-input", Keys.Enter);
+
     }
 
     public void NavigateToProfile(ISearchContext searchContext)
@@ -101,7 +108,7 @@ internal class PixaiNavigation : IPixaiNavigation
 
     public void NavigateToAccountTabInEditProfilePage(ISearchContext searchContext)
     {
-        _logger.Log("Clicking Account tab",_logger.CreditClaimerLogFilePath);
+        _logger.Log("Clicking Account tab", _logger.CreditClaimerLogFilePath);
         ClickElement(searchContext, "div:nth-child(3) > a");
     }
 
@@ -115,12 +122,12 @@ internal class PixaiNavigation : IPixaiNavigation
         _logger.Log($"Navigating to {url}", _logger.CreditClaimerLogFilePath);
         driver.Navigate().GoToUrl(url);
     }
-
+    
     public void ClosePopup(ISearchContext searchContext)
     {
         try
         {
-            ClickElement(searchContext, ".dfAnPH > svg");
+            SendKeysToElement(searchContext,"body",Keys.Escape);
         }
         catch (NoSuchElementException)
         {
@@ -128,10 +135,10 @@ internal class PixaiNavigation : IPixaiNavigation
             //so after catching this exception,
             //I can safely ignore it and the bot will still perform its task correctly.
             _logger.Log("No popup found", _logger.CreditClaimerLogFilePath);
-          return;
+            return;
         }
-        _logger.Log("Popup closed",_logger.CreditClaimerLogFilePath);
 
+        _logger.Log("Popup closed", _logger.CreditClaimerLogFilePath);
     }
 
     public void ClickClaimCreditButton(ISearchContext searchContext)
@@ -142,7 +149,7 @@ internal class PixaiNavigation : IPixaiNavigation
         }
         catch (ElementClickInterceptedException)
         {
-            ClickClaimCreditButton(searchContext);
+            _logger.Log("Credit claim button click intercepted",_logger.CreditClaimerLogFilePath);
         }
     }
 
@@ -198,7 +205,7 @@ internal class PixaiNavigation : IPixaiNavigation
         }
     }
 
-    public void SendKeysToElement(ISearchContext searchContext,string cssSelector, string keys)
+    public void SendKeysToElement(ISearchContext searchContext, string cssSelector, string keys)
     {
         try
         {
@@ -211,12 +218,6 @@ internal class PixaiNavigation : IPixaiNavigation
             throw new ChromeDriverException("ChromeDriver exception occurred", e);
         }
     }
-
-    #endregion
-
-    #region Fields
-
-    private readonly ILogger _logger;
-
+    
     #endregion
 }

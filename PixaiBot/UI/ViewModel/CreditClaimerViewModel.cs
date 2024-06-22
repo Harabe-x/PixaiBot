@@ -1,33 +1,20 @@
-﻿using PixaiBot.Data.Interfaces;
-using System.Windows.Threading;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using PixaiBot.UI.Base;
-using System.Linq;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Windows;
-using System.Windows.Media;
+using System.Windows.Threading;
 using Notification.Wpf;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
+using PixaiBot.Data.Interfaces;
+using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
-using Brush = System.Drawing.Brush;
 
 namespace PixaiBot.UI.ViewModel;
 
 public class CreditClaimerViewModel : BaseViewModel
 {
-
-
-    #region Commands
-    
-    public ICommand ClaimCreditsCommand { get; }
-
-    #endregion  
-
     #region Constructor
 
     public CreditClaimerViewModel(ICreditClaimer creditClaimer, IToastNotificationSender notificationSender,
@@ -53,19 +40,24 @@ public class CreditClaimerViewModel : BaseViewModel
 
         ClaimButtonText = "Start Claiming";
         OperationStatus = "Idle.";
-        
+
         if (!_configManager.GetConfig().CreditsAutoClaim) return;
-        
+
         ClaimButtonText = "Stop";
         ClaimCredits();
-        _creditClaimerTimer = new DispatcherTimer()
+        _creditClaimerTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromHours(AutoCreditsClaimInterval)
         };
-        _creditClaimerTimer.Tick += (sender, args) => { ClaimCredits(); };
-
-
+        _creditClaimerTimer.Tick += (_,_) => { ClaimCredits(); };
     }
+
+    #endregion
+
+
+    #region Commands
+
+    public ICommand ClaimCreditsCommand { get; }
 
     #endregion
 
@@ -83,7 +75,9 @@ public class CreditClaimerViewModel : BaseViewModel
         var config = _configManager.GetConfig();
         _tokenSource = new CancellationTokenSource();
 
-        if (config.ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Credits claiming process started", NotificationType.Information);
+        if (config.ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Credits claiming process started",
+                NotificationType.Information);
 
         ClaimButtonText = "Stop";
         IsRunning = true;
@@ -92,13 +86,17 @@ public class CreditClaimerViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
 
-        if (config.MultiThreading)  
+        if (config.MultiThreading)
         {
             _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
             var accounts = _accountsManager.GetAllAccounts().SplitList(config.NumberOfThreads);
 
             var tasks = accounts.Select(account =>
-                Task.Run(() => { _creditClaimer.ClaimCreditsForAllAccounts(account, driverCreationStrategy, _tokenSource.Token); },
+                Task.Run(
+                    () =>
+                    {
+                        _creditClaimer.ClaimCreditsForAllAccounts(account, driverCreationStrategy, _tokenSource.Token);
+                    },
                     _tokenSource.Token));
             await Task.WhenAll(tasks);
         }
@@ -107,13 +105,13 @@ public class CreditClaimerViewModel : BaseViewModel
             await Task.Run(
                 () =>
                 {
-                    _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), driverCreationStrategy, _tokenSource.Token);
+                    _creditClaimer.ClaimCreditsForAllAccounts(_accountsManager.GetAllAccounts(), driverCreationStrategy,
+                        _tokenSource.Token);
                 }, _tokenSource.Token);
         }
-        
 
 
-            StopClaiming();
+        StopClaiming();
     }
 
 
@@ -123,7 +121,9 @@ public class CreditClaimerViewModel : BaseViewModel
         ClaimButtonText = "Start Claiming";
         OperationStatus = "Idle.";
         LastCreditClaimDate = DateTime.Now.ToString("d");
-        if (_configManager.GetConfig().ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Credits claiming process ended", NotificationType.Information);
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Credits claiming process ended",
+                NotificationType.Information);
         _tokenSource.Cancel();
         _logger.Log("Credits claiming process ended", _logger.ApplicationLogFilePath);
     }

@@ -33,7 +33,6 @@ internal class AccountInfoLogger : IAccountInfoLogger
         _stringBuilder.Clear();
     }
 
-   
 
     public string StartLoggingAccountsInfo(IEnumerable<UserAccount> userAccountsList,
         IDriverCreationStrategy driverCreationStrategy, IAccountInfoLoggerSettings settings,
@@ -45,19 +44,19 @@ internal class AccountInfoLogger : IAccountInfoLogger
             if (cancellationToken.IsCancellationRequested) return _stringBuilder.ToString();
             try
             {
-                LogAccountInfo(account,settings,driverCreationStrategy);
+                LogAccountInfo(account, settings, driverCreationStrategy);
             }
             catch (Exception e)
             {
                 _logger.Log($"Error occurred, Error message : {e.Message}", _logger.CreditClaimerLogFilePath);
-                continue;
             }
         }
 
         return _stringBuilder.ToString();
     }
 
-    private void LogAccountInfo(UserAccount account, IAccountInfoLoggerSettings settings, IDriverCreationStrategy driverCreationStrategy)
+    private void LogAccountInfo(UserAccount account, IAccountInfoLoggerSettings settings,
+        IDriverCreationStrategy driverCreationStrategy)
     {
         _logger.Log("=====Launched Chrome Driver=====", _logger.CreditClaimerLogFilePath);
 
@@ -75,13 +74,13 @@ internal class AccountInfoLogger : IAccountInfoLogger
         if (!wait.Until(drv => drv.Url == MainPageUrl))
         {
             _logger.Log("Login Failed\n=====Chrome Driver Closed=====\n", _logger.CreditClaimerLogFilePath);
-            internalStringBuilder.AppendLine($"Login Operation Status : Failed\n==============================");
+            internalStringBuilder.AppendLine("Login Operation Status : Failed\n==============================");
             return;
         }
 
-        _pixaiNavigation.ClosePopup(driver);    
+        _pixaiNavigation.ClosePopup(driver);
 
-        _logger.Log($"Reading account data", _logger.CreditClaimerLogFilePath);
+        _logger.Log("Reading account data", _logger.CreditClaimerLogFilePath);
 
         while (!driver.Url.Contains('@'))
         {

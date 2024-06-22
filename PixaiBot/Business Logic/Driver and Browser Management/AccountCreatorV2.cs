@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
@@ -11,8 +10,8 @@ namespace PixaiBot.Business_Logic.Driver_and_Browser_Management;
 
 internal class AccountCreatorV2 : IAccountCreator
 {
-
     #region Constructor
+
     public AccountCreatorV2(IPixaiNavigation pixaiNavigation, ITempMailApiManager tempMailApiManager,
         ILoginCredentialsMaker loginCredentialsMaker, ILogger logger, IProxyManager proxyManager)
     {
@@ -26,11 +25,15 @@ internal class AccountCreatorV2 : IAccountCreator
     #endregion
 
     #region Methods
+
     public void CreateAccounts(int amount, string tempMailApiKey, bool shouldVerifyEmail,
-     IDriverCreationStrategy driverCreationStrategy, TimeSpan interval, CancellationToken token)
+        IDriverCreationStrategy driverCreationStrategy, TimeSpan interval, CancellationToken token)
     {
         _logger.Log("The account creation process has started", _logger.ApplicationLogFilePath);
 
+
+        if (tempMailApiKey == null) tempMailApiKey = string.Empty;
+        
         for (var i = 0; i < amount; i++)
         {
             if (token.IsCancellationRequested) return;
@@ -97,7 +100,7 @@ internal class AccountCreatorV2 : IAccountCreator
         }
 
 
-        var userAccount = new UserAccount() { Email = email, Password = password };
+        var userAccount = new UserAccount { Email = email, Password = password };
 
         AccountCreated?.Invoke(this, userAccount);
 
@@ -141,6 +144,7 @@ internal class AccountCreatorV2 : IAccountCreator
 
         _logger.Log("Email verified\n=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
     }
+
     #endregion
 
     #region Fields

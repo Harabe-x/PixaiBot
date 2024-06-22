@@ -7,8 +7,9 @@ namespace PixaiBot.Business_Logic.Extension;
 public static class EnumerableSplitter
 {
     /// <summary>
-    /// Splits the <paramref name="source"/> into <paramref name="numberOfLists"/> lists, attempting to evenly distribute elements among them.
-    /// </summary>
+    ///     Splits the <paramref name="source" /> into <paramref name="numberOfLists" /> lists, attempting to evenly distribute
+    ///     elements among them.        
+    /// </summary>      
     /// <param name="source">The source IEnumerable to be split.</param>
     /// <param name="numberOfLists">The desired number of lists to split the source into.</param>
     /// <returns>An IEnumerable of IEnumerable&lt;T&gt; representing the divided lists.</returns>

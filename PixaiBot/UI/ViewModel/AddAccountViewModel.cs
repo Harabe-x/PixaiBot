@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
@@ -14,17 +9,10 @@ namespace PixaiBot.UI.ViewModel;
 
 public class AddAccountViewModel : BaseViewModel, IWindowHelper
 {
-    #region Commands
-
-    public ICommand AddAccountCommand { get; }
-
-    public ICommand CloseWindowCommand { get; }
-
-    #endregion
-
     #region Constructor
 
-    public AddAccountViewModel(IAccountsManager accountsManager,IToastNotificationSender notificationSender, IDataValidator dataValidator, ILogger logger,IConfigManager configManager )
+    public AddAccountViewModel(IAccountsManager accountsManager, IToastNotificationSender notificationSender,
+        IDataValidator dataValidator, ILogger logger, IConfigManager configManager)
     {
         AddAccountCommand = new RelayCommand(_ => AddAccount());
         CloseWindowCommand = new RelayCommand(_ => CloseWindow());
@@ -34,6 +22,14 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
         _dataValidator = dataValidator;
         _logger = logger;
     }
+
+    #endregion
+
+    #region Commands
+
+    public ICommand AddAccountCommand { get; }
+
+    public ICommand CloseWindowCommand { get; }
 
     #endregion
 
@@ -62,13 +58,14 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
             Password = Password
         };
         _accountsManger.AddAccount(userAccount);
-        if(_configManager.GetConfig().ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account added successfully", NotificationType.Success);
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Account added successfully", NotificationType.Success);
         CloseWindow();
         _logger.Log("Account Added ", _logger.ApplicationLogFilePath);
     }
 
     public bool CanCloseWindow()
-    { 
+    {
         return true;
     }
 

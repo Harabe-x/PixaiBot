@@ -1,31 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.Win32;
 using Notification.Wpf;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
-using PixaiBot.Business_Logic.Logging;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
 using PixaiBot.UI.Models;
-using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace PixaiBot.UI.ViewModel;
 
 internal class AccountInfoLoggerViewModel : BaseViewModel
 {
-    #region Commands
-
-    public ICommand StartLoggingCommand { get; }
-
-    #endregion
-
     #region Constructor
 
     public AccountInfoLoggerViewModel(IAccountInfoLogger accountInfoLogger,
@@ -48,6 +37,12 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
 
     #endregion
 
+    #region Commands
+
+    public ICommand StartLoggingCommand { get; }
+
+    #endregion
+
     #region Methods
 
     private async void StartLogging()
@@ -67,12 +62,13 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         OperationStatus = "Running...";
         LogButtonText = "Stop";
 
-        if(config.ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account info logging process started",NotificationType.Information);
-        
+        if (config.ToastNotifications)
+            _toastNotificationSender.SendNotification("PixaiBot", "Account info logging process started",
+                NotificationType.Information);
+
         IDriverCreationStrategy driverCreationStrategy = config.HeadlessBrowser
             ? new HeadlessDriverCreationStrategy()
-            : new DebugDriverCreationStrategy();
-
+            : new HiddenDriverCreationStrategy();
 
 
         _accountInfoLogger.ClearStringBuilderContent();
@@ -83,7 +79,8 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
             _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
 
             var tasks = accounts.Select(account => Task.Run(() =>
-                _accountInfoLogger.StartLoggingAccountsInfo(account, driverCreationStrategy, _accountInfoLoggerModel, _tokenSource.Token)));
+                _accountInfoLogger.StartLoggingAccountsInfo(account, driverCreationStrategy, _accountInfoLoggerModel,
+                    _tokenSource.Token)));
 
             await Task.WhenAll(tasks);
 
@@ -116,7 +113,9 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
         _logger.Log("Account info logging process Ended", _logger.ApplicationLogFilePath);
         IsRunning = false;
         OperationStatus = "Idle.";
-        if(_configManager.GetConfig().ToastNotifications) _toastNotificationSender.SendNotification("PixaiBot", "Account info logging process ended", NotificationType.Information);
+        if (_configManager.GetConfig().ToastNotifications)
+            _toastNotificationSender.SendNotification("PixaiBot", "Account info logging process ended",
+                NotificationType.Information);
         LogButtonText = "Start Logging";
         _tokenSource.Cancel();
     }

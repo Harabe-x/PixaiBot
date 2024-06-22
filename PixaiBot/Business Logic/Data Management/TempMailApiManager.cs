@@ -56,7 +56,8 @@ public class TempMailApiManager : ITempMailApiManager
 
     public string GetDomain(string tempMailApiKey)
     {
-        var domainsAssociatedWithApiKeys = JsonReader.GetDomainsAssociatedWithApiKeys(InitialConfiguration.ApiKeysFilePath);
+        var domainsAssociatedWithApiKeys =
+            JsonReader.GetDomainsAssociatedWithApiKeys(InitialConfiguration.ApiKeysFilePath);
 
         if (domainsAssociatedWithApiKeys == null)
         {
@@ -65,10 +66,8 @@ public class TempMailApiManager : ITempMailApiManager
         }
 
         if (domainsAssociatedWithApiKeys.ContainsKey(tempMailApiKey))
-        {
             return domainsAssociatedWithApiKeys[tempMailApiKey]
                 .ElementAt(_random.Next(domainsAssociatedWithApiKeys[tempMailApiKey].Count()));
-        }
         var domains = GetDomains(tempMailApiKey);
         domainsAssociatedWithApiKeys.Add(tempMailApiKey, domains);
         JsonWriter.WriteJson(domainsAssociatedWithApiKeys, InitialConfiguration.ApiKeysFilePath);

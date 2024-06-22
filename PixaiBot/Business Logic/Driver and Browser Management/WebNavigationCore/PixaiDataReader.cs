@@ -7,9 +7,14 @@ namespace PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCor
 
 internal class PixaiDataReader : IPixaiDataReader
 {
+    #region Fields
+
+    private readonly ILogger _logger;
+
+    #endregion
 
     #region Constructor
- 
+
     public PixaiDataReader(ILogger logger)
     {
         _logger = logger;
@@ -93,11 +98,6 @@ internal class PixaiDataReader : IPixaiDataReader
 
         return element.Text;
     }
-    #endregion
-
-    #region Fields
-
-    private readonly ILogger _logger;
 
     #endregion
 }

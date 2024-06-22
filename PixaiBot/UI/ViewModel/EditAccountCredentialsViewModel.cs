@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
@@ -13,18 +9,11 @@ namespace PixaiBot.UI.ViewModel;
 
 internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
 {
-    #region Commands
-
-    public ICommand CloseWindowCommand { get; }
-
-    public ICommand SaveAccountCommand { get; }
-
-    #endregion
-
     #region Constructor
 
-    public  EditAccountCredentialsViewModel(IAccountsManager accountsManager, ILogger logger,
-        UserAccount editedAccount, IDataValidator dataValidator,IToastNotificationSender notificationSender,IConfigManager configManager)
+    public EditAccountCredentialsViewModel(IAccountsManager accountsManager, ILogger logger,
+        UserAccount editedAccount, IDataValidator dataValidator, IToastNotificationSender notificationSender,
+        IConfigManager configManager)
     {
         SaveAccountCommand = new RelayCommand(_ => SaveAccount());
         CloseWindowCommand = new RelayCommand(_ => CLoseWindow());
@@ -42,6 +31,14 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
 
     #endregion
 
+    #region Commands
+
+    public ICommand CloseWindowCommand { get; }
+
+    public ICommand SaveAccountCommand { get; }
+
+    #endregion
+
     #region Methods
 
     private void SaveAccount()
@@ -52,8 +49,9 @@ internal class EditAccountCredentialsViewModel : BaseViewModel, IWindowHelper
 
         _accountsManager.EditAccount(Account, Email, Password);
         _logger.Log("Account edited successfully", _logger.CreditClaimerLogFilePath);
-        if(_configManager.GetConfig().ToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account edited successfully", NotificationType.Success);
-            Close?.Invoke();
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Account edited successfully", NotificationType.Success);
+        Close?.Invoke();
     }
 
     private void CLoseWindow()

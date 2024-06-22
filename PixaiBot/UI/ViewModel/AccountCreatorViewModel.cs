@@ -106,7 +106,7 @@ internal class AccountCreatorViewModel : BaseViewModel
 
         IDriverCreationStrategy driverCreationStrategy = ShouldUseProxy
             ? new ProxyDriverCreationStrategy(_proxyManager)
-            : new HiddenDriverCreationStrategy();
+            : new DebugDriverCreationStrategy();
 
         if (_configManager.GetConfig().ToastNotifications)
             _toastNotificationSender.SendNotification("PixaiBot", "Account creation process started",
@@ -119,7 +119,7 @@ internal class AccountCreatorViewModel : BaseViewModel
 
             // Pixai limits the amount of accounts that can be created from the same IP address.
             // if the user uses a proxy, the interval may be zero because a different proxy will be selected for each account
-            // if the user does not use a proxy, the interval will be 5 minutes to avoid being blocked by Pixai.
+            // if the user does not use a proxy, the interval will be 5 minutes to avoid being blocked by rate limiter.
             _accountCreator.CreateAccounts(amount, TempMailApiKey, ShouldVerifyEmail, driverCreationStrategy,
                 interval, _tokenSource.Token);
         });

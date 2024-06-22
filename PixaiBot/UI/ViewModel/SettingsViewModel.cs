@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -22,20 +20,6 @@ namespace PixaiBot.UI.ViewModel;
 //TODO: Refactor
 public class SettingsViewModel : BaseViewModel
 {
-    #region Commands
-
-    public ICommand ShowAddAccountWindowCommand { get; }
-
-    public ICommand AddManyAccountsCommand { get; }
-
-    public ICommand CheckAllAccountsLoginCommand { get; }
-
-    public ICommand StartWithSystemCommand { get; }
-
-    public ICommand UpdateToastNotificationPreferenceCommand { get; }
-
-    #endregion
-
     #region Constructor
 
     public SettingsViewModel(IDialogService dialogService, IAccountsManager
@@ -69,6 +53,20 @@ public class SettingsViewModel : BaseViewModel
 
     #endregion
 
+    #region Commands
+
+    public ICommand ShowAddAccountWindowCommand { get; }
+
+    public ICommand AddManyAccountsCommand { get; }
+
+    public ICommand CheckAllAccountsLoginCommand { get; }
+
+    public ICommand StartWithSystemCommand { get; }
+
+    public ICommand UpdateToastNotificationPreferenceCommand { get; }
+
+    #endregion
+
     #region Methods
 
     private void UpdateToastNotificationPreference()
@@ -83,7 +81,8 @@ public class SettingsViewModel : BaseViewModel
     private void ShowAddAccountWindow()
     {
         _dialogService.ShowDialog(new AddAccountView(),
-            new AddAccountViewModel(_accountsManager, _notificationSender, _dataValidator, _logger, _configManager), true);
+            new AddAccountViewModel(_accountsManager, _notificationSender, _dataValidator, _logger, _configManager),
+            true);
     }
 
     private void AddManyAccounts()
@@ -109,11 +108,13 @@ public class SettingsViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
         IEnumerable<UserAccount> validAccounts = null;
-        if (EnableToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account checking started", NotificationType.Information);
+        if (EnableToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Account checking started", NotificationType.Information);
 
         await Task.Run(() =>
         {
-            validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(), driverCreationStrategy, _tokenSource.Token);
+            validAccounts = _accountLoginChecker.CheckAllAccountsLogin(accountsList.ToList(),
+                driverCreationStrategy, _tokenSource.Token);
         });
 
         var statistics = _botStatisticsManager.GetStatistics();
@@ -129,7 +130,8 @@ public class SettingsViewModel : BaseViewModel
     {
         _logger.Log("Account checking ended", _logger.ApplicationLogFilePath);
         IsAccountCheckerRunning = false;
-        if (EnableToastNotifications) _notificationSender.SendNotification("PixaiBot", "Account checking ended", NotificationType.Information);
+        if (EnableToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Account checking ended", NotificationType.Information);
 
         AccountCheckerButtonText = "Validate accounts";
         _tokenSource.Cancel();
@@ -138,9 +140,10 @@ public class SettingsViewModel : BaseViewModel
     private void StartWithSystem()
     {
         _logger.Log("Start with system option changed", _logger.ApplicationLogFilePath);
-        var autoUpdaterPath = Directory.GetParent(Path.GetDirectoryName(_executablePath)).FullName + "\\PixaiBotLauncher.exe";
+        var autoUpdaterPath = Directory.GetParent(Path.GetDirectoryName(_executablePath)).FullName +
+                              "\\PixaiBotLauncher.exe";
         var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-        
+
         if (ShouldStartWithSystem) registryKey?.SetValue("PixaiBot", autoUpdaterPath);
         else registryKey?.DeleteValue("PixaiBot", false);
     }
@@ -156,7 +159,7 @@ public class SettingsViewModel : BaseViewModel
 
     private readonly IDialogService _dialogService;
 
-    private readonly string? _executablePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+    private readonly string? _executablePath = Process.GetCurrentProcess().MainModule?.FileName;
 
     private readonly IAccountsManager _accountsManager;
 
@@ -264,7 +267,8 @@ public class SettingsViewModel : BaseViewModel
         get => _settingsModel.UserConfig.NumberOfThreads.ToString();
         set
         {
-            if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads || parsedValue < 1) return;
+            if (!int.TryParse(value, out var parsedValue) || parsedValue > MaxNumberOfThreads ||
+                parsedValue < 1) return;
             _settingsModel.UserConfig.NumberOfThreads = parsedValue;
             _configManager.SaveConfig(_settingsModel.UserConfig);
             OnPropertyChanged();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
@@ -25,7 +25,7 @@ internal class CreditClaimerV2 : ICreditClaimer
 
     #region Methods
 
-    public void ClaimCredits(UserAccount userAccount,IDriverCreationStrategy driverCreationStrategy)
+    public void ClaimCredits(UserAccount userAccount, IDriverCreationStrategy driverCreationStrategy)
     {
         using var driver = driverCreationStrategy.CreateDriver();
 
@@ -58,7 +58,7 @@ internal class CreditClaimerV2 : ICreditClaimer
         catch (NoSuchElementException e)
         {
             // Sometimes popup does not appear. This seems to be a random occurrence.
-            _logger.Log("the popup did not appear",_logger.CreditClaimerLogFilePath);
+            _logger.Log("the popup did not appear", _logger.CreditClaimerLogFilePath);
         }
 
         //Ensures that user in on profile page. User profile page always contains '@' in the url.   
@@ -68,7 +68,13 @@ internal class CreditClaimerV2 : ICreditClaimer
             _pixaiNavigation.NavigateToProfile(driver);
         }
 
-        for (var i = 0; i < MaxTries; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
+        
+        _pixaiNavigation.ClosePopup(driver);
+        
+        for (var i = 0; i < MaxTries; i++)
+        {
+            _pixaiNavigation.ClickClaimCreditButton(driver);
+        }
 
         driver.Quit();
         _logger.Log($"Credits claimed for {userAccount.Email}", _logger.CreditClaimerLogFilePath);
@@ -78,8 +84,8 @@ internal class CreditClaimerV2 : ICreditClaimer
     }
 
 
-
-    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,IDriverCreationStrategy driverCreationStrategy, CancellationToken cancellationToken)
+    public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,
+        IDriverCreationStrategy driverCreationStrategy, CancellationToken cancellationToken)
     {
         foreach (var account in accounts)
         {
@@ -97,7 +103,6 @@ internal class CreditClaimerV2 : ICreditClaimer
                 // It seems to be related to the headless environment, possibly due to rapid claim button clicks.
                 // I think it can be safely ignored because the credits are successfully claimed regardless.
                 _logger.Log(e.Message, _logger.CreditClaimerLogFilePath);
-
             }
             catch (InvalidPageContentException e)
             {
@@ -125,7 +130,7 @@ internal class CreditClaimerV2 : ICreditClaimer
     private const int MaxTries = 5;
 
     private const int MaxLoginAttemptSeconds = 5;
-
+    
     public event EventHandler<string> ErrorOccurred;
 
     public event EventHandler<UserAccount>? CreditsClaimed;
@@ -133,4 +138,4 @@ internal class CreditClaimerV2 : ICreditClaimer
     public event EventHandler<UserAccount>? ProcessStartedForAccount;
 
     #endregion
-}   
+}

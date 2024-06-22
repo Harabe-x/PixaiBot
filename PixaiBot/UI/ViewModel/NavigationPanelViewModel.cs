@@ -1,21 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using PixaiBot.Data.Interfaces;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Windows.Input;
 using Notification.Wpf;
-using OpenQA.Selenium.DevTools;
+using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
-using ICommand = System.Windows.Input.ICommand;
 
 namespace PixaiBot.UI.ViewModel;
 
 public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 {
+    #region Constructor
+
+    public NavigationPanelViewModel(INavigationService navService, ILogger logger,
+        IToastNotificationSender toastNotificationASender, IConfigManager configManager)
+    {
+        NavigateToAccountCreatorCommand = new RelayCommand(_ => NavigateToAccountCreator());
+        NavigateToLogAccountInfoCommand = new RelayCommand(obj => NavigateToLogAccountInfo());
+        NavigateToDashboardCommand = new RelayCommand(_ => NavigateToDashboard());
+        NavigateToSettingsCommand = new RelayCommand(_ => NavigateToSettings());
+        ExitApplicationCommand = new RelayCommand(_ => ExitApplication());
+        HideApplicationCommand = new RelayCommand(_ => HideApplication());
+        NavigateToAccountsListCommand = new RelayCommand(_ => NavigateToAccountsList());
+
+        Navigation = navService;
+        _configManager = configManager;
+        _toastNotificationSender = toastNotificationASender;
+        _logger = logger;
+
+        NavigateToDashboardCommand.Execute(null);
+    }
+
+    #endregion
+
     #region Commands
 
     public ICommand NavigateToDashboardCommand { get; }
@@ -31,29 +46,6 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     public ICommand ExitApplicationCommand { get; }
 
     public ICommand HideApplicationCommand { get; }
-
-    #endregion
-
-    #region Constructor
-
-    public NavigationPanelViewModel(INavigationService navService, ILogger logger,
-        IToastNotificationSender toastNotificationASender, IConfigManager configManager)
-    {
-        NavigateToAccountCreatorCommand = new RelayCommand(_ => NavigateToAccountCreator());
-        NavigateToLogAccountInfoCommand = new RelayCommand((obj) => NavigateToLogAccountInfo());
-        NavigateToDashboardCommand = new RelayCommand(_ => NavigateToDashboard());
-        NavigateToSettingsCommand = new RelayCommand(_ => NavigateToSettings());
-        ExitApplicationCommand = new RelayCommand(_ => ExitApplication());
-        HideApplicationCommand = new RelayCommand(_ => HideApplication());
-        NavigateToAccountsListCommand = new RelayCommand(_ => NavigateToAccountsList());
-
-        Navigation = navService;
-        _configManager = configManager;
-        _toastNotificationSender = toastNotificationASender;
-        _logger = logger;
-
-        NavigateToDashboardCommand.Execute(null);
-    }
 
     #endregion
 
@@ -126,7 +118,7 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
 
     private readonly IToastNotificationSender _toastNotificationSender;
 
-    private INavigationService _navigation;
+    private readonly INavigationService _navigation;
 
     private readonly IConfigManager _configManager;
 
