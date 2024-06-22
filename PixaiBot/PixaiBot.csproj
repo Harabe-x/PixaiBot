@@ -1,46 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\images\PixaiAutoClaimerIcon.ico</ApplicationIcon>
-    <AssemblyVersion></AssemblyVersion>
-    <FileVersion></FileVersion>
-    <Version></Version>
+    <AssemblyVersion>
+    </AssemblyVersion>
+    <FileVersion>
+    </FileVersion>
+    <Version>
+    </Version>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Resources\images\PixaiAutoClaimerIcon.ico" />
     <None Remove="Resources\images\PixaiAutoClaimerLogo.png" />
     <None Remove="Resources\images\PixaiLogo.png" />
     <None Remove="UI\View\Pixai_AutoClaimer2.png" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Notification.Wpf" Version="7.0.0.2" />
     <PackageReference Include="Selenium.WebDriver" Version="4.21.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Windows.Forms">
-      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Windows.Forms.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
   <ItemGroup>
     <Content Include="Resources\images\PixaiAutoClaimerIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -55,5 +46,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-
 </Project>
