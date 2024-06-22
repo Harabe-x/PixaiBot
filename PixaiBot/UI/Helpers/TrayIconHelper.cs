@@ -52,28 +52,31 @@ public class TrayIconHelper
 
     private static void HideToTray(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is Window window)
-            window.Loaded += (s, e) =>
-            {
-                if (window.DataContext is ITrayIconHelper trayIconHelper)
-                    trayIconHelper.HideToTray += () =>
-                    {
-                        if (!trayIconHelper.CanHideToTray()) return;
+        // After migration to .NET 8 NotifyIcon is no longer available
+        // i will write new logic in future
 
-                        window.Hide();
+        //if (d is Window window)
+        //    window.Loaded += (s, e) =>
+        //    {
+        //        if (window.DataContext is ITrayIconHelper trayIconHelper)
+        //            trayIconHelper.HideToTray += () =>
+        //            {
+        //                if (!trayIconHelper.CanHideToTray()) return;
 
-                        var notifyIcon = new NotifyIcon
-                        {
-                            Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
-                            Visible = true,
-                            Text = "Pixai Auto Claimer"
-                        };
-                        notifyIcon.Click += (s, e) =>
-                        {
-                            window.Show();
-                            notifyIcon.Visible = false;
-                        };
-                    };
-            };
+        //                window.Hide();
+
+        //                var notifyIcon = new NotifyIcon
+        //                {
+        //                    Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
+        //                    Visible = true,
+        //                    Text = "Pixai Auto Claimer"
+        //                };
+        //                notifyIcon.Click += (s, e) =>
+        //                {
+        //                    window.Show();
+        //                    notifyIcon.Visible = false;
+        //                };
+        //            };
+        //    };
     }
 }
