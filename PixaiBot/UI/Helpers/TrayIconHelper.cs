@@ -1,12 +1,16 @@
 ﻿using System.Drawing;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using PixaiBot.Data.Interfaces;
+using PixaiBot.UI.ViewModel;
 
 namespace PixaiBot.UI.Helpers;
 
-public class TrayIconHelper
+public static class TrayIconHelper
 {
+    
+    
     // Using a DependencyProperty as the backing store for CanShowWindow.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CanShowWindowProperty =
         DependencyProperty.RegisterAttached("CanShowWindow", typeof(bool), typeof(TrayIconHelper),
@@ -52,31 +56,41 @@ public class TrayIconHelper
 
     private static void HideToTray(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        // After migration to .NET 8 NotifyIcon is no longer available
-        // i will write new logic in future
 
-        //if (d is Window window)
-        //    window.Loaded += (s, e) =>
-        //    {
-        //        if (window.DataContext is ITrayIconHelper trayIconHelper)
-        //            trayIconHelper.HideToTray += () =>
-        //            {
-        //                if (!trayIconHelper.CanHideToTray()) return;
+        if (d is Window window)
+            window.Loaded += (s, e) =>
+            {
+                if (window.DataContext is ITrayIconHelper trayIconHelper)
+                    trayIconHelper.HideToTray += () =>
+                    {
+                        
+                        if (!trayIconHelper.CanHideToTray()) return;
 
-        //                window.Hide();
+                        window.Hide();
 
-        //                var notifyIcon = new NotifyIcon
-        //                {
-        //                    Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
-        //                    Visible = true,
-        //                    Text = "Pixai Auto Claimer"
-        //                };
-        //                notifyIcon.Click += (s, e) =>
-        //                {
-        //                    window.Show();
-        //                    notifyIcon.Visible = false;
-        //                };
-        //            };
-        //    };
+
+                        var menuStrip = new ContextMenuStrip();
+
+                        menuStrip.Items.Add("Exit", null , (s, e) => window.Close());
+                         
+                        
+                        var notifyIcon = new NotifyIcon
+                        {
+                            Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
+                            Visible = true,
+                            ContextMenuStrip = menuStrip,
+                            Text = "Pixai Auto Claimer"
+                        };
+
+                        
+                        notifyIcon.DoubleClick += (s, e) =>
+                        {
+                            window.Show();
+                            notifyIcon.Visible = false;
+                            
+                        };
+                    };
+            };
     }
+    
 }
