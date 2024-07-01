@@ -69,16 +69,12 @@ public static class TrayIconHelper
                         window.Hide();
 
 
-                        var menuStrip = new ContextMenuStrip();
 
-                        menuStrip.Items.Add("Exit", null , (s, e) => window.Close());
-                         
                         
                         var notifyIcon = new NotifyIcon
                         {
                             Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
                             Visible = true,
-                            ContextMenuStrip = menuStrip,
                             Text = "Pixai Auto Claimer"
                         };
 
