@@ -92,11 +92,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Publish to folder.Publish PixaiBot to folder">
-    <configuration name="Publish PixaiBot to folder" type="DotNetFolderPublish" factoryName="Publish to folder">
-      <riderPublish configuration="Release" platform="Any CPU" runtime="Portable" target_folder="$USER_HOME$/Desktop/PixaiBot Releases/PixaiBot v1.3.8.0" target_framework="net8.0-windows" uuid_high="8985067777967212139" uuid_low="-8197950242621632597" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected=".NET Project.Unnamed">
     <configuration name="PixaiBotAutoUpdater: FolderProfile" type="DotNetMsBuildPublish" factoryName="Publish to IIS">
       <riderPublish publish_profile="FolderProfile.pubxml" pubxml_path="$PROJECT_DIR$/PixaiBotAutoUpdater/Properties/PublishProfiles/FolderProfile.pubxml" uuid_high="-2581359345601458619" uuid_low="-6670035840180251675" />
       <method v="2" />
@@ -150,7 +146,6 @@
     <list>
       <item itemvalue=".NET Executable.Unnamed" />
       <item itemvalue=".NET Project.Unnamed" />
-      <item itemvalue="Publish to folder.Publish PixaiBot to folder" />
       <item itemvalue="Publish to IIS.PixaiBot: FolderProfile2" />
       <item itemvalue="Publish to IIS.PixaiBot: FolderProfile" />
       <item itemvalue="Publish to IIS.PixaiBot: FolderProfile1" />
