@@ -5,7 +5,7 @@ using PixaiBot.UI.Models;
 
 namespace PixaiBot.Data.Interfaces;
 
-internal interface IAccountCreator
+public interface IAccountCreator
 {
     /// <summary>
     ///     Occurs when an account is created.

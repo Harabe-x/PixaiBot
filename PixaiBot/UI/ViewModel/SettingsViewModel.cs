@@ -107,6 +107,9 @@ public class SettingsViewModel : BaseViewModel
         IDriverCreationStrategy driverCreationStrategy = HeadlessBrowser
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
+        
+        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
+
         IEnumerable<UserAccount> validAccounts = null;
         if (EnableToastNotifications)
             _notificationSender.SendNotification("PixaiBot", "Account checking started", NotificationType.Information);

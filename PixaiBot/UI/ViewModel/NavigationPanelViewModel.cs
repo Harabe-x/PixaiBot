@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Windows.Input;
 using Notification.Wpf;
 using PixaiBot.Data.Interfaces;
@@ -9,6 +9,7 @@ namespace PixaiBot.UI.ViewModel;
 public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowHelper
 {
     #region Constructor
+    
 
     public NavigationPanelViewModel(INavigationService navService, ILogger logger,
         IToastNotificationSender toastNotificationASender, IConfigManager configManager)
@@ -20,7 +21,8 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
         ExitApplicationCommand = new RelayCommand(_ => ExitApplication());
         HideApplicationCommand = new RelayCommand(_ => HideApplication());
         NavigateToAccountsListCommand = new RelayCommand(_ => NavigateToAccountsList());
-
+        NavigateToDebugToolsCommand = new RelayCommand(_ => NavigateToDebugTools());
+    
         Navigation = navService;
         _configManager = configManager;
         _toastNotificationSender = toastNotificationASender;
@@ -30,9 +32,10 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     }
 
     #endregion
+    
 
     #region Commands
-
+    
     public ICommand NavigateToDashboardCommand { get; }
 
     public ICommand NavigateToSettingsCommand { get; }
@@ -42,7 +45,9 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     public ICommand NavigateToLogAccountInfoCommand { get; }
 
     public ICommand NavigateToAccountCreatorCommand { get; }
-
+    
+    public ICommand NavigateToDebugToolsCommand { get; }
+    
     public ICommand ExitApplicationCommand { get; }
 
     public ICommand HideApplicationCommand { get; }
@@ -80,6 +85,12 @@ public class NavigationPanelViewModel : BaseViewModel, ITrayIconHelper, IWindowH
     {
         Navigation.NavigateTo<SettingsViewModel>();
         _logger.Log("Navigated to Settings control", _logger.ApplicationLogFilePath);
+    }
+
+    private void NavigateToDebugTools()
+    {
+        Navigation.NavigateTo<DebugToolsViewModel>();
+        _logger.Log("Navigated to Debug Tools", _logger.ApplicationLogFilePath);
     }
 
     private void HideApplication()

@@ -11,26 +11,43 @@ namespace PixaiBot.Business_Logic.Data_Management;
 public static class InitialConfiguration
 {
     #region Constructor
+    
 
     static InitialConfiguration()
     {
-        ApplicationDataPath =
-            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer";
-        UserConfigPath =
-            $"{ApplicationDataPath}\\config.json";
-        BotLogsPath = $"{ApplicationDataPath}\\Logs";
-        StatisticsFilePath =
-            $"{ApplicationDataPath}\\statistics.json";
-        AccountsFilePath =
-            $"{ApplicationDataPath}\\accounts.json";
-        BotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        ApiKeysFilePath = $"{ApplicationDataPath}\\apiKeys.json";
+
+        IsDevEnv = false;
+      
+        
+        ApplicationDataPath = 
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PixaiAutoClaimer");
+        UserConfigPath = 
+            Path.Combine(ApplicationDataPath, "config.json");
+        BotLogsPath = 
+            Path.Combine(ApplicationDataPath, "Logs");
+        StatisticsFilePath = 
+            Path.Combine(ApplicationDataPath, "statistics.json");
+        AccountsFilePath = 
+            Path.Combine(ApplicationDataPath, "accounts.json");
+        BotVersion = 
+            Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        ApiKeysFilePath = 
+            Path.Combine(ApplicationDataPath, "apiKeys.json");
+        CreditClaimerLogFilePath = 
+            Path.Combine(BotLogsPath, $"CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt");
+        ApplicationLogFilePath = 
+            Path.Combine(BotLogsPath, $"Application Log {DateTime.Now:yyyy-MM-dd}.txt");
+     
+        
         if (!Directory.Exists(ApplicationDataPath)) CreateDirectories();
     }
 
     #endregion
+    
+        
 
     #region Methods
+    
 
     /// <summary>
     ///     Creates the directories needed for the bot to work
@@ -100,6 +117,17 @@ public static class InitialConfiguration
     #region Fields
 
     /// <summary>
+    ///  Path to Credit Claimer Logs 
+    /// </summary>
+    public  static string CreditClaimerLogFilePath { get; }
+
+    
+    /// <summary>
+    ///  Path to Credit Claimer Logs 
+    /// </summary>
+    public  static string ApplicationLogFilePath { get; }
+    
+    /// <summary>
     ///     Current Bot Version
     /// </summary>
     public static string BotVersion { get; }
@@ -138,6 +166,8 @@ public static class InitialConfiguration
     ///     Path to the application data folder
     /// </summary>
     public static string ApplicationDataPath { get; }
+    
+    public static bool IsDevEnv { get; } 
 
     #endregion
 }

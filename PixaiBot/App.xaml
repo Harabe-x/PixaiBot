@@ -25,6 +25,9 @@
         <DataTemplate DataType="{x:Type TypeName=viewModel:AccountCreatorViewModel}">
             <view:AccountCreatorView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:DebugToolsViewModel}">
+            <view:DebugControlView />
+        </DataTemplate>
 
         <!--#endregion-->
 

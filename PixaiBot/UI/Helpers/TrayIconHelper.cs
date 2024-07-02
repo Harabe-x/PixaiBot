@@ -68,9 +68,6 @@ public static class TrayIconHelper
 
                         window.Hide();
 
-
-
-                        
                         var notifyIcon = new NotifyIcon
                         {
                             Icon = new Icon("Resources/images/PixaiAutoClaimerIcon.ico"),
@@ -78,7 +75,6 @@ public static class TrayIconHelper
                             Text = "Pixai Auto Claimer"
                         };
 
-                        
                         notifyIcon.DoubleClick += (s, e) =>
                         {
                             window.Show();
@@ -90,3 +86,10 @@ public static class TrayIconHelper
     }
     
 }
+
+
+
+
+
+
+

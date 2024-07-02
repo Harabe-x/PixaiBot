@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Notification.Wpf;
+using PixaiBot.Business_Logic.Data_Management;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
 using PixaiBot.Data.Interfaces;
@@ -86,6 +87,8 @@ public class CreditClaimerViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
 
+        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy(); 
+        
         if (config.MultiThreading)
         {
             _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
@@ -175,6 +178,7 @@ public class CreditClaimerViewModel : BaseViewModel
     private const int AutoCreditsClaimInterval = 24;
 
     private readonly DispatcherTimer _creditClaimerTimer;
+
 
 
     public bool IsRunning

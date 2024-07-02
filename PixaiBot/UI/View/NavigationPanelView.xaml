@@ -5,11 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:PixaiBot.UI.Helpers"
+        xmlns:dataManagement="clr-namespace:PixaiBot.Business_Logic.Data_Management"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" Background="Transparent" WindowStyle="None"
         ResizeMode="NoResize"
         Title="Pixai Bot" Height="700" Width="600" AllowsTransparency="True"
         local:TrayIconHelper.CanHideToTray="True" local:WindowHelper.EnableClosing="True"
         local:TrayIconHelper.CanShowWindow="True">
+    
+    
+    
+ 
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -32,7 +41,7 @@
                                  Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Home" Style="{StaticResource SidePanelButtonIcon}" />
-                            <TextBlock x:Name="SettingsButton" Text="Dashnoard"
+                            <TextBlock x:Name="SettingsButton" Text="Dashboard"
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </RadioButton>
@@ -62,6 +71,17 @@
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </RadioButton>
+                    
+                    
+                    <RadioButton Name="DebugButton" Visibility="{Binding Source={ x:Static dataManagement:InitialConfiguration.IsDevEnv} , Converter={StaticResource VisibilityConverter}}"
+                                 Command="{Binding NavigateToDebugToolsCommand}" Style="{StaticResource MenuButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="Bug" Style="{StaticResource SidePanelButtonIcon}" />
+                            <TextBlock x:Name="Debug" Text="Debug Tools"
+                                       Style="{StaticResource SidePanelButton}" />
+                        </StackPanel>
+                    </RadioButton>
+
                     <RadioButton Name="SettingsBtn"
                                  Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
@@ -70,6 +90,10 @@
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </RadioButton>
+
+
+
+                    
                     <Button Name="HideBtn"
                             Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton1}">
                         <StackPanel Orientation="Horizontal">
@@ -78,15 +102,17 @@
                                        Style="{StaticResource SidePanelButton1}" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding ExitApplicationCommand}" Style="{StaticResource MenuButton1}">
+                    
+                    
+                    
+                    <Button Command="{Binding ExitApplicationCommand}" Style="{StaticResource MenuButton1}"  >
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="PowerOff" Style="{StaticResource SidePanelButtonIcon1}" />
                             <TextBlock x:Name="Exit" Text="Exit"
                                        Style="{StaticResource SidePanelButton1}" />
                         </StackPanel>
+                        
                     </Button>
-
-
                 </StackPanel>
 
             </Grid>
@@ -100,4 +126,5 @@
 
     </Grid>
 
+    
 </Window>

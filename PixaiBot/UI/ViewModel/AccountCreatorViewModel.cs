@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Notification.Wpf;
+using PixaiBot.Business_Logic.Data_Management;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Data.Interfaces;
 using PixaiBot.UI.Base;
@@ -106,7 +107,9 @@ internal class AccountCreatorViewModel : BaseViewModel
 
         IDriverCreationStrategy driverCreationStrategy = ShouldUseProxy
             ? new ProxyDriverCreationStrategy(_proxyManager)
-            : new DebugDriverCreationStrategy();
+            : new HeadlessDriverCreationStrategy();
+        
+        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
 
         if (_configManager.GetConfig().ToastNotifications)
             _toastNotificationSender.SendNotification("PixaiBot", "Account creation process started",

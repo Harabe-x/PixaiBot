@@ -36,6 +36,7 @@ public partial class App : Application
         services.AddSingleton<AccountListViewModel>();
         services.AddSingleton<AccountInfoLoggerViewModel>();
         services.AddSingleton<AccountCreatorViewModel>();
+        services.AddSingleton<DebugToolsViewModel>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IAccountsManager, AccountsManager>();
@@ -49,6 +50,7 @@ public partial class App : Application
         services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();
         services.AddSingleton<IProxyManager, ProxyManager>();
         services.AddSingleton<ITempMailApiManager, TempMailApiManager>();
+        services.AddSingleton<IRealTimeLogWatcher, RealTimeLogWatcher>();   
         services.AddSingleton<IAccountCreator, AccountCreatorV2>();
         services.AddSingleton<IPixaiDataReader, PixaiDataReader>();
         services.AddSingleton<IPixaiNavigation, PixaiNavigation>();

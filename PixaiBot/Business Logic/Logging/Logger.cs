@@ -9,17 +9,13 @@ public class Logger : ILogger
 {
     public Logger()
     {
-        CreditClaimerLogFilePath =
-            $@"{InitialConfiguration.BotLogsPath}\CreditClaimer Log {DateTime.Now:yyyy-MM-dd}.txt";
-        ApplicationLogFilePath = $@"{InitialConfiguration.BotLogsPath}\Application Log {DateTime.Now:yyyy-MM-dd}.txt";
-
         if (!File.Exists(CreditClaimerLogFilePath)) File.Create(CreditClaimerLogFilePath).Close();
         if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath).Close();
     }
 
-    public string CreditClaimerLogFilePath { get; }
+    public string CreditClaimerLogFilePath { get => InitialConfiguration.CreditClaimerLogFilePath; }
 
-    public string ApplicationLogFilePath { get; }
+    public string ApplicationLogFilePath { get => InitialConfiguration.ApplicationLogFilePath; }
 
     /// <summary>
     ///     Logs a message to the log file
@@ -34,6 +30,7 @@ public class Logger : ILogger
         }
         catch (IOException)
         {
+            
         }
     }
 }
