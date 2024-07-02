@@ -1,134 +1,115 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Net.Http;
 using System.Reflection;
+using System.Windows;
 using PixaiBotAutoUpdater.AutoUpdater;
 
+namespace PixaiBot.AutoUpdater;
 
-namespace PixaiBot.AutoUpdater
+internal class ApplicationAutoUpdater
 {
-    internal class ApplicationAutoUpdater
+    private readonly string _applicationFileDirectoryPath =
+        $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer";
+
+    private readonly string _applicationVersionFilePath;
+
+    private readonly GithubApi _githubApi;
+
+    private readonly HttpClient _httpClient;
+
+    public ApplicationAutoUpdater()
     {
+        _githubApi = new GithubApi();
+        _httpClient = new HttpClient();
+        if (!Directory.Exists(_applicationFileDirectoryPath)) CreateDirectories();
+        _applicationVersionFilePath = _applicationFileDirectoryPath + "\\ApplicationVersion.json";
+        GetApplicationVersion();
+    }
 
-        public ApplicationAutoUpdater()
+    private ApplicationVersion GetApplicationVersion()
+    {
+        if (File.Exists(_applicationVersionFilePath))
+            return JsonReader.ReadApplicationVersion(_applicationVersionFilePath);
+
+
+        var applicationVersion = new ApplicationVersion
         {
-            _githubApi = new GithubApi();
-            _httpClient = new HttpClient();
-            if(!Directory.Exists(_applicationFileDirectoryPath)) CreateDirectories();
-            _applicationVersionFilePath = _applicationFileDirectoryPath + "\\ApplicationVersion.json";
-            GetApplicationVersion();
+            CurrentVersion = GetCurrentFileVersion()
+        };
+
+        JsonWriter.WriteJson(applicationVersion, _applicationVersionFilePath);
+
+        return applicationVersion;
+    }
+
+    private static void CreateDirectories()
+    {
+        Directory.CreateDirectory(
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\Logs");
+    }
+
+    private string GetCurrentFileVersion()
+    {
+        return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+    }
+
+    public bool IsUpdateAvailable()
+    {
+        return GetApplicationVersion().CurrentVersion != _githubApi.GetLatestVersion();
+    }
+
+    public bool DoesApplicationDirectoryExist()
+    {
+        return Directory.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\bin");
+    }
+
+    public async Task<Stream> DownloadUpdate()
+    {
+        return await _httpClient.GetStreamAsync(_githubApi.GetLatestReleaseDownloadUrl());
+    }
+
+    public async Task InstallUpdate(Stream file)
+    {
+        var tempPath = Path.GetTempPath() + "PixaiBotUpdate.zip";
+
+        await using var fileStream = File.Create(tempPath);
 
 
-        }
+        await file.CopyToAsync(fileStream);
 
-        private ApplicationVersion GetApplicationVersion()
-        {
-            if (File.Exists(_applicationVersionFilePath))
-            {
-                return JsonReader.ReadApplicationVersion(_applicationVersionFilePath);
-            }
+        var executableDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+
+        fileStream.Close();
 
 
-            var applicationVersion = new ApplicationVersion()
-            {
-                CurrentVersion = GetCurrentFileVersion()
-            };
+        var binFolderPath = executableDirectory + "\\bin";
 
-            JsonWriter.WriteJson(applicationVersion,_applicationVersionFilePath);
+        if (!Directory.Exists(binFolderPath)) Directory.CreateDirectory(binFolderPath);
 
-            return applicationVersion;
+        ZipFile.ExtractToDirectory(tempPath, binFolderPath, true);
 
-        }
+        CallApplication();
 
-        private static void CreateDirectories()
-        {
-            Directory.CreateDirectory(
-                $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\Logs");
-        }
+        WriteNewVersion();
+    }
 
-        private string GetCurrentFileVersion()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
+    public void CloseApplication()
+    {
+        Application.Current.Dispatcher.Invoke(() => { Application.Current.Shutdown(0); });
+    }
 
-        public bool IsUpdateAvailable()
-        {
-            return GetApplicationVersion().CurrentVersion != _githubApi.GetLatestVersion();
-        }
-
-        public bool DoesApplicationDirectoryExist()
-        {
-            return Directory.Exists(Path.GetDirectoryName(Application.ExecutablePath) +"\\bin");
-        }
-
-        public async Task<Stream> DownloadUpdate()
-        {
-          return await _httpClient.GetStreamAsync(_githubApi.GetLatestReleaseDownloadUrl());
-        }
-
-        public async Task InstallUpdate(Stream file)
-        {
-            var tempPath = Path.GetTempPath() + "PixaiBotUpdate.zip";
-
-            await using var fileStream = File.Create(tempPath);
-
-      
-            await file.CopyToAsync(fileStream);
-
-            var executableDirectory = Path.GetDirectoryName(Application.ExecutablePath);
-
-            fileStream.Close();
+    private void WriteNewVersion()
+    {
+        var applicationVersion = GetApplicationVersion();
+        applicationVersion.CurrentVersion = _githubApi.GetLatestVersion();
+        JsonWriter.WriteJson(applicationVersion, _applicationVersionFilePath);
+    }
 
 
-            var binFolderPath = executableDirectory + "\\bin";
-
-            if (!Directory.Exists(binFolderPath))
-            {
-                Directory.CreateDirectory(binFolderPath);
-            }
-
-            ZipFile.ExtractToDirectory(tempPath,binFolderPath ,true);
-
-            CallApplication();
-
-            WriteNewVersion();
-        }
-
-        public void CloseApplication()
-        {
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            { 
-                System.Windows.Application.Current.Shutdown(0);
-            });
-        }
-
-        private void WriteNewVersion()
-        {
-            var applicationVersion = GetApplicationVersion();
-            applicationVersion.CurrentVersion = _githubApi.GetLatestVersion();
-            JsonWriter.WriteJson(applicationVersion, _applicationVersionFilePath);
-        }
-
-
-        public void CallApplication()
-        {
-            Process.Start($"{Path.GetDirectoryName(Application.ExecutablePath)}\\bin\\PixaiBot.exe");
-        }
-
-        private readonly GithubApi _githubApi;
-
-        private readonly HttpClient _httpClient;
-
-        private readonly string _applicationFileDirectoryPath  = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer";
-
-        private readonly string _applicationVersionFilePath;
+    public void CallApplication()
+    {
+        Process.Start($"{Path.GetDirectoryName(Application.ExecutablePath)}\\bin\\PixaiBot.exe");
     }
 }

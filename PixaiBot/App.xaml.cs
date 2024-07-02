@@ -28,7 +28,7 @@ public partial class App : Application
     {
         _logger = new Logger();
         IServiceCollection services = new ServiceCollection();
-        services.AddSingleton<NavigationPanelView>(provider => new NavigationPanelView
+        services.AddSingleton(provider => new NavigationPanelView
             { DataContext = provider.GetService<NavigationPanelViewModel>() });
         services.AddSingleton<NavigationPanelViewModel>();
         services.AddSingleton<CreditClaimerViewModel>();
@@ -50,7 +50,7 @@ public partial class App : Application
         services.AddSingleton<IToastNotificationSender, ToastNotificationSender>();
         services.AddSingleton<IProxyManager, ProxyManager>();
         services.AddSingleton<ITempMailApiManager, TempMailApiManager>();
-        services.AddSingleton<IRealTimeLogWatcher, RealTimeLogWatcher>();   
+        services.AddSingleton<IRealTimeLogWatcher, RealTimeLogWatcher>();
         services.AddSingleton<IAccountCreator, AccountCreatorV2>();
         services.AddSingleton<IPixaiDataReader, PixaiDataReader>();
         services.AddSingleton<IPixaiNavigation, PixaiNavigation>();

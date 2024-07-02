@@ -13,9 +13,9 @@ public class Logger : ILogger
         if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath).Close();
     }
 
-    public string CreditClaimerLogFilePath { get => InitialConfiguration.CreditClaimerLogFilePath; }
+    public string CreditClaimerLogFilePath => InitialConfiguration.CreditClaimerLogFilePath;
 
-    public string ApplicationLogFilePath { get => InitialConfiguration.ApplicationLogFilePath; }
+    public string ApplicationLogFilePath => InitialConfiguration.ApplicationLogFilePath;
 
     /// <summary>
     ///     Logs a message to the log file
@@ -30,7 +30,6 @@ public class Logger : ILogger
         }
         catch (IOException)
         {
-            
         }
     }
 }

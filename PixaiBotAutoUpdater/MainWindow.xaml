@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/" WindowStyle="None" WindowStartupLocation="CenterScreen"
         mc:Ignorable="d" AllowDrop="True" Background="Transparent" ResizeMode="NoResize"
-        Title="PixaiBot AutoUpdater" Height="225" Width="800"> 
+        Title="PixaiBot AutoUpdater" Height="225" Width="800">
     <Grid>
         <Border CornerRadius="10" Background="#ffffff" MouseDown="UIElement_OnMouseDown">
             <Grid>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Name="label" Text="Checking for update"   HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" FontWeight="Thin" Margin="0,10,0,0"/>
+                    <TextBlock Name="label" Text="Checking for update" HorizontalAlignment="Center"
+                               VerticalAlignment="Center" FontSize="36" FontWeight="Thin" Margin="0,10,0,0" />
                     <fa:ImageAwesome Margin="10" Foreground="#3c3c3c" Icon="CircleOutlineNotch" Width="50" Spin="True" />
                 </StackPanel>
             </Grid>

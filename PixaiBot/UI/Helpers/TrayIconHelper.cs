@@ -1,16 +1,12 @@
 ﻿using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using PixaiBot.Data.Interfaces;
-using PixaiBot.UI.ViewModel;
 
 namespace PixaiBot.UI.Helpers;
 
 public static class TrayIconHelper
 {
-    
-    
     // Using a DependencyProperty as the backing store for CanShowWindow.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CanShowWindowProperty =
         DependencyProperty.RegisterAttached("CanShowWindow", typeof(bool), typeof(TrayIconHelper),
@@ -56,14 +52,12 @@ public static class TrayIconHelper
 
     private static void HideToTray(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-
         if (d is Window window)
             window.Loaded += (s, e) =>
             {
                 if (window.DataContext is ITrayIconHelper trayIconHelper)
                     trayIconHelper.HideToTray += () =>
                     {
-                        
                         if (!trayIconHelper.CanHideToTray()) return;
 
                         window.Hide();
@@ -79,17 +73,8 @@ public static class TrayIconHelper
                         {
                             window.Show();
                             notifyIcon.Visible = false;
-                            
                         };
                     };
             };
     }
-    
 }
-
-
-
-
-
-
-

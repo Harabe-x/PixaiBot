@@ -1,8 +1,4 @@
-﻿using System.Windows.Input;
-using Key = OpenQA.Selenium.DevTools.V123.IndexedDB.Key;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace PixaiBot.Data.Interfaces;
 
@@ -169,6 +165,4 @@ public interface IPixaiNavigation
     /// </summary>
     /// <param name="searchContext"></param>
     public void NavigateToAccountTabInEditProfilePage(ISearchContext searchContext);
-
-
 }

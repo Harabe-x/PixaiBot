@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
@@ -68,13 +67,10 @@ internal class CreditClaimerV2 : ICreditClaimer
             _pixaiNavigation.NavigateToProfile(driver);
         }
 
-        
+
         _pixaiNavigation.ClosePopup(driver);
-        
-        for (var i = 0; i < MaxTries; i++)
-        {
-            _pixaiNavigation.ClickClaimCreditButton(driver);
-        }
+
+        for (var i = 0; i < MaxTries; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
 
         driver.Quit();
         _logger.Log($"Credits claimed for {userAccount.Email}", _logger.CreditClaimerLogFilePath);
@@ -130,7 +126,7 @@ internal class CreditClaimerV2 : ICreditClaimer
     private const int MaxTries = 5;
 
     private const int MaxLoginAttemptSeconds = 5;
-    
+
     public event EventHandler<string> ErrorOccurred;
 
     public event EventHandler<UserAccount>? CreditsClaimed;

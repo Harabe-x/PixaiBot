@@ -11,14 +11,12 @@
         Title="Pixai Bot" Height="700" Width="600" AllowsTransparency="True"
         local:TrayIconHelper.CanHideToTray="True" local:WindowHelper.EnableClosing="True"
         local:TrayIconHelper.CanShowWindow="True">
-    
-    
-    
- 
+
+
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
     </Window.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -71,9 +69,10 @@
                                        Style="{StaticResource SidePanelButton}" />
                         </StackPanel>
                     </RadioButton>
-                    
-                    
-                    <RadioButton Name="DebugButton" Visibility="{Binding Source={ x:Static dataManagement:InitialConfiguration.IsDevEnv} , Converter={StaticResource VisibilityConverter}}"
+
+
+                    <RadioButton Name="DebugButton"
+                                 Visibility="{Binding Source={ x:Static dataManagement:InitialConfiguration.IsDevEnv} , Converter={StaticResource VisibilityConverter}}"
                                  Command="{Binding NavigateToDebugToolsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Bug" Style="{StaticResource SidePanelButtonIcon}" />
@@ -92,8 +91,6 @@
                     </RadioButton>
 
 
-
-                    
                     <Button Name="HideBtn"
                             Command="{Binding HideApplicationCommand}" Style="{StaticResource MenuButton1}">
                         <StackPanel Orientation="Horizontal">
@@ -102,16 +99,15 @@
                                        Style="{StaticResource SidePanelButton1}" />
                         </StackPanel>
                     </Button>
-                    
-                    
-                    
-                    <Button Command="{Binding ExitApplicationCommand}" Style="{StaticResource MenuButton1}"  >
+
+
+                    <Button Command="{Binding ExitApplicationCommand}" Style="{StaticResource MenuButton1}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="PowerOff" Style="{StaticResource SidePanelButtonIcon1}" />
                             <TextBlock x:Name="Exit" Text="Exit"
                                        Style="{StaticResource SidePanelButton1}" />
                         </StackPanel>
-                        
+
                     </Button>
                 </StackPanel>
 
@@ -126,5 +122,5 @@
 
     </Grid>
 
-    
+
 </Window>

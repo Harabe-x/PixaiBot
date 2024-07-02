@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Text.Json;
 
-namespace PixaiBotAutoUpdater.AutoUpdater
+namespace PixaiBotAutoUpdater.AutoUpdater;
+
+internal static class JsonReader
 {
-    internal static class JsonReader
+    public static ApplicationVersion ReadApplicationVersion(string filePath)
     {
-
-        public static ApplicationVersion ReadApplicationVersion(string filePath)
-        {
-            var jsonContent = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<ApplicationVersion>(jsonContent);
-        }
-
+        var jsonContent = File.ReadAllText(filePath);
+        return JsonSerializer.Deserialize<ApplicationVersion>(jsonContent);
     }
 }

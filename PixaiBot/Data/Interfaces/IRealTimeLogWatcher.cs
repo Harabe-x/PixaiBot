@@ -4,5 +4,5 @@ namespace PixaiBot.Data.Interfaces;
 
 public interface IRealTimeLogWatcher
 {
-  event EventHandler<string> LogFileChanged;
+    event EventHandler<string> LogFileChanged;
 }

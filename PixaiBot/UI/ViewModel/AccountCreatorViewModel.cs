@@ -108,7 +108,7 @@ internal class AccountCreatorViewModel : BaseViewModel
         IDriverCreationStrategy driverCreationStrategy = ShouldUseProxy
             ? new ProxyDriverCreationStrategy(_proxyManager)
             : new HeadlessDriverCreationStrategy();
-        
+
         if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
 
         if (_configManager.GetConfig().ToastNotifications)

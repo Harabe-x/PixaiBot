@@ -3,23 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:PixaiBot.UI.View"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-                
-        <Button Grid.Row="0" Margin="6" Command="{Binding RunAllTasksCommand}" Style="{StaticResource PurpleButton}" Content="Run All Tasks"></Button>
-        <Button Grid.Row="1" Margin="6" Command="{Binding OpenDebugLogLivePreviewCommand}" Style="{StaticResource PurpleButton}" Content="Log Live Preview"></Button>
-        <Button Grid.Row="2" Margin="6" Command="{Binding RunCreditClaimCommand}" Style="{StaticResource PurpleButton}" Content="Run Credit Claim"></Button>
-        <Button Grid.Row="3" Margin="6" Command="{Binding RunAccountRegistrationCommand}" Style="{StaticResource PurpleButton}" Content="Run Account Registration"></Button>
-        <Button Grid.Row="4" Margin="6" Command="{Binding RunAccountLoginCheckCommand}" Style="{StaticResource PurpleButton}" Content="Run Account Login Check"></Button>
+
+        <Button Grid.Row="0" Margin="6" Command="{Binding RunAllTasksCommand}" Style="{StaticResource PurpleButton}"
+                Content="Run All Tasks" />
+        <Button Grid.Row="1" Margin="6" Command="{Binding OpenDebugLogLivePreviewCommand}"
+                Style="{StaticResource PurpleButton}" Content="Log Live Preview" />
+        <Button Grid.Row="2" Margin="6" Command="{Binding RunCreditClaimCommand}" Style="{StaticResource PurpleButton}"
+                Content="Run Credit Claim" />
+        <Button Grid.Row="3" Margin="6" Command="{Binding RunAccountRegistrationCommand}"
+                Style="{StaticResource PurpleButton}" Content="Run Account Registration" />
+        <Button Grid.Row="4" Margin="6" Command="{Binding RunAccountLoginCheckCommand}"
+                Style="{StaticResource PurpleButton}" Content="Run Account Login Check" />
 
     </Grid>
 </UserControl>

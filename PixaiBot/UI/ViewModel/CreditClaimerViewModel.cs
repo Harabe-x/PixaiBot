@@ -50,7 +50,7 @@ public class CreditClaimerViewModel : BaseViewModel
         {
             Interval = TimeSpan.FromHours(AutoCreditsClaimInterval)
         };
-        _creditClaimerTimer.Tick += (_,_) => { ClaimCredits(); };
+        _creditClaimerTimer.Tick += (_, _) => { ClaimCredits(); };
     }
 
     #endregion
@@ -87,8 +87,8 @@ public class CreditClaimerViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
 
-        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy(); 
-        
+        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
+
         if (config.MultiThreading)
         {
             _logger.Log("Multi-threading enabled\nCreating a tasks to do", _logger.ApplicationLogFilePath);
@@ -178,7 +178,6 @@ public class CreditClaimerViewModel : BaseViewModel
     private const int AutoCreditsClaimInterval = 24;
 
     private readonly DispatcherTimer _creditClaimerTimer;
-
 
 
     public bool IsRunning

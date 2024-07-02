@@ -8,18 +8,17 @@ namespace PixaiBot.Business_Logic.Logging;
 public class RealTimeLogWatcher : IRealTimeLogWatcher
 {
     #region Ctor
-    
+
     public RealTimeLogWatcher(ILogger logger)
     {
-        _logger = logger; 
-        
-        
-         _fileSystemWatcher = new FileSystemWatcher
+        _logger = logger;
+
+
+        _fileSystemWatcher = new FileSystemWatcher
         {
             Path = InitialConfiguration.BotLogsPath,
-            EnableRaisingEvents = true 
-            
-        };          
+            EnableRaisingEvents = true
+        };
 
         _fileSystemWatcher.Changed += OnLogFileChanged;
     }
@@ -27,25 +26,23 @@ public class RealTimeLogWatcher : IRealTimeLogWatcher
     #endregion
 
 
-
     #region Methods
-    
+
     private void OnLogFileChanged(object sender, FileSystemEventArgs e)
     {
         try
         {
             var readedText = File.ReadAllText(e.FullPath);
-            
+
             LogFileChanged?.Invoke(this, readedText);
-            
+
             _fileSystemWatcher.Dispose();
-            
+
             _fileSystemWatcher = new FileSystemWatcher
             {
                 Path = InitialConfiguration.BotLogsPath,
-                EnableRaisingEvents = true 
-            
-            };          
+                EnableRaisingEvents = true
+            };
 
             _fileSystemWatcher.Changed += OnLogFileChanged;
         }
@@ -64,7 +61,7 @@ public class RealTimeLogWatcher : IRealTimeLogWatcher
     }
 
     #endregion
-    
+
     #region Fields
 
     public event EventHandler<string>? LogFileChanged;

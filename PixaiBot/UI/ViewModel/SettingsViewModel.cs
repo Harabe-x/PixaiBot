@@ -107,7 +107,7 @@ public class SettingsViewModel : BaseViewModel
         IDriverCreationStrategy driverCreationStrategy = HeadlessBrowser
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
-        
+
         if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
 
         IEnumerable<UserAccount> validAccounts = null;

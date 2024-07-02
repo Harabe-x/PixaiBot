@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 using OpenQA.Selenium;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.WebNavigationCore.WebNavigationCoreException;
 using PixaiBot.Data.Interfaces;
@@ -77,7 +76,6 @@ internal class PixaiNavigation : IPixaiNavigation
         _logger.Log("Clicking login button ", _logger.CreditClaimerLogFilePath);
 
         SendKeysToElement(searchContext, "#password-input", Keys.Enter);
-
     }
 
     public void NavigateToProfile(ISearchContext searchContext)
@@ -122,12 +120,12 @@ internal class PixaiNavigation : IPixaiNavigation
         _logger.Log($"Navigating to {url}", _logger.CreditClaimerLogFilePath);
         driver.Navigate().GoToUrl(url);
     }
-    
+
     public void ClosePopup(ISearchContext searchContext)
     {
         try
         {
-            SendKeysToElement(searchContext,"body",Keys.Escape);
+            SendKeysToElement(searchContext, "body", Keys.Escape);
         }
         catch (NoSuchElementException)
         {
@@ -149,7 +147,7 @@ internal class PixaiNavigation : IPixaiNavigation
         }
         catch (ElementClickInterceptedException)
         {
-            _logger.Log("Credit claim button click intercepted",_logger.CreditClaimerLogFilePath);
+            _logger.Log("Credit claim button click intercepted", _logger.CreditClaimerLogFilePath);
         }
     }
 
@@ -218,6 +216,6 @@ internal class PixaiNavigation : IPixaiNavigation
             throw new ChromeDriverException("ChromeDriver exception occurred", e);
         }
     }
-    
+
     #endregion
 }

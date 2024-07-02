@@ -33,8 +33,8 @@ internal class AccountCreatorV2 : IAccountCreator
 
 
         if (tempMailApiKey == null) tempMailApiKey = string.Empty;
-        
-        
+
+
         for (var i = 0; i < amount; i++)
         {
             if (token.IsCancellationRequested) return;
