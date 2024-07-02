@@ -11,46 +11,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/InitialConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/InitialConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Extension/EnumerableSplitter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Extension/EnumerableSplitter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Logging/Logger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Logging/Logger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Logging/RealTimeLogWatcher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Logging/RealTimeLogWatcher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IRealTimeLogWatcher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IRealTimeLogWatcher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/PixaiBot.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/PixaiBot.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/Helpers/TrayIconHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/Helpers/TrayIconHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/Models/DebugToolsModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/Models/DebugToolsModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/Models/SettingsModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/Models/SettingsModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/View/DebugToolsView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/View/DebugToolsView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/View/DebugToolsView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/View/DebugControlView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/View/LogWindowView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/View/LogWindowView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/View/LogWindowView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/View/LogWindowView.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/View/NavigationPanelView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/View/NavigationPanelView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AccountCreatorViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AccountCreatorViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/CreditClaimerViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/CreditClaimerViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/DebugToolsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/DebugToolsViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/LogWindowViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/LogWindowViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/NavigationPanelViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/NavigationPanelViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/SettingsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/SettingsViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/App.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/App.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/App.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/ApplicationAutoUpdater.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/ApplicationAutoUpdater.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/ApplicationVersion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/ApplicationVersion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/Asset.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/Asset.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/GithubApi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/GithubApi.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/GithubRelease.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/GithubRelease.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/JsonReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/JsonReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/JsonWriter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/AutoUpdater/JsonWriter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/MainWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/MainWindow.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/MainWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBotAutoUpdater/PixaiBotAutoUpdater.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBotAutoUpdater/PixaiBotAutoUpdater.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -71,7 +32,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2iFYV2tBJKUDdAaLByn1z9NzOAV" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -165,7 +126,7 @@
       <workItem from="1719861236809" duration="831000" />
       <workItem from="1719863044277" duration="315000" />
       <workItem from="1719867023901" duration="1103000" />
-      <workItem from="1719932532074" duration="20489000" />
+      <workItem from="1719932532074" duration="21543000" />
     </task>
     <servers />
   </component>
