@@ -30,7 +30,7 @@ public class ConfigManager : IConfigManager
     public void SaveConfig(UserConfig config)
     {
         _logger.Log("Saving config file", _logger.ApplicationLogFilePath);
-        JsonWriter.WriteJson(config, InitialConfiguration.UserConfigPath);
+        JsonWriter.WriteJson(config, Configuration.UserConfigPath);
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class ConfigManager : IConfigManager
     public UserConfig GetConfig()
     {
         _logger.Log("Reading config file", _logger.ApplicationLogFilePath);
-        var readConfig = JsonReader.ReadConfigFile(InitialConfiguration.UserConfigPath);
+        var readConfig = JsonReader.ReadConfigFile(Configuration.UserConfigPath);
 
         if (readConfig == null)
         {

@@ -19,7 +19,7 @@ public class AccountsManager : IAccountsManager
         _logger = logger;
         _botStatisticsManager = botStatisticsManager;
 
-        AccountsFilePath = InitialConfiguration.AccountsFilePath;
+        AccountsFilePath = Configuration.AccountsFilePath;
     }
 
     #endregion

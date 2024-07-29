@@ -87,7 +87,7 @@ public class CreditClaimerViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
 
-        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
+        if (Configuration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
 
         if (config.MultiThreading)
         {

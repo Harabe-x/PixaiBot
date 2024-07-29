@@ -109,7 +109,7 @@ internal class AccountCreatorViewModel : BaseViewModel
             ? new ProxyDriverCreationStrategy(_proxyManager)
             : new HeadlessDriverCreationStrategy();
 
-        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
+        if (Configuration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
 
         if (_configManager.GetConfig().ToastNotifications)
             _toastNotificationSender.SendNotification("PixaiBot", "Account creation process started",

@@ -21,14 +21,14 @@ public class BotStatisticsManager : IBotStatisticsManager
     public void SaveStatistics(BotStatistics botStatistics)
     {
         _logger.Log("Saving statistics file", _logger.ApplicationLogFilePath);
-        JsonWriter.WriteJson(botStatistics, InitialConfiguration.StatisticsFilePath);
+        JsonWriter.WriteJson(botStatistics, Configuration.StatisticsFilePath);
         StatisticsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public BotStatistics GetStatistics()
     {
         _logger.Log("Reading statistics file", _logger.ApplicationLogFilePath);
-        var botStatistics = JsonReader.ReadStatisticsFile(InitialConfiguration.StatisticsFilePath);
+        var botStatistics = JsonReader.ReadStatisticsFile(Configuration.StatisticsFilePath);
 
         if (botStatistics == null)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ public partial class App : Application
 
     public App()
     {
+
         _logger = new Logger();
         IServiceCollection services = new ServiceCollection();
         services.AddSingleton(provider => new NavigationPanelView
@@ -63,9 +65,9 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        InitialConfiguration.CreateConfigFile();
-        InitialConfiguration.CreateStatisticsFile();
-        InitialConfiguration.CreateApiKeysFile();
+        Configuration.CreateConfigFile();
+        Configuration.CreateStatisticsFile();
+        Configuration.CreateApiKeysFile();
         _logger.Log("=====Application Started=====", _logger.ApplicationLogFilePath);
         base.OnStartup(e);
         var mainWindow = _serviceProvider.GetRequiredService<NavigationPanelView>();

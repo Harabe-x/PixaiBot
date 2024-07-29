@@ -10,7 +10,8 @@ public class HeadlessDriverCreationStrategy : IDriverCreationStrategy
     {
         var options = new ChromeOptions();
 
-        options.AddArguments("--headless", "--disable-crash-reporter", "--disable-gpu", "--disable-crash-reporter");
+        options.AddArguments("--headless", "--disable-crash-reporter", "--disable-gpu"
+            , "--disable-crash-reporter", "--disable-search-engine-choice-screen");
         options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
 
         var service = ChromeDriverService.CreateDefaultService();

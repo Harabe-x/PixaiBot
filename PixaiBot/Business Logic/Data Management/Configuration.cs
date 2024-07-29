@@ -8,11 +8,11 @@ using PixaiBot.UI.Models;
 namespace PixaiBot.Business_Logic.Data_Management;
 
 //TODO: Refactor      
-public static class InitialConfiguration
+public static class Configuration
 {
     #region Constructor
 
-    static InitialConfiguration()
+    static Configuration()
     {
         IsDevEnv = false;
 
@@ -41,7 +41,6 @@ public static class InitialConfiguration
     }
 
     #endregion
-
 
     #region Methods
 
@@ -163,6 +162,7 @@ public static class InitialConfiguration
     /// </summary>
     public static string ApplicationDataPath { get; }
 
+    
     public static bool IsDevEnv { get; }
 
     #endregion

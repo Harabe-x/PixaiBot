@@ -16,7 +16,7 @@ public class RealTimeLogWatcher : IRealTimeLogWatcher
 
         _fileSystemWatcher = new FileSystemWatcher
         {
-            Path = InitialConfiguration.BotLogsPath,
+            Path = Configuration.BotLogsPath,
             EnableRaisingEvents = true
         };
 
@@ -40,7 +40,7 @@ public class RealTimeLogWatcher : IRealTimeLogWatcher
 
             _fileSystemWatcher = new FileSystemWatcher
             {
-                Path = InitialConfiguration.BotLogsPath,
+                Path = Configuration.BotLogsPath,
                 EnableRaisingEvents = true
             };
 

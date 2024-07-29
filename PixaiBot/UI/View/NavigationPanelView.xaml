@@ -72,7 +72,7 @@
 
 
                     <RadioButton Name="DebugButton"
-                                 Visibility="{Binding Source={ x:Static dataManagement:InitialConfiguration.IsDevEnv} , Converter={StaticResource VisibilityConverter}}"
+                                 Visibility="{Binding Source={ x:Static dataManagement:Configuration.IsDevEnv} , Converter={StaticResource VisibilityConverter}}"
                                  Command="{Binding NavigateToDebugToolsCommand}" Style="{StaticResource MenuButton}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Bug" Style="{StaticResource SidePanelButtonIcon}" />

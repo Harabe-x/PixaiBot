@@ -11,7 +11,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="" />
+    <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/InitialConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/InitialConfiguration.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,6 +131,8 @@
       <workItem from="1719863044277" duration="315000" />
       <workItem from="1719867023901" duration="1103000" />
       <workItem from="1719932532074" duration="21543000" />
+      <workItem from="1720029796388" duration="92000" />
+      <workItem from="1721065136795" duration="1097000" />
     </task>
     <servers />
   </component>

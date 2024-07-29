@@ -108,7 +108,7 @@ public class SettingsViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
 
-        if (InitialConfiguration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
+        if (Configuration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();
 
         IEnumerable<UserAccount> validAccounts = null;
         if (EnableToastNotifications)
@@ -124,7 +124,7 @@ public class SettingsViewModel : BaseViewModel
 
         statistics.AccountsCount = accountsList.Count();
 
-        JsonWriter.WriteJson(validAccounts, InitialConfiguration.AccountsFilePath);
+        JsonWriter.WriteJson(validAccounts, Configuration.AccountsFilePath);
 
         CancelAccountsChecking();
     }

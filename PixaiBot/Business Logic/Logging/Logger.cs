@@ -13,9 +13,9 @@ public class Logger : ILogger
         if (!File.Exists(ApplicationLogFilePath)) File.Create(ApplicationLogFilePath).Close();
     }
 
-    public string CreditClaimerLogFilePath => InitialConfiguration.CreditClaimerLogFilePath;
+    public string CreditClaimerLogFilePath => Configuration.CreditClaimerLogFilePath;
 
-    public string ApplicationLogFilePath => InitialConfiguration.ApplicationLogFilePath;
+    public string ApplicationLogFilePath => Configuration.ApplicationLogFilePath;
 
     /// <summary>
     ///     Logs a message to the log file

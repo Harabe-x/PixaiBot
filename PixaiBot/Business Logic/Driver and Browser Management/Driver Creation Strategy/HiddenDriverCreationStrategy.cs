@@ -10,9 +10,8 @@ internal class HiddenDriverCreationStrategy : IDriverCreationStrategy
     {
         var options = new ChromeOptions();
 
-
         options.AddArguments("--window-position=-32000,-32000", "--disable-crash-reporter", "--disable-gpu",
-            "--disable-crash-reporter");
+            "--disable-crash-reporter", "--disable-search-engine-choice-screen");
         options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
 
         var service = ChromeDriverService.CreateDefaultService();
