@@ -48,35 +48,30 @@ internal class CreditClaimerV2 : ICreditClaimer
             driver.Quit();
             return;
         }
-
-
+        
+        CreditsAlreadyClaimed?.Invoke(this, userAccount);
+        
+        
+        // Code below will change with popup removal 
         try
         {
-            _pixaiNavigation.ClosePopup(driver);
+            Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+            _pixaiNavigation.ClaimCreditsUsingPopup(driver);
         }
-        catch (NoSuchElementException e)
+        catch (StaleElementReferenceException)
         {
-            // Sometimes popup does not appear. This seems to be a random occurrence.
-            _logger.Log("the popup did not appear", _logger.CreditClaimerLogFilePath);
+            _logger.Log("Credits was already claimed on this account", _logger.CreditClaimerLogFilePath);
+            _logger.Log("=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);   
+            CreditsAlreadyClaimed?.Invoke(this, userAccount);
+            driver.Quit();
+            return;
         }
-
-        //Ensures that user in on profile page. User profile page always contains '@' in the url.   
-        while (!driver.Url.Contains('@'))
-        {
-            _pixaiNavigation.ClickDropdownMenu(driver);
-            _pixaiNavigation.NavigateToProfile(driver);
-        }
-
-
-        _pixaiNavigation.ClosePopup(driver);
-
-        for (var i = 0; i < MaxTries; i++) _pixaiNavigation.ClickClaimCreditButton(driver);
-
+        
         driver.Quit();
         _logger.Log($"Credits claimed for {userAccount.Email}", _logger.CreditClaimerLogFilePath);
         CreditsClaimed?.Invoke(this, userAccount);
-
         _logger.Log("=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
+
     }
 
 
@@ -130,6 +125,8 @@ internal class CreditClaimerV2 : ICreditClaimer
     public event EventHandler<string> ErrorOccurred;
 
     public event EventHandler<UserAccount>? CreditsClaimed;
+
+    public event EventHandler<UserAccount>? CreditsAlreadyClaimed;
 
     public event EventHandler<UserAccount>? ProcessStartedForAccount;
 

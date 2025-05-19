@@ -144,7 +144,6 @@ public interface IPixaiNavigation
     /// <param name="cssSelector">The CSS selector used to locate the desired HTML element within the specified search context.</param>
     /// <returns>The <see cref="IWebElement" /> representing the located HTML element.</returns>
     public IWebElement GetElementByCssSelector(ISearchContext searchContext, string cssSelector);
-
     /// <summary>
     ///     Retrieves and returns the HTML element with the specified <paramref name="tagName" /> and containing the specified
     ///     <paramref name="text" />
@@ -159,7 +158,20 @@ public interface IPixaiNavigation
     /// <returns>The <see cref="IWebElement" /> representing the located HTML element.</returns>
     public IWebElement GetElementByText(ISearchContext searchContext, string tagName, string text);
 
+    /// <summary>
+    ///     Retrieves and returns the HTML element located by the specified <paramref name="cssSelector" /> within the provided
+    ///     search context.
+    /// </summary>
+    /// <param name="searchContext">
+    ///     The WebDriver instance representing the browser or a frame in which the element is to be
+    ///     searched.
+    /// </param>
+    /// <param name="cssSelector">The CSS selector used to locate the desired HTML element within the specified search context.</param>
+    /// <returns>The <see cref="IWebElement" /> representing the located HTML element.</returns>
+    public void ClaimCreditsUsingPopup(ISearchContext searchContext);
 
+
+    
     /// <summary>
     ///     Navigates to Account tab in Edit Profile Page
     /// </summary>

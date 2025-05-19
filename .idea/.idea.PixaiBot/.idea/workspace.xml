@@ -14,29 +14,37 @@
     <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/InitialConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/InitialConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Handling/JsonWriter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Handling/JsonWriter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/Configuration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/Configuration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/ICreditClaimer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/ICreditClaimer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AddAccountViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AddAccountViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/CreditClaimerViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/CreditClaimerViewModel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3e52048584b143508865bd3fd34e64c4f61920/aa/8bea98fb/IValueConverter.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7c2bbdb4eea74bd884a009d2070c34a72268a0/02/b887e4d4/DispatcherOperation.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b15d130dbb94452e96ecbcdb9734ea7b42e400/4a/fb4f1ca0/WebDriver.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/29331b3f29f3ac4b59fc9ef39ade696efbacb590c591bb0e93d8718f5fdf/FileSystemWatcher.Win32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/38ad98c9d60c1739a82dce92fa559af31b833496d8d3fba4a86361ff05bf017/XamlReader.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/621526284d3e4868b98948aff942206525763e57e194a27623b66c384466/ServiceProviderServiceExtensions.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/771dac726bcbf51f1839c45bef2a78c4d834c4bc5420482d9cc3c38eb97535/FileSystemWatcher.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9eda537f15ea23cdfae523c19e87eb303a3ded88937ae7e55919387a43f70/ExecutionContext.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ac24a7c2e0f296e231c484b3fd930268f76c06dc75f4aad1df7aaf09f2c1227/ThreadPoolWorkQueue.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/60afdfcef9945be6977fa4b76b3d84506e2a2067afb63480aacf49417cfa/ThrowHelper.Serialization.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2iFYV2tBJKUDdAaLByn1z9NzOAV" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -45,9 +53,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;.NET Project.Unnamed.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -84,8 +95,13 @@
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PixaiBot/bin/Debug/net6.0-windows" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/PixaiBot/PixaiBot.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -102,8 +118,13 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2">
         <option name="Build Solution" enabled="true" />
       </method>
@@ -133,6 +154,8 @@
       <workItem from="1719932532074" duration="21543000" />
       <workItem from="1720029796388" duration="92000" />
       <workItem from="1721065136795" duration="1097000" />
+      <workItem from="1747512101351" duration="7554000" />
+      <workItem from="1747671900879" duration="1448000" />
     </task>
     <servers />
   </component>
@@ -140,6 +163,7 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -154,5 +178,29 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.NullReferenceException" breakIfHandledByUserCode="true" breakIfHandledByOtherCode="false" isInternal="false" displayValue="NullReferenceException" namespaceName="System">
+            <option name="internal" value="false" />
+          </properties>
+          <option name="timeStamp" value="4" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

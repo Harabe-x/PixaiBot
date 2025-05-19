@@ -35,6 +35,7 @@ public class CreditClaimerViewModel : BaseViewModel
 
         _creditClaimer.CreditsClaimed += SendNotification;
         _creditClaimer.ErrorOccurred += SendNotification;
+        _creditClaimer.CreditsAlreadyClaimed += SendWarningNotifcation;
         _creditClaimer.ProcessStartedForAccount += UpdateBotOperationStatus;
         _botStatisticsManager.StatisticsChanged += GetFreshStatistic;
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();
@@ -54,14 +55,13 @@ public class CreditClaimerViewModel : BaseViewModel
     }
 
     #endregion
-
-
+    
     #region Commands
 
     public ICommand ClaimCreditsCommand { get; }
 
     #endregion
-
+    
     #region Methods
 
     private async void ClaimCredits()
@@ -149,6 +149,13 @@ public class CreditClaimerViewModel : BaseViewModel
             _notificationSender.SendNotification("PixaiBot", e, NotificationType.Error);
     }
 
+    private void SendWarningNotifcation(object? sender, UserAccount e)
+    {
+        if (_configManager.GetConfig().ToastNotifications)
+            _notificationSender.SendNotification("PixaiBot", "Credits already claimed", NotificationType.Warning);
+            
+    }
+    
     private void GetFreshStatistic(object? sender, EventArgs e)
     {
         _creditClaimerModel.BotStatistics = _botStatisticsManager.GetStatistics();

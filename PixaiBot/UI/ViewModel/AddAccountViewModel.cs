@@ -21,6 +21,7 @@ public class AddAccountViewModel : BaseViewModel, IWindowHelper
         _notificationSender = notificationSender;
         _dataValidator = dataValidator;
         _logger = logger;
+        _configManager = configManager;
     }
 
     #endregion

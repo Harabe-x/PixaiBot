@@ -14,7 +14,7 @@ public static class Configuration
 
     static Configuration()
     {
-        IsDevEnv = false;
+        IsDevEnv = true;
 
 
         ApplicationDataPath =
@@ -50,7 +50,7 @@ public static class Configuration
     private static void CreateDirectories()
     {
         Directory.CreateDirectory(
-            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\PixaiAutoClaimer\\Logs");
+            $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\PixaiAutoClaimer\Logs");
     }
 
 

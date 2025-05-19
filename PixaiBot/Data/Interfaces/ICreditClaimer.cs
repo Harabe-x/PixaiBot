@@ -19,6 +19,11 @@ public interface ICreditClaimer
     public event EventHandler<UserAccount> CreditsClaimed;
 
     /// <summary>
+    ///  Occures when credtis already was the claimed on the account 
+    /// </summary>
+    public event EventHandler<UserAccount> CreditsAlreadyClaimed;
+    
+    /// <summary>
     ///     Occurs when the process is started for an userAccount.
     /// </summary>
     public event EventHandler<UserAccount> ProcessStartedForAccount;

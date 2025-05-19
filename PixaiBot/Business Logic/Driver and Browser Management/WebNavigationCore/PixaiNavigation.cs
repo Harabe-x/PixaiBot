@@ -102,6 +102,13 @@ internal class PixaiNavigation : IPixaiNavigation
     {
         _logger.Log("Clicking dropdown menu", _logger.CreditClaimerLogFilePath);
         ClickElement(driver, ".shrink-0");
+        
+    }
+
+    public void ClaimCreditsUsingPopup(ISearchContext searchContext)
+    {
+        _logger.Log("Claimed credi,ts using popup", _logger.CreditClaimerLogFilePath);
+        ClickElement(searchContext,"button","Claim 10 000 daily credits");
     }
 
     public void NavigateToAccountTabInEditProfilePage(ISearchContext searchContext)
