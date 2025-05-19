@@ -49,9 +49,6 @@ internal class CreditClaimerV2 : ICreditClaimer
             return;
         }
         
-        CreditsAlreadyClaimed?.Invoke(this, userAccount);
-        
-        
         // Code below will change with popup removal 
         try
         {
