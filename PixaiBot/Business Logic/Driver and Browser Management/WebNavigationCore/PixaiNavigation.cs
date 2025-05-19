@@ -31,7 +31,7 @@ internal class PixaiNavigation : IPixaiNavigation
     public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext)
     {
         _logger.Log("Clicking resend email verification link button", _logger.CreditClaimerLogFilePath);
-        ClickElement(searchContext, "*:nth-child(3) *:nth-child(2) > *:nth-child(4)");
+        ClickElement(searchContext, "#app > body > shl-app-shell");
     }
 
     public void GoBack(IWebDriver driver)

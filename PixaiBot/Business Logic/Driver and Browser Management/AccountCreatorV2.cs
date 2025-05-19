@@ -33,8 +33,7 @@ internal class AccountCreatorV2 : IAccountCreator
 
 
         if (tempMailApiKey == null) tempMailApiKey = string.Empty;
-
-
+        
         for (var i = 0; i < amount; i++)
         {
             if (token.IsCancellationRequested) return;
@@ -107,8 +106,16 @@ internal class AccountCreatorV2 : IAccountCreator
 
         if (!shouldVerifyEmail) return;
 
-        _pixaiNavigation.ClosePopup(driver);
-
+        try
+        {
+            Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+            _pixaiNavigation.ClaimCreditsUsingPopup(driver);
+        }   
+        catch (StaleElementReferenceException)
+        {   
+            _logger.Log(_logger.CreditClaimerLogFilePath, "StaleElement Exception, account verification process will be continued");
+        }        
+        
         _logger.Log("Trying to confirm email", _logger.CreditClaimerLogFilePath);
 
         _pixaiNavigation.NavigateToProfileSettings(driver);

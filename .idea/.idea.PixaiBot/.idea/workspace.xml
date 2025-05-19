@@ -11,7 +11,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="" />
+    <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +29,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/60afdfcef9945be6977fa4b76b3d84506e2a2067afb63480aacf49417cfa/ThrowHelper.Serialization.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/62e644b99fc28175a0794718397b5ec5d847dbe158989f822cd617a46e61f59/ThreadPoolWorkQueue.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -144,7 +149,7 @@
       <workItem from="1720029796388" duration="92000" />
       <workItem from="1721065136795" duration="1097000" />
       <workItem from="1747512101351" duration="7554000" />
-      <workItem from="1747671900879" duration="1657000" />
+      <workItem from="1747671900879" duration="3197000" />
     </task>
     <servers />
   </component>
@@ -189,6 +194,19 @@
           </properties>
           <option name="timeStamp" value="4" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs</url>
+          <line>120</line>
+          <properties documentPath="C:\Users\xgra5\RiderProjects\PixaiBot\PixaiBot\Business Logic\Driver and Browser Management\AccountCreatorV2.cs" containingFunctionPresentation="Method 'CreateAccount'">
+            <startOffsets>
+              <option value="4180" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4231" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
