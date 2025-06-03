@@ -47,13 +47,14 @@ internal class CreditClaimerV2 : ICreditClaimer
             _logger.Log("=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
             driver.Quit();
             return;
-        }
+        } 
         
         // Code below will change with popup removal 
         try
         {
             Thread.Sleep(TimeSpan.FromMilliseconds(2500));
             _pixaiNavigation.ClaimCreditsUsingPopup(driver);
+            Thread.Sleep(TimeSpan.FromMilliseconds(1000));
         }
         catch (StaleElementReferenceException)
         {
@@ -64,12 +65,14 @@ internal class CreditClaimerV2 : ICreditClaimer
             return;
         }
         
+        
+        
         driver.Quit();
         _logger.Log($"Credits claimed for {userAccount.Email}", _logger.CreditClaimerLogFilePath);
         CreditsClaimed?.Invoke(this, userAccount);
         _logger.Log("=====Chrome Drive Closed=====\n", _logger.CreditClaimerLogFilePath);
 
-    }
+        }
 
 
     public void ClaimCreditsForAllAccounts(IEnumerable<UserAccount> accounts,

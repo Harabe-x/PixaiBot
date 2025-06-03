@@ -14,7 +14,7 @@ public static class Configuration
 
     static Configuration()
     {
-        IsDevEnv = true;
+        IsDevEnv = false;
 
 
         ApplicationDataPath =

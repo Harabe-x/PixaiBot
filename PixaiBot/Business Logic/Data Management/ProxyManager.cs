@@ -63,7 +63,7 @@ internal class ProxyManager : IProxyManager
 
     #region Fields
 
-    private readonly IList<string> _proxyList;
+    private readonly List<string> _proxyList;
 
     private const string ProxyPattern = @"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*:\s*(\d{1,5})$";
 

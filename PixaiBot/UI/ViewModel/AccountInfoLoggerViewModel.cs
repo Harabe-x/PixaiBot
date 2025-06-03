@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Notification.Wpf;
+using PixaiBot.Business_Logic.Data_Management;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
 using PixaiBot.Data.Interfaces;
@@ -70,6 +71,7 @@ internal class AccountInfoLoggerViewModel : BaseViewModel
             ? new HeadlessDriverCreationStrategy()
             : new HiddenDriverCreationStrategy();
 
+        if (Configuration.IsDevEnv) driverCreationStrategy = new DebugDriverCreationStrategy();  
 
         _accountInfoLogger.ClearStringBuilderContent();
         var result = string.Empty;

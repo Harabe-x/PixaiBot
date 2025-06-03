@@ -104,20 +104,21 @@ internal class AccountCreatorV2 : IAccountCreator
 
         AccountCreated?.Invoke(this, userAccount);
 
-        if (!shouldVerifyEmail) return;
-
         try
         {
             Thread.Sleep(TimeSpan.FromMilliseconds(2500));
             _pixaiNavigation.ClaimCreditsUsingPopup(driver);
+            _pixaiNavigation.ClosePopup(driver);
         }   
         catch (StaleElementReferenceException)
         {   
             _logger.Log(_logger.CreditClaimerLogFilePath, "StaleElement Exception, account verification process will be continued");
         }        
         
-        _logger.Log("Trying to confirm email", _logger.CreditClaimerLogFilePath);
+        if (!shouldVerifyEmail) return;
 
+        
+        _logger.Log("Trying to confirm email", _logger.CreditClaimerLogFilePath);
         _pixaiNavigation.NavigateToProfileSettings(driver);
         _pixaiNavigation.ClickResendEmailVerificationLinkButton(driver);
 

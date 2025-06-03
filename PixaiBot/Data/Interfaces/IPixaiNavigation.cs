@@ -104,12 +104,21 @@ public interface IPixaiNavigation
     public void LogIn(IWebDriver webDriver, string email, string password);
 
     /// <summary>
-    ///     searches for and clicks on the element with the selected <paramref name="cssSelector" />
+    ///     searches for element and clicks on the element with the selected <paramref name="cssSelector" />
     /// </summary>
     /// <param name="searchContext">The WebDriver instance representing the browser or a frame.</param>
     /// <param name="cssSelector">  The CSS selector used to locate the desired element within the specified search context.</param>
     public void ClickElement(ISearchContext searchContext, string cssSelector);
 
+    
+    /// <summary>
+    ///     searches for element and clicks on the element with the selected <paramref name="xPath" />
+    /// </summary>
+    /// <param name="searchContext">The WebDriver instance representing the browser or a frame.</param>
+    /// <param name="xPath">  The xPath used to locate the desired element within the specified search context.</param>
+    public void ClickElementUsingXPath(ISearchContext searchContext, string xPath);
+
+    
     /// <summary>
     /// </summary>
     /// <param name="searchContext">The WebDriver instance representing the browser or a frame.</param>
@@ -169,12 +178,19 @@ public interface IPixaiNavigation
     /// <param name="cssSelector">The CSS selector used to locate the desired HTML element within the specified search context.</param>
     /// <returns>The <see cref="IWebElement" /> representing the located HTML element.</returns>
     public void ClaimCreditsUsingPopup(ISearchContext searchContext);
-
-
     
     /// <summary>
     ///     Navigates to Account tab in Edit Profile Page
     /// </summary>
     /// <param name="searchContext"></param>
     public void NavigateToAccountTabInEditProfilePage(ISearchContext searchContext);
+    
+    
+    /// <summary>
+    ///     Navigates to Account tab in Edit Profile Page
+    /// </summary>
+    /// <param name="searchContext"></param>
+    public void NavigateToBasicAccountInfo(IWebDriver searchContext);
+    
+    
 }

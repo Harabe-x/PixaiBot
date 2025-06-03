@@ -60,7 +60,7 @@ public partial class App : Application
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider =>
             viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType));
         _serviceProvider = services.BuildServiceProvider();
-        // Current.DispatcherUnhandledException += HandleUnhandledApplicationException;
+        Current.DispatcherUnhandledException += HandleUnhandledApplicationException;
     }
 
     protected override void OnStartup(StartupEventArgs e)
@@ -79,11 +79,11 @@ public partial class App : Application
         base.OnExit(e);
         _logger.Log("=====Application Closed=====\n", _logger.ApplicationLogFilePath);
     }
-    //
-    // private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
-    // {
-    //     _logger.Log($"{e.Exception} | {e.Exception.Message} | {e.Exception.InnerException}",
-    //         _logger.ApplicationLogFilePath);
-    //     e.Handled = true;
-    // }
-}
+    
+    private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        _logger.Log($"{e.Exception} | {e.Exception.Message} | {e.Exception.InnerException}",
+            _logger.ApplicationLogFilePath);
+        e.Handled = true;
+    }
+}   

@@ -28,19 +28,19 @@ internal class PixaiDataReader : IPixaiDataReader
     {
         _logger.Log("Reading Account Id", _logger.CreditClaimerLogFilePath);
         return GetWebElementText(searchContext,
-            ".sc-cZFQFd > .font-bold");
+            ".MuiFormHelperText-filled .font-bold");
     }
 
     public string GetUsername(ISearchContext searchContext)
     {
         _logger.Log("Reading Username", _logger.CreditClaimerLogFilePath);
-        return GetWebElementText(searchContext, ".text-xl");
+        return GetWebElementText(searchContext, ".font-semibold.text-xl");
     }
 
     public string GetCreditsCount(ISearchContext searchContext)
     {
         _logger.Log("Reading Credits count", _logger.CreditClaimerLogFilePath);
-        return GetWebElementText(searchContext, ".font-bold > span");
+        return GetWebElementText(searchContext, ".items-center .flex.text-theme-primary > span");
     }
 
     public string GetEmailVerificationStatus(ISearchContext searchContext)
@@ -52,13 +52,13 @@ internal class PixaiDataReader : IPixaiDataReader
     public string GetFollowersCount(ISearchContext searchContext)
     {
         _logger.Log("Reading Followers Count", _logger.CreditClaimerLogFilePath);
-        return GetWebElementText(searchContext, "div:nth-child(2) > a:nth-child(2) > span:nth-child(1)");
+        return GetWebElementText(searchContext, ".flex.gap-6.items-center > a:nth-child(2) > span");
     }
 
     public string GetFollowingCount(ISearchContext searchContext)
     {
         _logger.Log("Reading Following Count", _logger.CreditClaimerLogFilePath);
-        return GetWebElementText(searchContext, "div:nth-child(2) > a:nth-child(1) > span:nth-child(1)");
+        return GetWebElementText(searchContext, ".flex.gap-6.items-center > a:nth-child(1) > span");
     }
 
     private static string GetWebElementText(ISearchContext searchContext, string cssSelector)

@@ -31,7 +31,7 @@ internal class PixaiNavigation : IPixaiNavigation
     public void ClickResendEmailVerificationLinkButton(ISearchContext searchContext)
     {
         _logger.Log("Clicking resend email verification link button", _logger.CreditClaimerLogFilePath);
-        ClickElement(searchContext, "#app > body > shl-app-shell");
+        ClickElement(searchContext, ".flex-1 .mt-6 > button");
     }
 
     public void GoBack(IWebDriver driver)
@@ -81,14 +81,15 @@ internal class PixaiNavigation : IPixaiNavigation
     public void NavigateToProfile(ISearchContext searchContext)
     {
         _logger.Log("Navigating to profile", _logger.CreditClaimerLogFilePath);
-
-        ClickElement(searchContext, ".MuiMenuItem-root:nth-child(1)");
+        
+        ClickElement(searchContext,"body [style='--base-avatar-width: 40px;'] .MuiBadge-root.css-chz7cr");
+        ClickElement(searchContext,".MuiButtonBase-root .h-5.w-5");
     }
 
     public void NavigateToProfileSettings(IWebDriver driver)
     {
         _logger.Log("Navigating to account model", _logger.CreditClaimerLogFilePath);
-        NavigateToUrl(driver, "https://pixai.art/profile/edit");
+        NavigateToUrl(driver, "https://pixai.art/profile/edit/accounts");
     }
 
     public void NavigateToCreditsTab(IWebDriver driver)
@@ -117,6 +118,11 @@ internal class PixaiNavigation : IPixaiNavigation
         ClickElement(searchContext, "div:nth-child(3) > a");
     }
 
+    public void NavigateToBasicAccountInfo(IWebDriver searchContext)
+    {
+        NavigateToUrl(searchContext,"https://pixai.art/profile/edit");    
+    }
+    
     public void NavigateToMyWorkTab(IWebDriver driver)
     {
         NavigateToUrl(driver, driver.Url + "/artwork");
@@ -132,7 +138,7 @@ internal class PixaiNavigation : IPixaiNavigation
     {
         try
         {
-            SendKeysToElement(searchContext, "body", Keys.Escape);
+            ClickElement(searchContext, "span", "Close");
         }
         catch (NoSuchElementException)
         {
@@ -141,6 +147,12 @@ internal class PixaiNavigation : IPixaiNavigation
             //I can safely ignore it and the bot will still perform its task correctly.
             _logger.Log("No popup found", _logger.CreditClaimerLogFilePath);
             return;
+        }
+        catch(StaleElementReferenceException)
+        {
+            _logger.Log("Popup was already removed from the DOM", _logger.CreditClaimerLogFilePath);
+            return;
+            
         }
 
         _logger.Log("Popup closed", _logger.CreditClaimerLogFilePath);
@@ -171,6 +183,12 @@ internal class PixaiNavigation : IPixaiNavigation
     {
         driver.FindElement(By.CssSelector(cssSelector)).Click();
     }
+
+    public void ClickElementUsingXPath(ISearchContext driver, string xPath)
+    {
+        driver.FindElement(By.XPath(xPath));
+    }
+
 
     public void ClickElement(ISearchContext driver, string tagName, string text)
     {

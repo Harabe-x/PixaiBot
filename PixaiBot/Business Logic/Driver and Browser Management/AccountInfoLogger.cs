@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using PixaiBot.Business_Logic.Driver_and_Browser_Management.Driver_Creation_Strategy;
 using PixaiBot.Business_Logic.Extension;
@@ -38,6 +39,7 @@ internal class AccountInfoLogger : IAccountInfoLogger
         IDriverCreationStrategy driverCreationStrategy, IAccountInfoLoggerSettings settings,
         CancellationToken cancellationToken)
     {
+        
         _logger.Log($"Logging information about {userAccountsList.Count()} accounts", _logger.CreditClaimerLogFilePath);
         foreach (var account in userAccountsList)
         {
@@ -78,14 +80,25 @@ internal class AccountInfoLogger : IAccountInfoLogger
             return;
         }
 
-        _pixaiNavigation.ClosePopup(driver);
-
+        try
+        {
+            Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+            _pixaiNavigation.ClaimCreditsUsingPopup(driver);
+            _pixaiNavigation.ClosePopup(driver);
+        }
+        catch (StaleElementReferenceException)
+        {
+            _logger.Log("Stale element reference exception",_logger.CreditClaimerLogFilePath);
+        }
         _logger.Log("Reading account data", _logger.CreditClaimerLogFilePath);
 
-        while (!driver.Url.Contains('@'))
+        _pixaiNavigation.NavigateToProfile(driver);
+
+        if (!driver.Url.Contains("@"))
         {
-            _pixaiNavigation.ClickDropdownMenu(driver);
-            _pixaiNavigation.NavigateToProfile(driver);
+            _logger.Log("Navigating error to profile error",_logger.CreditClaimerLogFilePath);
+            driver.Quit();
+            _logger.Log("=====Chrome Driver Closed=====\n", _logger.CreditClaimerLogFilePath);
         }
 
         Thread.Sleep(TimeSpan.FromSeconds(DynamicDataLoadDelay));
@@ -106,7 +119,7 @@ internal class AccountInfoLogger : IAccountInfoLogger
         internalStringBuilder.AppendLineIf(settings.ShouldLogAccountId,
             $"Account Id : {_pixaiDataReader.GetAccountId(driver)}");
 
-        _pixaiNavigation.NavigateToAccountTabInEditProfilePage(driver);
+        _pixaiNavigation.NavigateToProfileSettings(driver);
 
         internalStringBuilder.AppendLineIf(settings.ShouldLogEmailVerificationStatus,
             $"Email Verification Status : {_pixaiDataReader.GetEmailVerificationStatus(driver)}");

@@ -13,8 +13,16 @@
   <component name="ChangeListManager">
     <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/ProxyManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/ProxyManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountInfoLogger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountInfoLogger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiDataReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiDataReader.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/View/NavigationPanelView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/View/NavigationPanelView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AccountInfoLoggerViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AccountInfoLoggerViewModel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +35,23 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Harabe-x"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Harabe-x/PixaiBot.git",
+    "accountId": "de1236aa-aa3a-4360-b5e5-a8aa4e96b175"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2b90705926ae4f10aa01bbe3f1025828c90908/a3/3e608ce8/Void.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/60afdfcef9945be6977fa4b76b3d84506e2a2067afb63480aacf49417cfa/ThrowHelper.Serialization.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/62e644b99fc28175a0794718397b5ec5d847dbe158989f822cd617a46e61f59/ThreadPoolWorkQueue.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -52,6 +74,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.5031447&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -149,7 +172,14 @@
       <workItem from="1720029796388" duration="92000" />
       <workItem from="1721065136795" duration="1097000" />
       <workItem from="1747512101351" duration="7554000" />
-      <workItem from="1747671900879" duration="3197000" />
+      <workItem from="1747671900879" duration="3439000" />
+      <workItem from="1747728954777" duration="5670000" />
+      <workItem from="1747932006861" duration="4160000" />
+      <workItem from="1748197649709" duration="4015000" />
+      <workItem from="1748247820688" duration="965000" />
+      <workItem from="1748629645718" duration="3642000" />
+      <workItem from="1748804624684" duration="3832000" />
+      <workItem from="1748979180192" duration="902000" />
     </task>
     <servers />
   </component>
@@ -194,19 +224,6 @@
           </properties>
           <option name="timeStamp" value="4" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs</url>
-          <line>120</line>
-          <properties documentPath="C:\Users\xgra5\RiderProjects\PixaiBot\PixaiBot\Business Logic\Driver and Browser Management\AccountCreatorV2.cs" containingFunctionPresentation="Method 'CreateAccount'">
-            <startOffsets>
-              <option value="4180" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4231" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

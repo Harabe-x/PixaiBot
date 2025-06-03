@@ -33,7 +33,7 @@
             <Grid>
 
                 <StackPanel>
-                    <Image Source="/Resources/images/Pixai_AutoClaimer2.png" Height="250" Width="200"
+                    <Image Visibility="Visible" Source="/Resources/images/Pixai_AutoClaimer2.png" Height="250" Width="200"
                            RenderTransformOrigin="0.299,0.867" StretchDirection="DownOnly" />
                     <RadioButton IsChecked="True" Name="DashboardBtn" Command="{Binding NavigateToDashboardCommand}"
                                  Style="{StaticResource MenuButton}">
