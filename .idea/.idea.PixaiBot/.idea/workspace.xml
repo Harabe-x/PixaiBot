@@ -12,17 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f15bfd6-b22b-476c-b3b5-1ff4e980b5e4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixaiBot/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/App.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/ProxyManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Data Management/ProxyManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountCreatorV2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountInfoLogger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/AccountInfoLogger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/CreditClaimerV2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiDataReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiDataReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Business Logic/Driver and Browser Management/WebNavigationCore/PixaiNavigation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/Data/Interfaces/IPixaiNavigation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/View/NavigationPanelView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/View/NavigationPanelView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AccountInfoLoggerViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PixaiBot/UI/ViewModel/AccountInfoLoggerViewModel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,25 +58,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.Unnamed.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.5031447&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.Unnamed.executor": "Debug",
+    "Publish to folder.Publish PixaiBot to folder.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "XThreadsFramesViewSplitterKey": "0.5031447",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Project.Unnamed">
+    <configuration name="Publish PixaiBot to folder" type="DotNetFolderPublish" factoryName="Publish to folder">
+      <riderPublish configuration="Release" platform="Any CPU" runtime="Portable" target_folder="$USER_HOME$/Desktop/PixaiBot realeses/v1.3.10" target_framework="net8.0-windows" uuid_high="8985067777967212139" uuid_low="-8197950242621632597" />
+      <method v="2" />
+    </configuration>
     <configuration name="PixaiBotAutoUpdater: FolderProfile" type="DotNetMsBuildPublish" factoryName="Publish to IIS">
       <riderPublish publish_profile="FolderProfile.pubxml" pubxml_path="$PROJECT_DIR$/PixaiBotAutoUpdater/Properties/PublishProfiles/FolderProfile.pubxml" uuid_high="-2581359345601458619" uuid_low="-6670035840180251675" />
       <method v="2" />
@@ -149,6 +145,7 @@
     <list>
       <item itemvalue=".NET Executable.Unnamed" />
       <item itemvalue=".NET Project.Unnamed" />
+      <item itemvalue="Publish to folder.Publish PixaiBot to folder" />
       <item itemvalue="Publish to IIS.PixaiBot: FolderProfile2" />
       <item itemvalue="Publish to IIS.PixaiBot: FolderProfile" />
       <item itemvalue="Publish to IIS.PixaiBot: FolderProfile1" />
@@ -179,7 +176,7 @@
       <workItem from="1748247820688" duration="965000" />
       <workItem from="1748629645718" duration="3642000" />
       <workItem from="1748804624684" duration="3832000" />
-      <workItem from="1748979180192" duration="902000" />
+      <workItem from="1748979180192" duration="1567000" />
     </task>
     <servers />
   </component>
