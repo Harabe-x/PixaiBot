@@ -108,8 +108,8 @@ internal class PixaiNavigation : IPixaiNavigation
 
     public void ClaimCreditsUsingPopup(ISearchContext searchContext)
     {
-        _logger.Log("Claimed credi,ts using popup", _logger.CreditClaimerLogFilePath);
-        ClickElement(searchContext,"button","Claim 10 000 daily credits");
+        _logger.Log("Claimed credits using popup", _logger.CreditClaimerLogFilePath);
+        ClickElement(searchContext,".p-4 .flex button");
     }
 
     public void NavigateToAccountTabInEditProfilePage(ISearchContext searchContext)

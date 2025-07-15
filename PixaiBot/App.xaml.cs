@@ -72,13 +72,13 @@ public partial class App : Application
         base.OnStartup(e);
         var mainWindow = _serviceProvider.GetRequiredService<NavigationPanelView>();
         mainWindow.Show();
+        // if (e.Args.Length > 0 && e.Args[0] == "--dev")
+        // {
+        //     Configuration.IsDevEnv = true;
+        // }
     }
 
-    protected override void OnExit(ExitEventArgs e)
-    {
-        base.OnExit(e);
-        _logger.Log("=====Application Closed=====\n", _logger.ApplicationLogFilePath);
-    }
+    
     
     private void HandleUnhandledApplicationException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {

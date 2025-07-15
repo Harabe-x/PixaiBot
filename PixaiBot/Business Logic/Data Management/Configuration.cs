@@ -14,10 +14,11 @@ public static class Configuration
 
     static Configuration()
     {
-        IsDevEnv = false;
+        var args = Environment.GetCommandLineArgs();
+        IsDevEnv = args.Length > 1 && args[1] == "--dev";
+        
 
-
-        ApplicationDataPath =
+    ApplicationDataPath =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PixaiAutoClaimer");
         UserConfigPath =
             Path.Combine(ApplicationDataPath, "config.json");
@@ -163,7 +164,7 @@ public static class Configuration
     public static string ApplicationDataPath { get; }
 
     
-    public static bool IsDevEnv { get; }
+    public static bool IsDevEnv { get;}
 
     #endregion
 }
